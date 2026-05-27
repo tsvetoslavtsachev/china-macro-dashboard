@@ -121,12 +121,17 @@ body {
     border-radius: 12px; display: inline-block; margin-bottom: 12px; letter-spacing: 0.3px;
 }
 
-.readings-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.readings-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+.readings-table th:nth-child(1), .readings-table td:nth-child(1) { width: 52%; }
+.readings-table th:nth-child(2), .readings-table td:nth-child(2) { width: 14%; }
+.readings-table th:nth-child(3), .readings-table td:nth-child(3) { width: 20%; }
+.readings-table th:nth-child(4), .readings-table td:nth-child(4) { width: 14%; }
 .readings-table th {
     text-align: left; color: #8b949e; font-weight: 500;
     padding: 4px 6px; border-bottom: 1px solid #21262d;
+    word-wrap: break-word;
 }
-.readings-table td { padding: 5px 6px; border-bottom: 1px solid #161b27; }
+.readings-table td { padding: 5px 6px; border-bottom: 1px solid #161b27; word-wrap: break-word; }
 .readings-table tr:last-child td { border-bottom: none; }
 .val-pos { color: #3fb950; }
 .val-neg { color: #f85149; }
@@ -238,12 +243,12 @@ def _render_composite(results: list[dict]) -> str:
         icon = LENS_ICON.get(lens, "")
         bars_html += f"""
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <span style="font-size:14px;width:20px">{icon}</span>
-          <span style="color:#8b949e;font-size:12px;width:200px">{label}</span>
-          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+          <span style="font-size:14px;flex:0 0 20px">{icon}</span>
+          <span style="color:#8b949e;font-size:12px;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{label}">{label}</span>
+          <div style="flex:1 1 80px;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
             <div style="width:{sc:.0f}%;height:100%;background:{lc};border-radius:3px"></div>
           </div>
-          <span style="font-size:13px;font-weight:700;color:{lc};min-width:35px;text-align:right">{sc:.1f}</span>
+          <span style="font-size:13px;font-weight:700;color:{lc};flex:0 0 35px;text-align:right">{sc:.1f}</span>
         </div>
         """
 
@@ -287,10 +292,10 @@ def _render_lens_card(result: dict) -> str:
                 date_str = str(date_str)[:10]
             except Exception:
                 pass
-        lbl = r.get("label", "")[:40]
+        lbl = r.get("label", "")
         rows_html += f"""
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="{r.get('label', '')}">{lbl}</td>
           <td class="{vc}" style="text-align:right;font-weight:600">{val}</td>
           <td style="text-align:center">{bar} <span style="color:#8b949e;font-size:11px">{pct:.0f}%</span></td>
