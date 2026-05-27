@@ -69,12 +69,17 @@ body {
     border-radius: 12px; display: inline-block; margin-bottom: 12px; letter-spacing: 0.3px;
 }
 
-.readings-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.readings-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+.readings-table th:nth-child(1), .readings-table td:nth-child(1) { width: 52%; }
+.readings-table th:nth-child(2), .readings-table td:nth-child(2) { width: 14%; }
+.readings-table th:nth-child(3), .readings-table td:nth-child(3) { width: 20%; }
+.readings-table th:nth-child(4), .readings-table td:nth-child(4) { width: 14%; }
 .readings-table th {
     text-align: left; color: #8b949e; font-weight: 500;
     padding: 4px 6px; border-bottom: 1px solid #21262d;
+    word-wrap: break-word;
 }
-.readings-table td { padding: 5px 6px; border-bottom: 1px solid #161b27; }
+.readings-table td { padding: 5px 6px; border-bottom: 1px solid #161b27; word-wrap: break-word; }
 .readings-table tr:last-child td { border-bottom: none; }
 .val-pos { color: #3fb950; }
 .val-neg { color: #f85149; }
@@ -133,48 +138,48 @@ body {
   <div style="flex:1;padding-left:16px;border-left:1px solid #21262d">
     
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <span style="font-size:14px;width:20px">📈</span>
-          <span style="color:#8b949e;font-size:12px;width:200px">Растеж и активност</span>
-          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+          <span style="font-size:14px;flex:0 0 20px">📈</span>
+          <span style="color:#8b949e;font-size:12px;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Растеж и активност">Растеж и активност</span>
+          <div style="flex:1 1 80px;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
             <div style="width:13%;height:100%;background:#f85149;border-radius:3px"></div>
           </div>
-          <span style="font-size:13px;font-weight:700;color:#f85149;min-width:35px;text-align:right">13.4</span>
+          <span style="font-size:13px;font-weight:700;color:#f85149;flex:0 0 35px;text-align:right">13.4</span>
         </div>
         
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <span style="font-size:14px;width:20px">🔥</span>
-          <span style="color:#8b949e;font-size:12px;width:200px">Инфлация и цени</span>
-          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+          <span style="font-size:14px;flex:0 0 20px">🔥</span>
+          <span style="color:#8b949e;font-size:12px;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Инфлация и цени">Инфлация и цени</span>
+          <div style="flex:1 1 80px;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
             <div style="width:13%;height:100%;background:#f85149;border-radius:3px"></div>
           </div>
-          <span style="font-size:13px;font-weight:700;color:#f85149;min-width:35px;text-align:right">12.9</span>
+          <span style="font-size:13px;font-weight:700;color:#f85149;flex:0 0 35px;text-align:right">12.9</span>
         </div>
         
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <span style="font-size:14px;width:20px">👷</span>
-          <span style="color:#8b949e;font-size:12px;width:200px">Пазар на труда</span>
-          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+          <span style="font-size:14px;flex:0 0 20px">👷</span>
+          <span style="color:#8b949e;font-size:12px;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Пазар на труда">Пазар на труда</span>
+          <div style="flex:1 1 80px;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
             <div style="width:12%;height:100%;background:#f85149;border-radius:3px"></div>
           </div>
-          <span style="font-size:13px;font-weight:700;color:#f85149;min-width:35px;text-align:right">12.3</span>
+          <span style="font-size:13px;font-weight:700;color:#f85149;flex:0 0 35px;text-align:right">12.3</span>
         </div>
         
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <span style="font-size:14px;width:20px">🏦</span>
-          <span style="color:#8b949e;font-size:12px;width:200px">Монетарна политика и кредит</span>
-          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+          <span style="font-size:14px;flex:0 0 20px">🏦</span>
+          <span style="color:#8b949e;font-size:12px;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Монетарна политика и кредит">Монетарна политика и кредит</span>
+          <div style="flex:1 1 80px;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
             <div style="width:72%;height:100%;background:#3fb950;border-radius:3px"></div>
           </div>
-          <span style="font-size:13px;font-weight:700;color:#3fb950;min-width:35px;text-align:right">71.5</span>
+          <span style="font-size:13px;font-weight:700;color:#3fb950;flex:0 0 35px;text-align:right">71.5</span>
         </div>
         
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <span style="font-size:14px;width:20px">🏗️</span>
-          <span style="color:#8b949e;font-size:12px;width:200px">Имоти и търговия</span>
-          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+          <span style="font-size:14px;flex:0 0 20px">🏗️</span>
+          <span style="color:#8b949e;font-size:12px;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Имоти и търговия">Имоти и търговия</span>
+          <div style="flex:1 1 80px;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
             <div style="width:27%;height:100%;background:#f85149;border-radius:3px"></div>
           </div>
-          <span style="font-size:13px;font-weight:700;color:#f85149;min-width:35px;text-align:right">26.6</span>
+          <span style="font-size:13px;font-weight:700;color:#f85149;flex:0 0 35px;text-align:right">26.6</span>
         </div>
         
   </div>
@@ -208,7 +213,7 @@ body {
     </thead>
     <tbody>
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="БВП — реален растеж (YoY %)">БВП — реален растеж (YoY %)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">4.98</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:8%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">8%</span></td>
@@ -216,7 +221,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Индустрия — реален растеж (YoY %)">Индустрия — реален растеж (YoY %)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">5.32</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:16%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">16%</span></td>
@@ -224,7 +229,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Услуги — реален растеж (YoY %)">Услуги — реален растеж (YoY %)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">4.96</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:8%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">8%</span></td>
@@ -232,7 +237,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Брутно капиталообразуване (% от БВП)">Брутно капиталообразуване (% от БВП)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">40.61</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:28%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">28%</span></td>
@@ -240,7 +245,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Производство — дял от БВП (%)">Производство — дял от БВП (%)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">24.87</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
@@ -280,7 +285,7 @@ body {
     </thead>
     <tbody>
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="ИПЦ — инфлация (YoY %)">ИПЦ — инфлация (YoY %)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">0.22</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:8%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">8%</span></td>
@@ -288,7 +293,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="БВП дефлатор (YoY %)">БВП дефлатор (YoY %)</td>
           <td class="val-neg" style="text-align:right;font-weight:600">-0.71</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
@@ -296,7 +301,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="ИПЦ — индекс (месечен, YoY %)">ИПЦ — индекс (месечен, YoY %)</td>
           <td class="val-neu" style="text-align:right;font-weight:600">0.02</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:14%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">14%</span></td>
@@ -304,7 +309,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="ИПП — индекс (месечен, YoY %)">ИПП — индекс (месечен, YoY %)</td>
           <td class="val-neg" style="text-align:right;font-weight:600">-0.72</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:44%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">44%</span></td>
@@ -344,7 +349,7 @@ body {
     </thead>
     <tbody>
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Безработица — официална (ILO, %)">Безработица — официална (ILO, %)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">4.62</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:73%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">73%</span></td>
@@ -352,7 +357,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Младежка безработица (16-24 г., %)">Младежка безработица (16-24 г., %)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">15.79</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:96%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">96%</span></td>
@@ -360,8 +365,8 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
-              title="Коефициент на участие в работната сила (%)">Коефициент на участие в работната сила (</td>
+          <td style="color:#e6edf3;line-height:1.3"
+              title="Коефициент на участие в работната сила (%)">Коефициент на участие в работната сила (%)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">64.55</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
           <td style="color:#8b949e;font-size:11px">2025-12-31</td>
@@ -400,7 +405,7 @@ body {
     </thead>
     <tbody>
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Политическа лихва — PBoC 7-day repo (%)">Политическа лихва — PBoC 7-day repo (%)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">1.40</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
@@ -408,7 +413,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Кредитна лихва (%)">Кредитна лихва (%)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">4.35</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
@@ -416,7 +421,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Депозитна лихва (%)">Депозитна лихва (%)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">1.50</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
@@ -424,7 +429,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Кредит към частния сектор (% от БВП)">Кредит към частния сектор (% от БВП)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">194.17</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:96%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">96%</span></td>
@@ -432,7 +437,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="М2 — дял от БВП (%)">М2 — дял от БВП (%)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">227.50</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:96%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">96%</span></td>
@@ -440,7 +445,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Валутен курс CNY/USD">Валутен курс CNY/USD</td>
           <td class="val-pos" style="text-align:right;font-weight:600">7.17</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:61%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">61%</span></td>
@@ -480,7 +485,7 @@ body {
     </thead>
     <tbody>
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Текуща сметка — баланс (% от БВП)">Текуща сметка — баланс (% от БВП)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">2.26</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:48%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">48%</span></td>
@@ -488,7 +493,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Износ — дял от БВП (%)">Износ — дял от БВП (%)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">20.02</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:28%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">28%</span></td>
@@ -496,7 +501,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="ПЧИ — входящи (% от БВП)">ПЧИ — входящи (% от БВП)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">0.10</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
@@ -504,23 +509,23 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
-              title="Брутно фиксирано капиталообразуване (% от БВП)">Брутно фиксирано капиталообразуване (% о</td>
+          <td style="color:#e6edf3;line-height:1.3"
+              title="Брутно фиксирано капиталообразуване (% от БВП)">Брутно фиксирано капиталообразуване (% от БВП)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">39.87</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:36%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">36%</span></td>
           <td style="color:#8b949e;font-size:11px">2024-12-31</td>
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
-              title="Частно фиксирано капиталообразуване (% от БВП)">Частно фиксирано капиталообразуване (% о</td>
+          <td style="color:#e6edf3;line-height:1.3"
+              title="Частно фиксирано капиталообразуване (% от БВП)">Частно фиксирано капиталообразуване (% от БВП)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">33.48</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:12%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">12%</span></td>
           <td style="color:#8b949e;font-size:11px">2023-12-31</td>
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="Цени на нови жилища — 70 града (YoY %)">Цени на нови жилища — 70 града (YoY %)</td>
           <td class="val-pos" style="text-align:right;font-weight:600">0.70</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:24%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">24%</span></td>
@@ -528,7 +533,7 @@ body {
         </tr>
         
         <tr>
-          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <td style="color:#e6edf3;line-height:1.3"
               title="ПЧИ — реално използвани (YoY %)">ПЧИ — реално използвани (YoY %)</td>
           <td class="val-neg" style="text-align:right;font-weight:600">-18.42</td>
           <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:5%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">5%</span></td>
@@ -548,7 +553,7 @@ body {
 <div class="footer">
   <strong>China Macro Dashboard</strong> — автоматично генериран briefing.<br>
   Данни: World Bank Indicators API (годишни) · IMF IFS via DBnomics (месечни) · AkShare/НБС (месечни).<br>
-  Генериран: 2026-05-27 14:50 UTC · Серии: 25 · Lens-ове: 5.<br>
+  Генериран: 2026-05-27 15:19 UTC · Серии: 25 · Lens-ове: 5.<br>
   <em>Забележка: Китайските официални данни са обект на ревизии и методологични промени. Интерпретирайте с внимание.</em>
 </div>
 
