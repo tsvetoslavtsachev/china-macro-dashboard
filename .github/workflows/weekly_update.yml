@@ -50,6 +50,14 @@ jobs:
       - name: Generate Markdown context
         run: python run.py --export-context --no-browser
 
+      - name: Update index.html (latest briefing)
+        run: |
+          LATEST=$(ls -1t output/briefing_*.html | head -n1)
+          if [ -n "$LATEST" ]; then
+            cp "$LATEST" output/index.html
+            echo "index.html ← $LATEST"
+          fi
+
       - name: Commit and push output
         run: |
           git config --global user.name "github-actions[bot]"
@@ -60,5 +68,45 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "chore: weekly macro update $(date -u '+%Y-%m-%d')"
-            git push
+            for attempt in 1 2 3 4 5; do
+              if git push; then
+                echo "Push успешен (опит $attempt)."
+                break
+              fi
+              echo "Push fail-на (опит $attempt) — rebase + retry..."
+              git pull --rebase origin main
+              sleep $((attempt * 5))
+            done
           fi
+
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout (latest main, incl. bot commit)
+        uses: actions/checkout@v4
+
+      - name: Prepare Pages site
+        run: |
+          mkdir -p _site
+          cp output/index.html _site/index.html 2>/dev/null || \
+            cp $(ls -1t output/briefing_*.html | head -n1) _site/index.html
+          # archive: include all briefings + context md-та
+          cp output/briefing_*.html _site/ 2>/dev/null || true
+          cp output/briefing_context_*.md _site/ 2>/dev/null || true
+          ls -la _site/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
