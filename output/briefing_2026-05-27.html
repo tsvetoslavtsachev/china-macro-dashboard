@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🇨🇳 China Macro Dashboard — 2026-05-27</title>
+  <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0d1117; color: #e6edf3;
+    line-height: 1.6; font-size: 14px;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+.header {
+    background: linear-gradient(135deg, #1a1f2e 0%, #161b27 100%);
+    border: 1px solid #30363d; border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.header-left h1 { font-size: 26px; font-weight: 700; color: #f0f6fc; }
+.header-left h1 .flag { font-size: 30px; margin-right: 8px; }
+.header-left .subtitle { color: #8b949e; font-size: 13px; margin-top: 4px; }
+.header-right { text-align: right; }
+.header-right .date { color: #8b949e; font-size: 13px; }
+.header-right .series-count { font-size: 22px; font-weight: 700; color: #58a6ff; margin-top: 4px; }
+.header-right .series-label { color: #8b949e; font-size: 11px; }
+
+.composite-card {
+    background: #161b27; border: 1px solid #30363d; border-radius: 12px;
+    padding: 24px 32px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 32px;
+}
+.score-circle {
+    width: 90px; height: 90px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; flex-shrink: 0; border: 3px solid;
+}
+.score-circle .score-num { font-size: 28px; font-weight: 800; }
+.score-circle .score-label { font-size: 10px; color: #8b949e; }
+.composite-info h2 { font-size: 18px; font-weight: 600; color: #f0f6fc; }
+.composite-info .regime-badge {
+    display: inline-block; padding: 4px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 700; margin-top: 8px; letter-spacing: 0.5px;
+}
+.composite-info .description { color: #8b949e; font-size: 13px; margin-top: 8px; }
+
+.lens-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px; margin-bottom: 24px;
+}
+.lens-card {
+    background: #161b27; border: 1px solid #30363d; border-radius: 10px;
+    padding: 20px;
+}
+.lens-card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 16px;
+}
+.lens-title { font-size: 15px; font-weight: 600; color: #f0f6fc; }
+.lens-icon { font-size: 20px; }
+.lens-score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.lens-score-bar-wrap { flex: 1; height: 8px; background: #21262d; border-radius: 4px; overflow: hidden; }
+.lens-score-bar { height: 100%; border-radius: 4px; }
+.lens-score-num { font-size: 18px; font-weight: 700; min-width: 40px; text-align: right; }
+.lens-regime {
+    font-size: 11px; font-weight: 600; padding: 2px 10px;
+    border-radius: 12px; display: inline-block; margin-bottom: 12px; letter-spacing: 0.3px;
+}
+
+.readings-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.readings-table th {
+    text-align: left; color: #8b949e; font-weight: 500;
+    padding: 4px 6px; border-bottom: 1px solid #21262d;
+}
+.readings-table td { padding: 5px 6px; border-bottom: 1px solid #161b27; }
+.readings-table tr:last-child td { border-bottom: none; }
+.val-pos { color: #3fb950; }
+.val-neg { color: #f85149; }
+.val-neu { color: #e6edf3; }
+.pct-bar-wrap { width: 60px; height: 6px; background: #21262d; border-radius: 3px; display: inline-block; vertical-align: middle; }
+.pct-bar { height: 100%; border-radius: 3px; }
+
+.narrative { margin-top: 12px; }
+.narrative-item {
+    font-size: 12px; color: #8b949e; padding: 5px 10px;
+    border-left: 2px solid #30363d; margin-bottom: 6px;
+    background: #0d1117; border-radius: 0 4px 4px 0;
+}
+.narrative-item.warn { border-left-color: #d29922; color: #d29922; }
+
+.dq-card {
+    background: #161b27; border: 1px solid #d29922; border-radius: 10px;
+    padding: 20px; margin-bottom: 24px;
+}
+.dq-card h3 { color: #d29922; font-size: 14px; margin-bottom: 12px; }
+.dq-item { font-size: 12px; color: #8b949e; margin-bottom: 6px; padding-left: 12px; }
+.dq-item::before { content: "⚠ "; color: #d29922; }
+
+.footer {
+    background: #161b27; border: 1px solid #30363d; border-radius: 10px;
+    padding: 16px 20px; color: #8b949e; font-size: 11px;
+}
+.footer strong { color: #58a6ff; }
+</style>
+</head>
+<body>
+  <div class="container">
+    
+<div class="header">
+  <div class="header-left">
+    <h1><span class="flag">🇨🇳</span> China Macro Dashboard</h1>
+    <div class="subtitle">Икономически преглед — седмичен briefing</div>
+  </div>
+  <div class="header-right">
+    <div class="date">27 May 2026</div>
+    <div class="series-count">25</div>
+    <div class="series-label">активни серии</div>
+  </div>
+</div>
+
+<div class="composite-card">
+  <div class="score-circle" style="border-color:#f85149">
+    <span class="score-num" style="color:#f85149">26.7</span>
+    <span class="score-label">SCORE</span>
+  </div>
+  <div class="composite-info" style="flex:1">
+    <h2>Композитен Macro Score</h2>
+    <span class="regime-badge" style="background:#d5000022;color:#d50000;border:1px solid #d5000044">КРИЗА</span>
+    <div class="description">Претеглен composite от 5 lens-а: растеж (30%), кредит (20%), инфлация (20%), имоти (15%), труд (15%).</div>
+  </div>
+  <div style="flex:1;padding-left:16px;border-left:1px solid #21262d">
+    
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-size:14px;width:20px">📈</span>
+          <span style="color:#8b949e;font-size:12px;width:200px">Растеж и активност</span>
+          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+            <div style="width:13%;height:100%;background:#f85149;border-radius:3px"></div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:#f85149;min-width:35px;text-align:right">13.4</span>
+        </div>
+        
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-size:14px;width:20px">🔥</span>
+          <span style="color:#8b949e;font-size:12px;width:200px">Инфлация и цени</span>
+          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+            <div style="width:13%;height:100%;background:#f85149;border-radius:3px"></div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:#f85149;min-width:35px;text-align:right">12.9</span>
+        </div>
+        
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-size:14px;width:20px">👷</span>
+          <span style="color:#8b949e;font-size:12px;width:200px">Пазар на труда</span>
+          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+            <div style="width:12%;height:100%;background:#f85149;border-radius:3px"></div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:#f85149;min-width:35px;text-align:right">12.3</span>
+        </div>
+        
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-size:14px;width:20px">🏦</span>
+          <span style="color:#8b949e;font-size:12px;width:200px">Монетарна политика и кредит</span>
+          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+            <div style="width:72%;height:100%;background:#3fb950;border-radius:3px"></div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:#3fb950;min-width:35px;text-align:right">71.5</span>
+        </div>
+        
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-size:14px;width:20px">🏗️</span>
+          <span style="color:#8b949e;font-size:12px;width:200px">Имоти и търговия</span>
+          <div style="flex:1;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
+            <div style="width:27%;height:100%;background:#f85149;border-radius:3px"></div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:#f85149;min-width:35px;text-align:right">26.6</span>
+        </div>
+        
+  </div>
+</div>
+<div class="lens-grid">
+<div class="lens-card">
+  <div class="lens-card-header">
+    <div><div class="lens-title">Растеж и активност</div></div>
+    <span class="lens-icon">📈</span>
+  </div>
+
+  <div class="lens-score-row">
+    <div class="lens-score-bar-wrap">
+      <div class="lens-score-bar" style="width:13%;background:#f85149"></div>
+    </div>
+    <span class="lens-score-num" style="color:#f85149">13.4</span>
+  </div>
+
+  <span class="lens-regime" style="background:#d5000022;color:#d50000;border:1px solid #d5000044">
+    РЕЦЕСИЯ
+  </span>
+
+  <table class="readings-table">
+    <thead>
+      <tr>
+        <th>Показател</th>
+        <th style="text-align:right">Стойност</th>
+        <th style="text-align:center">Percentile</th>
+        <th>Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="БВП — реален растеж (YoY %)">БВП — реален растеж (YoY %)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">4.98</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:8%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">8%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Индустрия — реален растеж (YoY %)">Индустрия — реален растеж (YoY %)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">5.32</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:16%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">16%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Услуги — реален растеж (YoY %)">Услуги — реален растеж (YoY %)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">4.96</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:8%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">8%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Брутно капиталообразуване (% от БВП)">Брутно капиталообразуване (% от БВП)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">40.61</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:28%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">28%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Производство — дял от БВП (%)">Производство — дял от БВП (%)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">24.87</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        </tbody>
+  </table>
+
+  <div class="narrative"><div class="narrative-item">БВП растеж 5.0% — под официалния таргет. Очаквайте допълнителни стимули.</div></div>
+</div>
+
+<div class="lens-card">
+  <div class="lens-card-header">
+    <div><div class="lens-title">Инфлация и цени</div></div>
+    <span class="lens-icon">🔥</span>
+  </div>
+
+  <div class="lens-score-row">
+    <div class="lens-score-bar-wrap">
+      <div class="lens-score-bar" style="width:13%;background:#f85149"></div>
+    </div>
+    <span class="lens-score-num" style="color:#f85149">12.9</span>
+  </div>
+
+  <span class="lens-regime" style="background:#d5000022;color:#d50000;border:1px solid #d5000044">
+    ДЕФЛАЦИЯ
+  </span>
+
+  <table class="readings-table">
+    <thead>
+      <tr>
+        <th>Показател</th>
+        <th style="text-align:right">Стойност</th>
+        <th style="text-align:center">Percentile</th>
+        <th>Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="ИПЦ — инфлация (YoY %)">ИПЦ — инфлация (YoY %)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">0.22</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:8%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">8%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="БВП дефлатор (YoY %)">БВП дефлатор (YoY %)</td>
+          <td class="val-neg" style="text-align:right;font-weight:600">-0.71</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="ИПЦ — индекс (месечен, YoY %)">ИПЦ — индекс (месечен, YoY %)</td>
+          <td class="val-neu" style="text-align:right;font-weight:600">0.02</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:14%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">14%</span></td>
+          <td style="color:#8b949e;font-size:11px">2025-07-01</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="ИПП — индекс (месечен, YoY %)">ИПП — индекс (месечен, YoY %)</td>
+          <td class="val-neg" style="text-align:right;font-weight:600">-0.72</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:44%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">44%</span></td>
+          <td style="color:#8b949e;font-size:11px">2022-12-01</td>
+        </tr>
+        </tbody>
+  </table>
+
+  <div class="narrative"><div class="narrative-item">CPI 0.22% — близо до нула. Дефлационен риск. PBoC под натиск да стимулира.</div><div class="narrative-item">GDP дефлатор -0.71% — отрицателен. Номиналният БВП расте по-бавно от реалния. Широка дефлация.</div></div>
+</div>
+
+<div class="lens-card">
+  <div class="lens-card-header">
+    <div><div class="lens-title">Пазар на труда</div></div>
+    <span class="lens-icon">👷</span>
+  </div>
+
+  <div class="lens-score-row">
+    <div class="lens-score-bar-wrap">
+      <div class="lens-score-bar" style="width:12%;background:#f85149"></div>
+    </div>
+    <span class="lens-score-num" style="color:#f85149">12.3</span>
+  </div>
+
+  <span class="lens-regime" style="background:#d5000022;color:#d50000;border:1px solid #d5000044">
+    КРИЗА НА ТРУДА
+  </span>
+
+  <table class="readings-table">
+    <thead>
+      <tr>
+        <th>Показател</th>
+        <th style="text-align:right">Стойност</th>
+        <th style="text-align:center">Percentile</th>
+        <th>Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Безработица — официална (ILO, %)">Безработица — официална (ILO, %)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">4.62</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:73%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">73%</span></td>
+          <td style="color:#8b949e;font-size:11px">2025-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Младежка безработица (16-24 г., %)">Младежка безработица (16-24 г., %)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">15.79</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:96%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">96%</span></td>
+          <td style="color:#8b949e;font-size:11px">2025-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Коефициент на участие в работната сила (%)">Коефициент на участие в работната сила (</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">64.55</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
+          <td style="color:#8b949e;font-size:11px">2025-12-31</td>
+        </tr>
+        </tbody>
+  </table>
+
+  <div class="narrative"><div class="narrative-item">Младежка безработица 15.8% — повишена. Образователната система произвежда повече дипломирани, отколкото пазарът абсорбира.</div><div class="narrative-item">Официална безработица 4.6% — подценена. Не включва ~300 млн. мигрантски работници.</div></div>
+</div>
+
+<div class="lens-card">
+  <div class="lens-card-header">
+    <div><div class="lens-title">Монетарна политика и кредит</div></div>
+    <span class="lens-icon">🏦</span>
+  </div>
+
+  <div class="lens-score-row">
+    <div class="lens-score-bar-wrap">
+      <div class="lens-score-bar" style="width:72%;background:#3fb950"></div>
+    </div>
+    <span class="lens-score-num" style="color:#3fb950">71.5</span>
+  </div>
+
+  <span class="lens-regime" style="background:#69f0ae22;color:#69f0ae;border:1px solid #69f0ae44">
+    УМЕРЕНО СТИМУЛИРАНЕ
+  </span>
+
+  <table class="readings-table">
+    <thead>
+      <tr>
+        <th>Показател</th>
+        <th style="text-align:right">Стойност</th>
+        <th style="text-align:center">Percentile</th>
+        <th>Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Политическа лихва — PBoC 7-day repo (%)">Политическа лихва — PBoC 7-day repo (%)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">1.40</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
+          <td style="color:#8b949e;font-size:11px">2025-06-01</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Кредитна лихва (%)">Кредитна лихва (%)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">4.35</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
+          <td style="color:#8b949e;font-size:11px">2025-06-01</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Депозитна лихва (%)">Депозитна лихва (%)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">1.50</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
+          <td style="color:#8b949e;font-size:11px">2025-06-01</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Кредит към частния сектор (% от БВП)">Кредит към частния сектор (% от БВП)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">194.17</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:96%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">96%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="М2 — дял от БВП (%)">М2 — дял от БВП (%)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">227.50</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:96%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">96%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Валутен курс CNY/USD">Валутен курс CNY/USD</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">7.17</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:61%;background:#3fb950"></span></span> <span style="color:#8b949e;font-size:11px">61%</span></td>
+          <td style="color:#8b949e;font-size:11px">2025-07-01</td>
+        </tr>
+        </tbody>
+  </table>
+
+  <div class="narrative"><div class="narrative-item">PBoC policy rate 1.40% — активен easing цикъл.</div><div class="narrative-item">Кредит към частния сектор 194% от БВП — debt overhang. Ограничава monetary policy transmission.</div><div class="narrative-item">M2 227% от БВП — най-висок в G20. Монетарна маса значително над реалната икономика.</div><div class="narrative-item">CNY/USD 7.1728 — управляван флоат. PBoC контролира дневния band ±2%.</div></div>
+</div>
+
+<div class="lens-card">
+  <div class="lens-card-header">
+    <div><div class="lens-title">Имоти и търговия</div></div>
+    <span class="lens-icon">🏗️</span>
+  </div>
+
+  <div class="lens-score-row">
+    <div class="lens-score-bar-wrap">
+      <div class="lens-score-bar" style="width:27%;background:#f85149"></div>
+    </div>
+    <span class="lens-score-num" style="color:#f85149">26.6</span>
+  </div>
+
+  <span class="lens-regime" style="background:#d5000022;color:#d50000;border:1px solid #d5000044">
+    ИМОТНА КРИЗА
+  </span>
+
+  <table class="readings-table">
+    <thead>
+      <tr>
+        <th>Показател</th>
+        <th style="text-align:right">Стойност</th>
+        <th style="text-align:center">Percentile</th>
+        <th>Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Текуща сметка — баланс (% от БВП)">Текуща сметка — баланс (% от БВП)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">2.26</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:48%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">48%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Износ — дял от БВП (%)">Износ — дял от БВП (%)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">20.02</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:28%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">28%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="ПЧИ — входящи (% от БВП)">ПЧИ — входящи (% от БВП)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">0.10</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:0%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">0%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Брутно фиксирано капиталообразуване (% от БВП)">Брутно фиксирано капиталообразуване (% о</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">39.87</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:36%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">36%</span></td>
+          <td style="color:#8b949e;font-size:11px">2024-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Частно фиксирано капиталообразуване (% от БВП)">Частно фиксирано капиталообразуване (% о</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">33.48</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:12%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">12%</span></td>
+          <td style="color:#8b949e;font-size:11px">2023-12-31</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="Цени на нови жилища — 70 града (YoY %)">Цени на нови жилища — 70 града (YoY %)</td>
+          <td class="val-pos" style="text-align:right;font-weight:600">0.70</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:24%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">24%</span></td>
+          <td style="color:#8b949e;font-size:11px">2026-04-01</td>
+        </tr>
+        
+        <tr>
+          <td style="color:#e6edf3;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+              title="ПЧИ — реално използвани (YoY %)">ПЧИ — реално използвани (YoY %)</td>
+          <td class="val-neg" style="text-align:right;font-weight:600">-18.42</td>
+          <td style="text-align:center"><span class="pct-bar-wrap"><span class="pct-bar" style="width:5%;background:#f85149"></span></span> <span style="color:#8b949e;font-size:11px">5%</span></td>
+          <td style="color:#8b949e;font-size:11px">2023-05-01</td>
+        </tr>
+        </tbody>
+  </table>
+
+  <div class="narrative"><div class="narrative-item">Цени на жилища +0.7% YoY — стабилизация след корекцията.</div><div class="narrative-item">ПЧИ 0.10% от БВП — исторически минимум. Геополитически de-risking от западни компании.</div><div class="narrative-item">Текуща сметка +2.3% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU.</div></div>
+</div>
+</div>
+<div class="dq-card">
+  <h3>⚠ Бележки за качеството на данните</h3>
+  <div class="dq-item">Официалната безработица (~5%) не включва ~300 млн. мигрантски работници. Реалната е значително по-висока.</div><div class="dq-item">Младежката безработица (16-24 г.) беше спряна за публикуване от НБС юли–декември 2023 след рекорд 21.3%.</div><div class="dq-item">GDP данните са годишни (World Bank). Месечни данни за Китай са ограничено достъпни в международни бази.</div><div class="dq-item">PPI данни от IMF IFS са налични само до декември 2022. AkShare предоставя по-актуални данни от НБС.</div><div class="dq-item">FDI данните показват срив до ~0.1% от GDP (2024) — исторически минимум. Геополитически de-risking.</div><div class="dq-item">Цените на жилища (70 града) са от AkShare/НБС. Индексът е с база 100 — конвертиран към YoY %.</div><div class="dq-item">GDP дефлаторът е отрицателен от 2023 — широка дефлация. Номиналният GDP расте по-бавно от реалния.</div>
+</div>
+
+<div class="footer">
+  <strong>China Macro Dashboard</strong> — автоматично генериран briefing.<br>
+  Данни: World Bank Indicators API (годишни) · IMF IFS via DBnomics (месечни) · AkShare/НБС (месечни).<br>
+  Генериран: 2026-05-27 07:00 UTC · Серии: 25 · Lens-ове: 5.<br>
+  <em>Забележка: Китайските официални данни са обект на ревизии и методологични промени. Интерпретирайте с внимание.</em>
+</div>
+
+  </div>
+</body>
+</html>
