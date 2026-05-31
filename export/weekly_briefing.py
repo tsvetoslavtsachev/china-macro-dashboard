@@ -20,6 +20,8 @@ from typing import Any, Optional
 import pandas as pd
 
 from catalog.series import SERIES_CATALOG
+from analysis.divergence import compute_cross_lens_divergence
+from analysis.anomaly import compute_anomalies
 
 
 # ─── Labels ──────────────────────────────────────────────────────
@@ -160,6 +162,62 @@ body {
     padding: 16px 20px; color: #8b949e; font-size: 11px;
 }
 .footer strong { color: #58a6ff; }
+
+/* ─── Section title (нови аналитични секции) ─── */
+.section-title {
+    font-size: 16px; font-weight: 700; color: #f0f6fc;
+    margin: 0 0 14px; padding-bottom: 6px; border-bottom: 1px solid #30363d;
+    letter-spacing: 0.5px;
+}
+
+/* ─── Cross-Lens Divergence ─── */
+.cross-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px; margin-bottom: 24px;
+}
+.pair-card {
+    background: #161b27; border: 1px solid #30363d; border-radius: 10px;
+    padding: 18px 20px;
+}
+.pair-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.pair-head h3 { font-size: 14px; font-weight: 600; color: #f0f6fc; margin: 0; }
+.pair-state {
+    font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 12px;
+    white-space: nowrap; letter-spacing: 0.3px;
+}
+.pair-question { font-size: 12px; color: #8b949e; font-style: italic; margin-bottom: 14px; }
+.pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.pair-slot { background: #0d1117; border: 1px solid #21262d; border-radius: 6px; padding: 10px 12px; }
+.pair-slot-label { font-size: 10.5px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.4px; }
+.pair-slot-val { font-family: 'Consolas','Monaco',monospace; font-size: 20px; font-weight: 700; color: #e6edf3; margin-top: 4px; }
+.pair-slot-n { font-size: 10px; color: #6e7681; margin-top: 2px; }
+.pair-interp {
+    background: #0d1117; border-left: 3px solid #30363d; border-radius: 0 4px 4px 0;
+    padding: 10px 12px; font-size: 12.5px; color: #c9d1d9; line-height: 1.5;
+}
+
+/* ─── Top Anomalies ─── */
+.anom-card {
+    background: #161b27; border: 1px solid #30363d; border-radius: 10px;
+    padding: 20px; margin-bottom: 24px; overflow-x: auto;
+}
+.anom-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.anom-table th {
+    text-align: left; color: #8b949e; font-weight: 500; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.4px;
+    padding: 6px 8px; border-bottom: 1px solid #30363d;
+}
+.anom-table td { padding: 7px 8px; border-bottom: 1px solid #21262d; color: #e6edf3; }
+.anom-table tr:last-child td { border-bottom: none; }
+.anom-table .num { font-family: 'Consolas','Monaco',monospace; text-align: right; }
+.anom-rank { color: #8b949e; font-family: monospace; }
+.anom-arrow-up { color: #3fb950; font-weight: 700; }
+.anom-arrow-down { color: #f85149; font-weight: 700; }
+.anom-z { font-family: 'Consolas','Monaco',monospace; font-weight: 600; }
+.anom-code { font-family: 'Consolas','Monaco',monospace; background: #21262d; color: #c9d1d9; padding: 1px 5px; border-radius: 3px; font-size: 11.5px; }
+.anom-ne { display: inline-block; background: #d2992222; color: #d29922; font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 600; font-family: monospace; }
+.anom-empty { color: #8b949e; font-style: italic; font-size: 13px; }
+.lens-tag { color: #8b949e; font-size: 11px; }
 """
 
 
@@ -344,6 +402,122 @@ def _render_lens_card(result: dict) -> str:
 """
 
 
+# ─── Cross-Lens Divergence ───────────────────────────────────────
+
+_STATE_LABEL_BG = {
+    "both_up":           "↑↑ и двете нагоре",
+    "both_down":         "↓↓ и двете надолу",
+    "a_up_b_down":       "↑↓ A нагоре / B надолу",
+    "a_down_b_up":       "↓↑ A надолу / B нагоре",
+    "transition":        "⇄ преход",
+    "insufficient_data": "недостатъчно данни",
+}
+
+# (bg, fg) — aligned-up = зелено, aligned-down = червено, divergence = amber, иначе сиво
+_STATE_COLORS = {
+    "both_up":           ("#3fb95022", "#3fb950"),
+    "both_down":         ("#f8514922", "#f85149"),
+    "a_up_b_down":       ("#d2992222", "#d29922"),
+    "a_down_b_up":       ("#d2992222", "#d29922"),
+    "transition":        ("#8b949e22", "#8b949e"),
+    "insufficient_data": ("#8b949e22", "#6e7681"),
+}
+
+
+def _fmt_breadth(v) -> str:
+    if v is None:
+        return "—"
+    try:
+        if v != v:  # NaN
+            return "—"
+        return f"{float(v) * 100:.0f}%"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def _render_cross_lens(cross_report) -> str:
+    """Cross-Lens Divergence — China-специфични pair tests (от analysis/divergence)."""
+    if not cross_report.pairs:
+        return ""
+
+    cards = ""
+    for p in cross_report.pairs:
+        bg, fg = _STATE_COLORS.get(p.state, _STATE_COLORS["transition"])
+        state_lbl = _STATE_LABEL_BG.get(p.state, p.state)
+        cards += f"""
+        <div class="pair-card">
+          <div class="pair-head">
+            <span class="pair-state" style="background:{bg};color:{fg}">{state_lbl}</span>
+            <h3>{p.name_bg}</h3>
+          </div>
+          <div class="pair-question">{p.question_bg}</div>
+          <div class="pair-grid">
+            <div class="pair-slot">
+              <div class="pair-slot-label">A · {p.slot_a_label}</div>
+              <div class="pair-slot-val">{_fmt_breadth(p.breadth_a)}</div>
+              <div class="pair-slot-n">n={p.n_a_available}</div>
+            </div>
+            <div class="pair-slot">
+              <div class="pair-slot-label">B · {p.slot_b_label}</div>
+              <div class="pair-slot-val">{_fmt_breadth(p.breadth_b)}</div>
+              <div class="pair-slot-n">n={p.n_b_available}</div>
+            </div>
+          </div>
+          <div class="pair-interp">{p.interpretation}</div>
+        </div>
+        """
+
+    return f"""
+<h2 class="section-title">Cross-Lens Divergence</h2>
+<div class="cross-grid">{cards}</div>
+"""
+
+
+def _render_anomalies(anomaly_report) -> str:
+    """Top Anomalies — серии с |z|>2 (full-sample z-score)."""
+    if not anomaly_report.top:
+        return """
+<h2 class="section-title">Top Anomalies</h2>
+<div class="anom-card"><span class="anom-empty">Няма серии с |z|>2 в момента.</span></div>
+"""
+
+    rows = ""
+    for i, a in enumerate(anomaly_report.top, 1):
+        arrow_cls = "anom-arrow-up" if a.direction == "up" else "anom-arrow-down"
+        arrow = "↑" if a.direction == "up" else "↓"
+        ne = (f'<span class="anom-ne">NEW {a.new_extreme_direction.upper()}</span>'
+              if a.is_new_extreme and a.new_extreme_direction else "")
+        lens_str = " / ".join(a.lens)
+        rows += f"""
+        <tr>
+          <td class="anom-rank">{i}</td>
+          <td class="{arrow_cls}">{arrow}</td>
+          <td><span class="anom-code">{a.series_key}</span></td>
+          <td>{a.series_name_bg}</td>
+          <td class="num">{_fmt_val(a.last_value)}</td>
+          <td class="num anom-z" style="color:{'#3fb950' if a.direction == 'up' else '#f85149'}">{a.z_score:+.2f}</td>
+          <td>{ne}</td>
+          <td><span class="lens-tag">{lens_str}</span></td>
+        </tr>
+        """
+
+    return f"""
+<h2 class="section-title">Top Anomalies ({len(anomaly_report.top)}/{anomaly_report.total_flagged})</h2>
+<div class="anom-card">
+  <table class="anom-table">
+    <thead>
+      <tr>
+        <th>#</th><th></th><th>Серия</th><th>Показател</th>
+        <th style="text-align:right">Стойност</th><th style="text-align:right">z</th>
+        <th>Екстремум</th><th>Lens</th>
+      </tr>
+    </thead>
+    <tbody>{rows}</tbody>
+  </table>
+</div>
+"""
+
+
 def _render_data_quality() -> str:
     notes = [
         "Официалната безработица (~5%) не включва ~300 млн. мигрантски работници. Реалната е значително по-висока.",
@@ -353,6 +527,8 @@ def _render_data_quality() -> str:
         "FDI данните показват срив до ~0.1% от GDP (2024) — исторически минимум. Геополитически de-risking.",
         "Цените на жилища (70 града) са от AkShare/НБС. Индексът е с база 100 — конвертиран към YoY %.",
         "GDP дефлаторът е отрицателен от 2023 — широка дефлация. Номиналният GDP расте по-бавно от реалния.",
+        "Cross-Lens Divergence и Top Anomalies стъпват предимно на месечни серии (PMI, лихви, търговия, кредит). Годишните серии (БВП, безработица) се обновяват веднъж годишно — посоката им се движи по-бавно.",
+        "Z-score за аномалиите е изчислен върху цялата налична история на серията (full-sample), не 5-годишен прозорец. |z|>2 = екстремно четене спрямо собствената история. peer_group с <2 налични серии не дава breadth.",
     ]
     items = "".join(f'<div class="dq-item">{n}</div>' for n in notes)
     return f"""
@@ -410,12 +586,18 @@ def generate_weekly_briefing(
 
     n_series = len(snapshot)
 
+    # Аналитични слоеве (от analysis/) — независими от module composite-ите
+    cross_report = compute_cross_lens_divergence(snapshot)
+    anomaly_report = compute_anomalies(snapshot, z_threshold=2.0, top_n=10)
+
     body = (
         _render_header(today, n_series)
         + _render_composite(results)
+        + _render_cross_lens(cross_report)
         + '<div class="lens-grid">'
         + "".join(_render_lens_card(r) for r in results)
         + "</div>"
+        + _render_anomalies(anomaly_report)
         + _render_data_quality()
         + _render_footer(today)
     )
