@@ -51,12 +51,14 @@ def _build_adapters() -> dict:
         "worldbank": WorldBankAdapter(),
         "imf_ifs":   ImfIfsAdapter(),
         "akshare":   AkShareAdapter(),
+        # NOTE: bloomberg_bridge е специален — чете parquet, не има fetch_many
+        # interface. Snapshot building го handler-ва отделно в _build_snapshot.
     }
 
 
 def _build_snapshot(adapters: dict, force: bool = False) -> dict:
-    """Сглобява {series_key: pd.Series} от всички adapter-и."""
-    from catalog.series import series_by_source
+    """Сглобява {series_key: pd.Series} от всички adapter-и + bloomberg_bridge parquet."""
+    from catalog.series import series_by_source, SERIES_CATALOG
 
     snapshot: dict = {}
     for source_name, adapter in adapters.items():
@@ -69,6 +71,17 @@ def _build_snapshot(adapters: dict, force: bool = False) -> dict:
         else:
             results = adapter.get_snapshot([s["key"] for s in specs])
         snapshot.update(results)
+
+    # Bloomberg bridge — чете parquet от vrm-data-archive (read-only)
+    try:
+        from sources.bloomberg_bridge_adapter import BloombergBridgeAdapter
+        bridge = BloombergBridgeAdapter()
+        bridge_snap = bridge.get_snapshot(SERIES_CATALOG)
+        snapshot.update(bridge_snap)
+    except Exception as e:
+        import logging
+        logging.warning(f"Bloomberg bridge snapshot failed: {e}")
+
     return snapshot
 
 

@@ -35,7 +35,11 @@ def generate_status_report(catalog: dict, adapters: dict) -> None:
         print(f"\n  [{source_name.upper()}]  {n_cached}/{n_total} серии кешувани")
 
         for key, meta in source_series:
-            series = cache.get(key)
+            # Use adapter method to reconstruct Series от cache entry
+            try:
+                series = adapter._series_from_cache(key)
+            except AttributeError:
+                series = None
             if series is not None and not series.empty:
                 latest = series.dropna()
                 if not latest.empty:
