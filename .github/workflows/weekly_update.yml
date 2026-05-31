@@ -10,11 +10,15 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     permissions:
       contents: write
       pages: write
       id-token: write
+    env:
+      # tqdm \r → нов ред в Actions logs; akshare го ползва за heavy fetchers
+      TQDM_DISABLE: '1'
+      PYTHONUNBUFFERED: '1'
 
     steps:
       - name: Checkout repo
