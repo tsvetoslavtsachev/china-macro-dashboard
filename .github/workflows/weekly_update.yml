@@ -13,6 +13,8 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: write
+      pages: write
+      id-token: write
 
     steps:
       - name: Checkout repo
@@ -58,6 +60,21 @@ jobs:
             echo "index.html ← $LATEST"
           fi
 
+      - name: Prepare Pages site
+        run: |
+          mkdir -p _site
+          cp output/index.html _site/index.html 2>/dev/null || \
+            cp $(ls -1t output/briefing_*.html | head -n1) _site/index.html
+          # archive: include all briefings + context md-та
+          cp output/briefing_*.html _site/ 2>/dev/null || true
+          cp output/briefing_context_*.md _site/ 2>/dev/null || true
+          ls -la _site/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
       - name: Commit and push output
         run: |
           git config --global user.name "github-actions[bot]"
@@ -89,24 +106,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout (latest main, incl. bot commit)
-        uses: actions/checkout@v4
-
-      - name: Prepare Pages site
-        run: |
-          mkdir -p _site
-          cp output/index.html _site/index.html 2>/dev/null || \
-            cp $(ls -1t output/briefing_*.html | head -n1) _site/index.html
-          # archive: include all briefings + context md-та
-          cp output/briefing_*.html _site/ 2>/dev/null || true
-          cp output/briefing_context_*.md _site/ 2>/dev/null || true
-          ls -la _site/
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
