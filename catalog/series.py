@@ -871,3 +871,25 @@ def series_by_lens(lens: str) -> list[dict]:
             e["_key"] = key
             result.append(e)
     return result
+
+
+def series_by_tag(tag: str) -> list[dict]:
+    """Връща всички серии, носещи даден tag (non_consensus/structural/...), с _key."""
+    result = []
+    for key, entry in SERIES_CATALOG.items():
+        if tag in entry.get("tags", []):
+            e = dict(entry)
+            e["_key"] = key
+            result.append(e)
+    return result
+
+
+def series_by_peer_group(peer_group: str) -> list[dict]:
+    """Връща всички серии от даден peer_group, с добавен _key."""
+    result = []
+    for key, entry in SERIES_CATALOG.items():
+        if entry.get("peer_group") == peer_group:
+            e = dict(entry)
+            e["_key"] = key
+            result.append(e)
+    return result

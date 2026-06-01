@@ -264,6 +264,7 @@ def _render_header(today: date, n_series: int) -> str:
   <div class="header-left">
     <h1><span class="flag">🇨🇳</span> China Macro Dashboard</h1>
     <div class="subtitle">Икономически преглед — седмичен briefing</div>
+    <a href="deep.html" style="display:inline-block;margin-top:8px;color:#58a6ff;font-size:13px;font-weight:600;text-decoration:none">За подробен анализ →</a>
   </div>
   <div class="header-right">
     <div class="date">{today.strftime('%d %B %Y')}</div>

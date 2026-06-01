@@ -1,0 +1,179 @@
+"""
+tests/test_deep_briefing.py
+===========================
+Offline тестове за China deep briefing (Фаза 2):
+  - catalog helper-и series_by_tag / series_by_peer_group (отключват non_consensus)
+  - composite/regime математика — config.MODULE_WEIGHTS (НЕ landing-овото копие)
+  - generate_deep_briefing рендира всички China-native секции
+  - честни „предстои" placeholder-и (без фабрикувани US-копирани секции)
+  - WoW delta: първи run vs run с предишен state
+  - empty snapshot не крашва
+
+Без мрежа — синтетичен snapshot покрива целия каталог.
+"""
+import sys
+from datetime import date
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+import numpy as np
+import pandas as pd
+
+from config import MODULE_WEIGHTS, MACRO_REGIMES
+from catalog.series import SERIES_CATALOG, series_by_tag, series_by_peer_group, ALLOWED_TAGS
+from export.deep_briefing import (
+    generate_deep_briefing,
+    _overall_composite,
+    _overall_regime,
+)
+
+
+def _monthly(values, end="2026-05-01"):
+    idx = pd.date_range(end=end, periods=len(values), freq="MS")
+    return pd.Series(values, index=idx)
+
+
+def _synthetic_snapshot():
+    """Покрива целия каталог; тренд + няколко spike-а за аномалии."""
+    snap = {}
+    for i, k in enumerate(SERIES_CATALOG.keys()):
+        if i % 9 == 0:
+            vals = [2.0 + 0.03 * np.sin(j * 0.3) for j in range(57)] + [9.0, 9.4, 9.9]
+        else:
+            vals = list(np.linspace(2.0 + (i % 4) * 0.2, 4.5 + (i % 3) * 0.3, 60))
+        snap[k] = _monthly(vals)
+    return snap
+
+
+# ─── catalog helper-и (отключват non_consensus import) ───────────
+
+def test_catalog_helpers_exist_and_work():
+    # series_by_tag покрива всеки allowed tag
+    for tag in ALLOWED_TAGS:
+        rows = series_by_tag(tag)
+        for r in rows:
+            assert "_key" in r
+            assert tag in r.get("tags", [])
+    # има поне няколко non_consensus tagged серии (захранват highlights)
+    assert len(series_by_tag("non_consensus")) >= 3
+    # series_by_peer_group връща членовете на група
+    cpi = series_by_peer_group("cpi")
+    assert all(e.get("peer_group") == "cpi" for e in cpi)
+    assert {e["_key"] for e in cpi}  # непразно
+
+
+# ─── composite/regime — config тегла (authoritative) ────────────
+
+def test_overall_composite_uses_config_weights():
+    """Headline-ът трябва да е config.MODULE_WEIGHTS (= run.py --modules /
+    export_api / manifest), НЕ остарялото локално копие на landing-а."""
+    # Реалните per-lens скорове от run.py --modules (verified 2026-06-01)
+    results = [
+        {"module": "growth", "composite": 13.4, "regime": "РЕЦЕСИЯ"},
+        {"module": "inflation", "composite": 12.9, "regime": "ДЕФЛАЦИЯ"},
+        {"module": "labor", "composite": 12.3, "regime": "КРИЗА НА ТРУДА"},
+        {"module": "credit", "composite": 71.5, "regime": "УМЕРЕНО СТИМУЛИРАНЕ"},
+        {"module": "property", "composite": 26.6, "regime": "ИМОТНА КРИЗА"},
+    ]
+    overall = _overall_composite(results)
+    assert overall == 30.4   # config weights; landing-овите биха дали 26.7
+
+    label_bg, key, color = _overall_regime(overall)
+    assert label_bg == "РЕЦЕСИОНЕН"
+    assert key == "recessionary"
+    assert color.startswith("#")
+
+
+def test_module_weights_are_config_not_landing():
+    """Регресионен guard: deep ползва config теглата (credit 0.25, labor 0.10)."""
+    assert MODULE_WEIGHTS["credit"] == 0.25
+    assert MODULE_WEIGHTS["labor"] == 0.10
+    assert MODULE_WEIGHTS["property"] == 0.20
+
+
+def test_overall_regime_thresholds():
+    assert _overall_regime(85)[1] == "expansionary"
+    assert _overall_regime(70)[1] == "healthy"
+    assert _overall_regime(55)[1] == "mixed"
+    assert _overall_regime(40)[1] == "deteriorating"
+    assert _overall_regime(20)[1] == "recessionary"
+
+
+# ─── рендериране ─────────────────────────────────────────────────
+
+def test_deep_renders_all_native_sections(tmp_path):
+    snap = _synthetic_snapshot()
+    out = tmp_path / "deep.html"
+    generate_deep_briefing(snap, str(out), today=date(2026, 5, 30),
+                           state_dir=str(tmp_path / "state"))
+    html = out.read_text(encoding="utf-8")
+
+    # China-native секции
+    for section in [
+        "Регимна диагноза", "Седмична промяна", "Cross-Lens Divergence",
+        "Non-Consensus Highlights", "Top Anomalies", "Предстои",
+        "качеството на данните",
+    ]:
+        assert section in html, f"липсва секция: {section}"
+
+    # 3 cross-lens двойки, 5 lens блока
+    assert html.count('class="pair-card"') == 3
+    assert html.count("data-lens=") == 5
+
+    # честни „предстои" placeholder-и (3 card-а)
+    assert html.count('class="soon-card"') == 3
+    assert "Исторически аналози" in html
+    assert "Falsification criteria" in html
+
+    # backlink към краткия landing
+    assert 'href="index.html"' in html
+
+    # дарк China-family тема + self-contained
+    assert "#0d1117" in html
+    assert "<script" not in html.lower()
+
+
+def test_deep_has_no_us_executive_framing(tmp_path):
+    """Anti-illusion: deep НЕ показва US executive рамка / US threshold flags
+    като активни секции (само честни „предстои" обяснения)."""
+    snap = _synthetic_snapshot()
+    out = tmp_path / "deep.html"
+    generate_deep_briefing(snap, str(out), today=date(2026, 5, 30),
+                           state_dir=str(tmp_path / "state"))
+    html = out.read_text(encoding="utf-8")
+    # няма US executive заглавие
+    assert "Executive Summary" not in html
+    # няма активен US threshold-flags banner
+    assert "Threshold алерти" not in html
+    assert "flags-banner" not in html
+    # няма US регимни ключове като активен режим
+    assert "stagflation" not in html.lower()
+
+
+def test_deep_wow_first_run_then_delta(tmp_path):
+    snap = _synthetic_snapshot()
+    state_dir = str(tmp_path / "state")
+
+    # Run 1 — няма предишен state
+    out1 = tmp_path / "deep1.html"
+    generate_deep_briefing(snap, str(out1), today=date(2026, 5, 18), state_dir=state_dir)
+    html1 = out1.read_text(encoding="utf-8")
+    assert "Няма референтен snapshot" in html1
+
+    # Run 2 — 7 дни по-късно → намира run1 (≥5 дни) като референция
+    out2 = tmp_path / "deep2.html"
+    generate_deep_briefing(snap, str(out2), today=date(2026, 5, 25), state_dir=state_dir)
+    html2 = out2.read_text(encoding="utf-8")
+    assert "спрямо 2026-05-18" in html2
+    assert "Няма референтен snapshot" not in html2
+
+
+def test_deep_handles_empty_snapshot(tmp_path):
+    out = tmp_path / "empty.html"
+    generate_deep_briefing({}, str(out), today=date(2026, 5, 30), state_dir=None)
+    assert out.exists()
+    html = out.read_text(encoding="utf-8")
+    # graceful — секциите се рендират, без crash
+    assert "Регимна диагноза" in html
+    assert "Cross-Lens Divergence" in html

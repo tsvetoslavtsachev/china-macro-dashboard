@@ -50,8 +50,11 @@ jobs:
       - name: Smart refresh stale series
         run: python run.py --refresh-only
 
-      - name: Generate HTML briefing
+      - name: Generate HTML briefing (кратък landing)
         run: python run.py --briefing --no-browser
+
+      - name: Generate deep briefing (подробен анализ)
+        run: python run.py --deep --no-browser
 
       - name: Generate Markdown context
         run: python run.py --export-context --no-browser
@@ -63,20 +66,28 @@ jobs:
       - name: Assemble latest/ AI bundle (context.md + data.json + manifest.json)
         run: python export/build_latest.py
 
-      - name: Update index.html (latest briefing)
+      - name: Update index.html (landing) + deep.html
         run: |
-          LATEST=$(ls -1t output/briefing_*.html | head -n1)
+          # ⚠ glob briefing_*.html мачва и briefing_deep_*.html → изключваме deep за index
+          LATEST=$(ls -1t output/briefing_*.html | grep -v 'briefing_deep_' | head -n1)
           if [ -n "$LATEST" ]; then
             cp "$LATEST" output/index.html
             echo "index.html ← $LATEST"
+          fi
+          LATEST_DEEP=$(ls -1t output/briefing_deep_*.html 2>/dev/null | head -n1)
+          if [ -n "$LATEST_DEEP" ]; then
+            cp "$LATEST_DEEP" output/deep.html
+            echo "deep.html ← $LATEST_DEEP"
           fi
 
       - name: Prepare Pages site
         run: |
           mkdir -p _site
           cp output/index.html _site/index.html 2>/dev/null || \
-            cp $(ls -1t output/briefing_*.html | head -n1) _site/index.html
-          # archive: include all briefings + context md-та
+            cp $(ls -1t output/briefing_*.html | grep -v 'briefing_deep_' | head -n1) _site/index.html
+          # стабилен deep.html (линкът „За подробен анализ →" от landing-а сочи тук)
+          cp output/deep.html _site/deep.html 2>/dev/null || true
+          # archive: include all briefings (вкл. dated deep) + context md-та
           cp output/briefing_*.html _site/ 2>/dev/null || true
           cp output/briefing_context_*.md _site/ 2>/dev/null || true
           # стабилен /latest/ AI-consumption слой (context.md + data.json + manifest.json + series.json)

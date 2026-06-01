@@ -288,6 +288,40 @@ def cmd_briefing(args) -> int:
     return 0
 
 
+def cmd_deep(args) -> int:
+    """Deep Briefing — генерира подробния research-style HTML (зад линк от landing-а)."""
+    from export.deep_briefing import generate_deep_briefing
+
+    adapters = _build_adapters()
+
+    if not args.refresh:
+        _auto_refresh_stale(adapters, verbose=True)
+
+    snapshot = _build_snapshot(adapters, force=args.refresh)
+
+    if not snapshot:
+        print("⚠ Snapshot е празен. Стартирай `python run.py --status --refresh` първо.")
+        return 1
+
+    print(f"\n📦 Snapshot: {len(snapshot)} серии заредени")
+
+    output_path = f"{OUTPUT_DIR}/briefing_deep_{datetime.now().strftime('%Y-%m-%d')}.html"
+    print(f"📝 Генериране на подробен HTML → {output_path}")
+
+    generate_deep_briefing(
+        snapshot=snapshot,
+        output_path=output_path,
+    )
+
+    print(f"✓ Подробен briefing готов: {output_path}")
+    if not args.no_browser:
+        try:
+            webbrowser.open(f"file://{Path(output_path).resolve()}")
+        except Exception:
+            pass
+    return 0
+
+
 def cmd_export_context(args) -> int:
     """Markdown context export за LLM анализ."""
     from export.briefing_context import generate_briefing_context
@@ -333,7 +367,9 @@ def main() -> int:
     parser.add_argument("--refresh-only", action="store_true",
                         help="Refresh данни без briefing")
     parser.add_argument("--briefing", action="store_true",
-                        help="Weekly Briefing (HTML)")
+                        help="Weekly Briefing (HTML) — кратък landing")
+    parser.add_argument("--deep", action="store_true",
+                        help="Deep Briefing (HTML) — подробен research-style анализ")
     parser.add_argument("--export-context", action="store_true",
                         help="Markdown context export за LLM анализ")
     parser.add_argument("--refresh", action="store_true",
@@ -353,6 +389,8 @@ def main() -> int:
         return cmd_refresh_only(args)
     elif args.briefing:
         return cmd_briefing(args)
+    elif args.deep:
+        return cmd_deep(args)
     elif getattr(args, "export_context", False):
         return cmd_export_context(args)
     else:
