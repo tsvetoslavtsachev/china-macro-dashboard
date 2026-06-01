@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "region": "CN",
+  "as_of_date": "2026-06-01",
+  "generated_at": "2026-06-01T12:39:52Z",
+  "data_generated_at": "2026-06-01T12:39:31.305810Z",
+  "composite_score": 30.4,
+  "regime": {
+    "key": "recessionary",
+    "label_bg": "РЕЦЕСИОНЕН"
+  },
+  "lenses": [
+    {
+      "key": "growth",
+      "label_bg": "Растеж и активност",
+      "score": 13.4,
+      "direction": "contracting"
+    },
+    {
+      "key": "inflation",
+      "label_bg": "Инфлация и цени",
+      "score": 12.9,
+      "direction": "contracting"
+    },
+    {
+      "key": "labor",
+      "label_bg": "Пазар на труда",
+      "score": 12.3,
+      "direction": "contracting"
+    },
+    {
+      "key": "credit",
+      "label_bg": "Монетарна политика и кредит",
+      "score": 71.5,
+      "direction": "expanding"
+    },
+    {
+      "key": "property",
+      "label_bg": "Имоти и търговия",
+      "score": 26.6,
+      "direction": "contracting"
+    }
+  ],
+  "top_anomalies": [
+    {
+      "series_id": "CN_LPR_1Y",
+      "name_bg": "1-годишен Loan Prime Rate (PBoC)",
+      "lens": "credit",
+      "z_score": -2.564,
+      "direction": "down"
+    },
+    {
+      "series_id": "CN_POLICY_RATE",
+      "name_bg": "Политическа лихва — PBoC 7-day repo (%)",
+      "lens": "credit",
+      "z_score": -2.39,
+      "direction": "down"
+    },
+    {
+      "series_id": "CN_CGB_10Y",
+      "name_bg": "10Y China Government Bond yield",
+      "lens": "credit",
+      "z_score": -2.237,
+      "direction": "down"
+    },
+    {
+      "series_id": "CN_YOUTH_UNEMPLOYMENT",
+      "name_bg": "Младежка безработица (16-24 г., %)",
+      "lens": "labor",
+      "z_score": 2.225,
+      "direction": "up"
+    },
+    {
+      "series_id": "CN_FDI_GDP",
+      "name_bg": "ПЧИ — входящи (% от БВП)",
+      "lens": "property",
+      "z_score": -2.114,
+      "direction": "down"
+    }
+  ],
+  "counts": {
+    "lenses": 5,
+    "anomalies": 6,
+    "divergences": 3
+  },
+  "links": {
+    "context_md": "context.md",
+    "data_json": "data.json",
+    "series_json": "series.json",
+    "dashboard": "../index.html"
+  }
+}

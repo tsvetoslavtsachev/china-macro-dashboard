@@ -1,0 +1,306 @@
+{
+  "region": "CN",
+  "as_of_date": "2026-06-01",
+  "generated_at": "2026-06-01T12:39:31.305810Z",
+  "executive_summary": {
+    "composite_score": 30.4,
+    "regime_key": "recessionary",
+    "regime_label_bg": "РЕЦЕСИОНЕН",
+    "css_class": null,
+    "narrative": "Претеглен композитен macro score 30.4/100 → режим „РЕЦЕСИОНЕН“. 5 лещи, 6 flagged аномалии, 3 cross-lens двойки.",
+    "supporting_signals": [],
+    "primary_driver": null
+  },
+  "lenses": {
+    "growth": {
+      "score": 13.4,
+      "direction": "contracting",
+      "regime": "РЕЦЕСИЯ",
+      "label_bg": "Растеж и активност",
+      "indicators_count": 5,
+      "key_readings": [
+        {
+          "label": "БВП — реален растеж (YoY %)",
+          "value": 4.9774,
+          "percentile": 8.0
+        },
+        {
+          "label": "Индустрия — реален растеж (YoY %)",
+          "value": 5.3194,
+          "percentile": 16.0
+        },
+        {
+          "label": "Услуги — реален растеж (YoY %)",
+          "value": 4.9558,
+          "percentile": 8.0
+        },
+        {
+          "label": "Брутно капиталообразуване (% от БВП)",
+          "value": 40.6112,
+          "percentile": 28.0
+        }
+      ],
+      "narrative": [
+        "БВП растеж 5.0% — под официалния таргет. Очаквайте допълнителни стимули."
+      ]
+    },
+    "inflation": {
+      "score": 12.9,
+      "direction": "contracting",
+      "regime": "ДЕФЛАЦИЯ",
+      "label_bg": "Инфлация и цени",
+      "indicators_count": 4,
+      "key_readings": [
+        {
+          "label": "ИПЦ — инфлация (YoY %)",
+          "value": 0.2181,
+          "percentile": 8.0
+        },
+        {
+          "label": "БВП дефлатор (YoY %)",
+          "value": -0.7072,
+          "percentile": 0.0
+        },
+        {
+          "label": "ИПЦ — индекс (месечен, YoY %)",
+          "value": 0.0178,
+          "percentile": 14.3
+        },
+        {
+          "label": "ИПП — индекс (месечен, YoY %)",
+          "value": -0.7156,
+          "percentile": 43.8
+        }
+      ],
+      "narrative": [
+        "CPI 0.22% — близо до нула. Дефлационен риск. PBoC под натиск да стимулира.",
+        "GDP дефлатор -0.71% — отрицателен. Номиналният БВП расте по-бавно от реалния. Широка дефлация."
+      ]
+    },
+    "labor": {
+      "score": 12.3,
+      "direction": "contracting",
+      "regime": "КРИЗА НА ТРУДА",
+      "label_bg": "Пазар на труда",
+      "indicators_count": 3,
+      "key_readings": [
+        {
+          "label": "Безработица — официална (ILO, %)",
+          "value": 4.615,
+          "percentile": 73.1
+        },
+        {
+          "label": "Младежка безработица (16-24 г., %)",
+          "value": 15.795,
+          "percentile": 96.2
+        },
+        {
+          "label": "Коефициент на участие в работната сила (%)",
+          "value": 64.551,
+          "percentile": 0.0
+        }
+      ],
+      "narrative": [
+        "Младежка безработица 15.8% — повишена. Образователната система произвежда повече дипломирани, отколкото пазарът абсорбира.",
+        "Официална безработица 4.6% — подценена. Не включва ~300 млн. мигрантски работници."
+      ]
+    },
+    "credit": {
+      "score": 71.5,
+      "direction": "expanding",
+      "regime": "УМЕРЕНО СТИМУЛИРАНЕ",
+      "label_bg": "Монетарна политика и кредит",
+      "indicators_count": 6,
+      "key_readings": [
+        {
+          "label": "Политическа лихва — PBoC 7-day repo (%)",
+          "value": 1.4,
+          "percentile": 0.0
+        },
+        {
+          "label": "Кредитна лихва (%)",
+          "value": 4.35,
+          "percentile": 0.0
+        },
+        {
+          "label": "Депозитна лихва (%)",
+          "value": 1.5,
+          "percentile": 0.0
+        },
+        {
+          "label": "Кредит към частния сектор (% от БВП)",
+          "value": 194.166,
+          "percentile": 96.0
+        }
+      ],
+      "narrative": [
+        "PBoC policy rate 1.40% — активен easing цикъл.",
+        "Кредит към частния сектор 194% от БВП — debt overhang. Ограничава monetary policy transmission.",
+        "M2 227% от БВП — най-висок в G20. Монетарна маса значително над реалната икономика.",
+        "CNY/USD 7.1728 — управляван флоат. PBoC контролира дневния band ±2%."
+      ]
+    },
+    "property": {
+      "score": 26.6,
+      "direction": "contracting",
+      "regime": "ИМОТНА КРИЗА",
+      "label_bg": "Имоти и търговия",
+      "indicators_count": 7,
+      "key_readings": [
+        {
+          "label": "Текуща сметка — баланс (% от БВП)",
+          "value": 2.2616,
+          "percentile": 48.0
+        },
+        {
+          "label": "Износ — дял от БВП (%)",
+          "value": 20.0229,
+          "percentile": 28.0
+        },
+        {
+          "label": "ПЧИ — входящи (% от БВП)",
+          "value": 0.099,
+          "percentile": 0.0
+        },
+        {
+          "label": "Брутно фиксирано капиталообразуване (% от БВП)",
+          "value": 39.8697,
+          "percentile": 36.0
+        }
+      ],
+      "narrative": [
+        "Цени на жилища +0.7% YoY — стабилизация след корекцията.",
+        "ПЧИ 0.10% от БВП — исторически минимум. Геополитически de-risking от западни компании.",
+        "Текуща сметка +2.3% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU."
+      ]
+    }
+  },
+  "top_anomalies": [
+    {
+      "series_id": "CN_LPR_1Y",
+      "name_bg": "1-годишен Loan Prime Rate (PBoC)",
+      "lens": [
+        "credit"
+      ],
+      "peer_group": "rates",
+      "z_score": -2.564,
+      "direction": "down",
+      "current_value": 3.0,
+      "last_date": "2026-05-20",
+      "is_new_extreme": true,
+      "new_extreme_direction": "min",
+      "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
+    },
+    {
+      "series_id": "CN_POLICY_RATE",
+      "name_bg": "Политическа лихва — PBoC 7-day repo (%)",
+      "lens": [
+        "credit"
+      ],
+      "peer_group": "rates",
+      "z_score": -2.39,
+      "direction": "down",
+      "current_value": 1.4,
+      "last_date": "2025-06-01",
+      "is_new_extreme": true,
+      "new_extreme_direction": "min",
+      "narrative_hint": "PBoC benchmark rate. Намален до 1.4% (2025). Monetary easing цикъл в ход."
+    },
+    {
+      "series_id": "CN_CGB_10Y",
+      "name_bg": "10Y China Government Bond yield",
+      "lens": [
+        "credit"
+      ],
+      "peer_group": "rates",
+      "z_score": -2.237,
+      "direction": "down",
+      "current_value": 1.72,
+      "last_date": "2026-05-31",
+      "is_new_extreme": false,
+      "new_extreme_direction": null,
+      "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
+    },
+    {
+      "series_id": "CN_YOUTH_UNEMPLOYMENT",
+      "name_bg": "Младежка безработица (16-24 г., %)",
+      "lens": [
+        "labor"
+      ],
+      "peer_group": "unemployment",
+      "z_score": 2.225,
+      "direction": "up",
+      "current_value": 15.795,
+      "last_date": "2025-12-31",
+      "is_new_extreme": true,
+      "new_extreme_direction": "max",
+      "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
+    },
+    {
+      "series_id": "CN_FDI_GDP",
+      "name_bg": "ПЧИ — входящи (% от БВП)",
+      "lens": [
+        "property"
+      ],
+      "peer_group": "investment",
+      "z_score": -2.114,
+      "direction": "down",
+      "current_value": 0.099,
+      "last_date": "2024-12-31",
+      "is_new_extreme": true,
+      "new_extreme_direction": "min",
+      "narrative_hint": "Срина се до 0.10% GDP (2024) — исторически минимум. Геополитически de-risking от западни компании. Структурна промяна в глобалните вериги на доставки."
+    },
+    {
+      "series_id": "CN_CREDIT_PRIVATE",
+      "name_bg": "Кредит към частния сектор (% от БВП)",
+      "lens": [
+        "credit"
+      ],
+      "peer_group": "credit_depth",
+      "z_score": 2.074,
+      "direction": "up",
+      "current_value": 194.166,
+      "last_date": "2024-12-31",
+      "is_new_extreme": true,
+      "new_extreme_direction": "max",
+      "narrative_hint": "194% от GDP (2024) — изключително висок. Debt overhang ограничава monetary policy transmission. Кредитният импулс (промяна в новия кредит) е по-важен от нивото."
+    }
+  ],
+  "cross_lens_divergences": [
+    {
+      "pair_id": "credit_real_economy",
+      "name_bg": "Кредитна експанзия × Реален сектор",
+      "question_bg": "Превръща ли се кредитът в реална инвестиция, или ликвидността засяда (debt-deflation)?",
+      "state": "transition",
+      "interpretation": "Преход — кредит и реален сектор не са ясно aligned; чакай следващ TSF/FAI print.",
+      "slot_a_label": "Кредитна експанзия",
+      "slot_b_label": "Имоти и инвестиции",
+      "breadth_a": 0.6,
+      "breadth_b": 0.0
+    },
+    {
+      "pair_id": "monetary_inflation_trap",
+      "name_bg": "Монетарно разхлабване × Инфлация",
+      "question_bg": "Води ли разхлабването на PBoC до инфлация, или политиката бута в дефлация (policy trap)?",
+      "state": "a_up_b_down",
+      "interpretation": "Policy trap — PBoC разхлабва, но инфлацията пада/е в дефлация. Трансмисията е счупена (Japan-style): по-ниските лихви не вдигат цените при deleveraging.",
+      "slot_a_label": "Монетарно разхлабване",
+      "slot_b_label": "Инфлация",
+      "breadth_a": 1.0,
+      "breadth_b": 0.333
+    },
+    {
+      "pair_id": "external_domestic_balance",
+      "name_bg": "Външно търсене × Вътрешна активност",
+      "question_bg": "Балансиран ли е растежът, или Китай зависи от износа при слабо вътрешно търсене?",
+      "state": "a_up_b_down",
+      "interpretation": "Export-dependence — износът носи растежа, докато вътрешното търсене е слабо. Небалансирано възстановяване, уязвимо на тарифи/външни шокове.",
+      "slot_a_label": "Външно търсене",
+      "slot_b_label": "Вътрешна активност",
+      "breadth_a": 0.833,
+      "breadth_b": 0.0
+    }
+  ],
+  "non_consensus_highlights": []
+}
