@@ -19,6 +19,10 @@ import os
 # ─── API endpoints (без автентикация) ────────────────────────────────────────
 WORLDBANK_API_BASE = "https://api.worldbank.org/v2"
 DBNOMICS_API_BASE = "https://api.db.nomics.world/v22"
+# Опционален DBnomics ключ. Public v22 API е ОТВОРЕН (работи без ключ) — ключът
+# е за по-висок rate-limit под тежко натоварване. Идва от .env (gitignored) или
+# env var (CI секрет). None = не се изпраща (използваме отворения достъп).
+DBNOMICS_API_KEY = os.environ.get("DBNOMICS_API_KEY")
 
 # Optional .env override
 _DOTENV = os.path.join(os.path.dirname(__file__), ".env")
@@ -34,6 +38,8 @@ if os.path.exists(_DOTENV):
                 WORLDBANK_API_BASE = value
             elif key.strip() == "DBNOMICS_API_BASE":
                 DBNOMICS_API_BASE = value
+            elif key.strip() == "DBNOMICS_API_KEY":
+                DBNOMICS_API_KEY = value
 
 
 # ─── Кеш (адаптивен TTL по release schedule) ─────────────────────────────────

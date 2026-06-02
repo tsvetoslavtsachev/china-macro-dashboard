@@ -12,6 +12,11 @@ build/
 venv/
 env/
 
+# Secrets (НИКОГА не commit-вай — API ключове)
+.env
+.env.*
+!.env.example
+
 # Cache и data (локални)
 data/cache_*.json
 data/test_cache_*.json
