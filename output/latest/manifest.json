@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-06-01",
-  "generated_at": "2026-06-01T12:39:52Z",
-  "data_generated_at": "2026-06-01T12:39:31.305810Z",
+  "as_of_date": "2026-06-02",
+  "generated_at": "2026-06-02T05:45:52Z",
+  "data_generated_at": "2026-06-02T05:45:52.368456Z",
   "composite_score": 30.4,
   "regime": {
     "key": "recessionary",

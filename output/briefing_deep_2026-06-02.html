@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>China Macro — Подробен анализ 2026-06-02</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin: 0; padding: 0; background: #0d1117; color: #e6edf3; line-height: 1.5;
+}
+.brief-main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* Header */
+.brief-header {
+  display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(135deg, #1a1f2e 0%, #161b27 100%);
+  border: 1px solid #30363d; border-radius: 12px;
+  padding: 24px 28px; margin-bottom: 24px; flex-wrap: wrap; gap: 20px;
+}
+.brief-backlink { color: #58a6ff; font-size: 12.5px; text-decoration: none; display: inline-block; margin-bottom: 8px; }
+.brief-backlink:hover { text-decoration: underline; }
+.brief-title h1 { margin: 0; font-size: 26px; font-weight: 700; color: #f0f6fc; }
+.brief-title h1 .flag { font-size: 30px; margin-right: 8px; }
+.brief-subtitle { color: #8b949e; font-size: 13px; margin-top: 4px; }
+.brief-header-right { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.score-circle {
+  width: 84px; height: 84px; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex-shrink: 0; border: 3px solid;
+}
+.score-circle .score-num { font-size: 26px; font-weight: 800; line-height: 1; }
+.score-circle .score-label { font-size: 10px; color: #8b949e; margin-top: 3px; }
+.brief-kpis { display: flex; gap: 14px; flex-wrap: wrap; }
+.kpi { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 8px 14px; text-align: center; min-width: 84px; }
+.kpi-n { font-size: 22px; font-weight: 600; color: #58a6ff; }
+.kpi-l { font-size: 10.5px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Sections */
+.brief-section { margin-bottom: 36px; }
+.brief-section h2 {
+  font-size: 17px; text-transform: uppercase; letter-spacing: 1px;
+  color: #f0f6fc; border-bottom: 1px solid #30363d; padding-bottom: 6px; margin: 0 0 14px;
+}
+.brief-section h4 { font-size: 12.5px; text-transform: uppercase; color: #8b949e; letter-spacing: 0.7px; margin: 0 0 8px; }
+.muted { color: #8b949e; font-style: italic; font-size: 13px; }
+
+/* Regime headline (China composite) */
+.exec-section { background: #161b27; border: 1px solid #30363d; border-radius: 8px; padding: 18px 20px; }
+.exec-section h2 { margin-top: 0; }
+.exec-headline { display: grid; grid-template-columns: minmax(180px, 260px) 1fr; gap: 18px; align-items: start; margin-bottom: 14px; }
+.regime-badge { padding: 12px 14px; border-radius: 6px; text-align: center; border: 1px solid; }
+.regime-badge .regime-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.6px; opacity: 0.75; }
+.regime-badge .regime-val { font-size: 18px; font-weight: 700; margin: 4px 0 6px; line-height: 1.25; }
+.regime-badge .regime-driver { font-size: 10.5px; opacity: 0.7; font-family: monospace; }
+.exec-narrative { background: #0d1117; border-left: 3px solid #30363d; padding: 10px 14px; font-size: 14px; line-height: 1.55; color: #c9d1d9; }
+.exec-grid-single { margin-top: 4px; }
+.exec-weights-note { margin: 12px 0 0; font-size: 11.5px; }
+.regime-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #161b27; }
+.regime-table th, .regime-table td { padding: 7px 10px; text-align: left; border-bottom: 1px solid #21262d; }
+.regime-table th { background: #21262d; color: #8b949e; font-weight: 500; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.ne-inline { display: inline-block; background: #d2992222; color: #d29922; font-size: 10px; padding: 1px 5px; border-radius: 3px; font-weight: 600; margin-left: 4px; font-family: monospace; }
+@media (max-width: 760px) { .exec-headline { grid-template-columns: 1fr; } }
+
+/* Week-over-Week delta */
+.delta-section { background: #161b27; border: 1px solid #30363d; border-radius: 8px; padding: 14px 18px; }
+.delta-section h2 { margin-top: 0; }
+.delta-section .delta-since { font-size: 12px; color: #8b949e; text-transform: none; letter-spacing: 0; font-weight: normal; }
+.delta-regime { background: #d2992222; border: 1px solid #d2992244; color: #d29922; padding: 10px 14px; border-radius: 6px; margin-bottom: 12px; font-size: 14px; }
+.delta-regime .delta-label { font-weight: 600; margin-right: 8px; }
+.delta-regime .delta-arrow { font-family: monospace; }
+.delta-block { margin: 10px 0; }
+.delta-block ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.delta-block li { margin-bottom: 3px; }
+.delta-interp { color: #8b949e; }
+.state-from { color: #8b949e; font-family: monospace; }
+.state-to { font-family: monospace; color: #e6edf3; }
+.delta-pp { font-family: monospace; margin-left: 6px; font-weight: 600; padding: 0 4px; border-radius: 3px; }
+.delta-pp.up { background: #3fb95022; color: #3fb950; }
+.delta-pp.down { background: #f8514922; color: #f85149; }
+.delta-pp.flat { color: #8b949e; }
+.delta-tag { display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 3px; font-weight: 600; margin-right: 4px; }
+.delta-tag.new { background: #58a6ff22; color: #58a6ff; }
+.delta-tag.gone { background: #8b949e22; color: #8b949e; }
+.ref-vanished { background: #21262d; color: #8b949e; text-decoration: line-through; font-family: monospace; font-size: 12.5px; padding: 1px 5px; border-radius: 3px; }
+
+/* Cross-lens pairs */
+.pair-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 14px; }
+.pair-card { background: #161b27; border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; }
+.pair-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.pair-head h3 { margin: 0; font-size: 14.5px; font-weight: 600; color: #f0f6fc; }
+.pair-state { font-size: 10.5px; padding: 3px 8px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+.state-up-up { background: #3fb95022; color: #3fb950; }
+.state-dn-dn { background: #f8514922; color: #f85149; }
+.state-mixed { background: #d2992222; color: #d29922; }
+.state-trans { background: #8b949e22; color: #8b949e; }
+.state-ins   { background: #8b949e22; color: #6e7681; }
+.pair-question { font-size: 12.5px; color: #8b949e; font-style: italic; margin-bottom: 10px; }
+.pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.pair-slot { background: #0d1117; border: 1px solid #21262d; border-radius: 5px; padding: 8px 10px; }
+.pair-slot-label { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+.pair-slot-val { font-family: 'Consolas', 'Monaco', monospace; font-size: 18px; font-weight: 600; margin-top: 4px; color: #e6edf3; }
+.pair-slot-n { font-size: 10.5px; color: #8b949e; }
+.pair-interp { background: #0d1117; border-left: 3px solid #30363d; padding: 8px 12px; font-size: 13px; color: #c9d1d9; }
+
+/* Lens blocks + tables */
+.lens-block h2 { color: #f0f6fc; }
+.breadth-table, .nc-table, .anom-table { width: 100%; border-collapse: collapse; background: #161b27; border: 1px solid #30363d; font-size: 13px; margin-bottom: 14px; }
+.breadth-table th, .breadth-table td, .nc-table th, .nc-table td, .anom-table th, .anom-table td { padding: 7px 10px; text-align: left; border-bottom: 1px solid #21262d; vertical-align: middle; }
+.breadth-table th, .nc-table th, .anom-table th { background: #21262d; color: #8b949e; font-weight: 500; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.num { font-family: 'Consolas', 'Monaco', monospace; text-align: right; }
+.pg-name { font-weight: 500; }
+.dir-badge { font-size: 11px; padding: 2px 8px; border-radius: 3px; font-weight: 500; }
+.dir-up  { background: #3fb95022; color: #3fb950; }
+.dir-dn  { background: #f8514922; color: #f85149; }
+.dir-mix { background: #d2992222; color: #d29922; }
+.dir-ins { background: #8b949e22; color: #8b949e; }
+.extremes { max-width: 260px; }
+.lens-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.lens-grid > div { background: #161b27; border: 1px solid #30363d; border-radius: 6px; padding: 12px 14px; }
+.lens-grid ul, .lens-grid ol { margin: 0; padding-left: 18px; }
+.lens-grid li { font-size: 13px; margin-bottom: 4px; }
+.diff { color: #8b949e; font-family: monospace; margin-left: 6px; }
+@media (max-width: 760px) { .lens-grid { grid-template-columns: 1fr; } }
+
+/* Non-consensus */
+.sig-badge { display: inline-block; font-size: 10.5px; padding: 2px 7px; border-radius: 3px; font-weight: 600; }
+.sig-high   { background: #f8514922; color: #f85149; }
+.sig-medium { background: #d2992222; color: #d29922; }
+.sig-low    { background: #8b949e22; color: #8b949e; }
+tr.sig-high { background: #f8514911; }
+.tag { display: inline-block; font-size: 10.5px; padding: 1px 6px; border-radius: 3px; margin-right: 3px; background: #58a6ff22; color: #58a6ff; font-family: monospace; }
+.tag-structural { background: #3fb95022; color: #3fb950; }
+.tag-data_quality_risk { background: #d2992222; color: #d29922; }
+
+/* Anomalies */
+.rank { color: #8b949e; font-family: monospace; }
+.arrow { font-family: monospace; font-weight: 600; }
+.arrow.up { color: #3fb950; }
+.arrow.down { color: #f85149; }
+.ne { display: inline-block; background: #d2992222; color: #d29922; font-size: 10.5px; padding: 1px 6px; border-radius: 3px; font-weight: 600; margin-left: 4px; font-family: monospace; }
+.z { font-family: monospace; color: #8b949e; margin: 0 6px; }
+.pg { color: #8b949e; font-size: 12px; margin-left: 4px; }
+.series-code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color: #c9d1d9; padding: 1px 5px; border-radius: 3px; font-size: 12px; cursor: help; }
+
+/* "Предстои" placeholders */
+.soon-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.soon-card { background: #161b27; border: 1px dashed #30363d; border-radius: 8px; padding: 14px 16px; }
+.soon-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.soon-head h3 { margin: 0; font-size: 14px; font-weight: 600; color: #8b949e; }
+.soon-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #d29922; background: #d2992222; border: 1px solid #d2992244; padding: 2px 8px; border-radius: 10px; }
+.soon-card p { font-size: 12.5px; color: #8b949e; line-height: 1.5; margin: 0; }
+
+/* Data quality */
+.dq-card { background: #161b27; border: 1px solid #d29922; border-radius: 10px; padding: 20px; }
+.dq-card h3 { color: #d29922; font-size: 14px; margin-bottom: 12px; }
+.dq-item { font-size: 12px; color: #8b949e; margin-bottom: 6px; padding-left: 12px; }
+.dq-item::before { content: "⚠ "; color: #d29922; }
+
+code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color: #c9d1d9; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+.brief-footer { border-top: 1px solid #30363d; padding-top: 16px; margin-top: 30px; font-size: 12px; color: #8b949e; }
+.brief-footer p { margin: 6px 0; }
+.brief-footer h4 { font-size: 12.5px; text-transform: uppercase; color: #8b949e; letter-spacing: 0.7px; margin: 10px 0 6px; }
+.methodology summary { cursor: pointer; color: #58a6ff; }
+</style>
+</head>
+<body>
+<main class="brief-main">
+
+<header class="brief-header">
+  <div class="brief-title">
+    <a class="brief-backlink" href="index.html">← Кратък преглед</a>
+    <h1><span class="flag">🇨🇳</span> China Macro — Подробен анализ</h1>
+    <div class="brief-subtitle">Генериран 2026-06-02 · Данни към 2026-05-31</div>
+  </div>
+  <div class="brief-header-right">
+    <div class="score-circle" style="border-color:#f85149">
+      <span class="score-num" style="color:#f85149">30.4</span>
+      <span class="score-label">SCORE</span>
+    </div>
+    <div class="brief-kpis">
+      <div class="kpi"><div class="kpi-n">43</div><div class="kpi-l">серии</div></div>
+      <div class="kpi"><div class="kpi-n">6</div><div class="kpi-l">аномалии |z|>2</div></div>
+      <div class="kpi"><div class="kpi-n">0</div><div class="kpi-l">non-consensus HIGH</div></div>
+      <div class="kpi"><div class="kpi-n">4</div><div class="kpi-l">non-consensus MEDIUM</div></div>
+    </div>
+  </div>
+</header>
+
+
+<section class="brief-section exec-section">
+  <h2>Регимна диагноза</h2>
+  <div class="exec-headline">
+    <div class="regime-badge" style="background:#d5000022;color:#d50000;border-color:#d5000066">
+      <div class="regime-label">Композитен режим</div>
+      <div class="regime-val">РЕЦЕСИОНЕН</div>
+      <div class="regime-driver">composite 30.4/100</div>
+    </div>
+    <div class="exec-narrative">Претеглен композитен macro score 30.4/100 → режим „РЕЦЕСИОНЕН“. Най-слаба тема: Пазар на труда (12.3 — КРИЗА НА ТРУДА); най-силна: Монетарна политика и кредит (71.5). Активни cross-lens сигнали: Монетарно разхлабване × Инфлация → ↑↓ A нагоре / B надолу; Външно търсене × Вътрешна активност → ↑↓ A нагоре / B надолу. 6 серии с |z|&gt;2 (екстремни четения).</div>
+  </div>
+  <div class="exec-grid-single">
+    <table class="regime-table">
+      <thead><tr>
+        <th>Тема</th><th>Score</th><th>Режим</th><th>Посока</th><th>Аномалии</th>
+      </tr></thead>
+      <tbody>
+<tr>
+  <td class="pg-name">📈 Растеж и активност</td>
+  <td class="num" style="color:#f85149;font-weight:600">13.4</td>
+  <td>РЕЦЕСИЯ</td>
+  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="num">0 </td>
+</tr>
+
+<tr>
+  <td class="pg-name">🔥 Инфлация и цени</td>
+  <td class="num" style="color:#f85149;font-weight:600">12.9</td>
+  <td>ДЕФЛАЦИЯ</td>
+  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="num">0 </td>
+</tr>
+
+<tr>
+  <td class="pg-name">👷 Пазар на труда</td>
+  <td class="num" style="color:#f85149;font-weight:600">12.3</td>
+  <td>КРИЗА НА ТРУДА</td>
+  <td><span class="dir-badge dir-up">разширяване</span></td>
+  <td class="num">1 <span class='ne-inline'>1 NEW</span></td>
+</tr>
+
+<tr>
+  <td class="pg-name">🏦 Монетарна политика и кредит</td>
+  <td class="num" style="color:#3fb950;font-weight:600">71.5</td>
+  <td>УМЕРЕНО СТИМУЛИРАНЕ</td>
+  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="num">4 <span class='ne-inline'>3 NEW</span></td>
+</tr>
+
+<tr>
+  <td class="pg-name">🏗️ Имоти и търговия</td>
+  <td class="num" style="color:#f85149;font-weight:600">26.6</td>
+  <td>ИМОТНА КРИЗА</td>
+  <td><span class="dir-badge dir-mix">смесено</span></td>
+  <td class="num">1 <span class='ne-inline'>1 NEW</span></td>
+</tr>
+</tbody>
+    </table>
+  </div>
+  <p class="exec-weights-note muted">
+    Композитът е претеглен по China-калибрираните тегла: растеж 30% · кредит 25% ·
+    имоти 20% · инфлация 15% · труд 10%. Идентичен с <code>run.py --modules</code>,
+    <code>export_api</code> (manifest) и satellite.
+  </p>
+</section>
+
+
+<section class="brief-section delta-section">
+  <h2>Седмична промяна</h2>
+  <p class="muted">Няма референтен snapshot — това е първият генериран подробен briefing (или няма предишно състояние в <code>data/state/</code>).</p>
+</section>
+
+
+<section class="brief-section">
+  <h2>Cross-Lens Divergence</h2>
+  <div class="pair-wrap">
+<div class="pair-card">
+  <div class="pair-head">
+    <span class="pair-state state-trans">⇄ преход</span>
+    <h3>Кредитна експанзия × Реален сектор</h3>
+  </div>
+  <div class="pair-question">Превръща ли се кредитът в реална инвестиция, или ликвидността засяда (debt-deflation)?</div>
+  <div class="pair-grid">
+    <div class="pair-slot">
+      <div class="pair-slot-label">A · Кредитна експанзия</div>
+      <div class="pair-slot-val">60%</div>
+      <div class="pair-slot-n">n=5</div>
+    </div>
+    <div class="pair-slot">
+      <div class="pair-slot-label">B · Имоти и инвестиции</div>
+      <div class="pair-slot-val">0%</div>
+      <div class="pair-slot-n">n=5</div>
+    </div>
+  </div>
+  <div class="pair-interp">Преход — кредит и реален сектор не са ясно aligned; чакай следващ TSF/FAI print.</div>
+</div>
+
+<div class="pair-card">
+  <div class="pair-head">
+    <span class="pair-state state-mixed">↑↓ A нагоре / B надолу</span>
+    <h3>Монетарно разхлабване × Инфлация</h3>
+  </div>
+  <div class="pair-question">Води ли разхлабването на PBoC до инфлация, или политиката бута в дефлация (policy trap)?</div>
+  <div class="pair-grid">
+    <div class="pair-slot">
+      <div class="pair-slot-label">A · Монетарно разхлабване</div>
+      <div class="pair-slot-val">100%</div>
+      <div class="pair-slot-n">n=6</div>
+    </div>
+    <div class="pair-slot">
+      <div class="pair-slot-label">B · Инфлация</div>
+      <div class="pair-slot-val">33%</div>
+      <div class="pair-slot-n">n=3</div>
+    </div>
+  </div>
+  <div class="pair-interp">Policy trap — PBoC разхлабва, но инфлацията пада/е в дефлация. Трансмисията е счупена (Japan-style): по-ниските лихви не вдигат цените при deleveraging.</div>
+</div>
+
+<div class="pair-card">
+  <div class="pair-head">
+    <span class="pair-state state-mixed">↑↓ A нагоре / B надолу</span>
+    <h3>Външно търсене × Вътрешна активност</h3>
+  </div>
+  <div class="pair-question">Балансиран ли е растежът, или Китай зависи от износа при слабо вътрешно търсене?</div>
+  <div class="pair-grid">
+    <div class="pair-slot">
+      <div class="pair-slot-label">A · Външно търсене</div>
+      <div class="pair-slot-val">83%</div>
+      <div class="pair-slot-n">n=6</div>
+    </div>
+    <div class="pair-slot">
+      <div class="pair-slot-label">B · Вътрешна активност</div>
+      <div class="pair-slot-val">0%</div>
+      <div class="pair-slot-n">n=2</div>
+    </div>
+  </div>
+  <div class="pair-interp">Export-dependence — износът носи растежа, докато вътрешното търсене е слабо. Небалансирано възстановяване, уязвимо на тарифи/външни шокове.</div>
+</div>
+</div>
+</section>
+
+
+<section class="brief-section lens-block" data-lens="growth">
+  <h2>📈 Растеж и активност</h2>
+  
+<table class="breadth-table">
+  <thead><tr>
+    <th>Peer group</th><th>breadth ↑</th><th>breadth |z|>2</th>
+    <th>данни</th><th>посока</th><th>екстремни членове</th>
+  </tr></thead>
+  <tbody>
+<tr>
+  <td class="pg-name">diffusion_indices</td>
+  <td class="num">80%</td>
+  <td class="num">0%</td>
+  <td class="num">5/5</td>
+  <td><span class="dir-badge dir-up">разширяване</span></td>
+  <td class="extremes"></td>
+</tr>
+
+<tr>
+  <td class="pg-name">gdp</td>
+  <td class="num">25%</td>
+  <td class="num">0%</td>
+  <td class="num">4/4</td>
+  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="extremes"></td>
+</tr>
+
+<tr>
+  <td class="pg-name">hard_activity</td>
+  <td class="num">0%</td>
+  <td class="num">0%</td>
+  <td class="num">2/2</td>
+  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="extremes"></td>
+</tr>
+
+<tr>
+  <td class="pg-name">investment</td>
+  <td class="num">—</td>
+  <td class="num">—</td>
+  <td class="num">1/1</td>
+  <td><span class="dir-badge dir-ins">недостатъчно данни</span></td>
+  <td class="extremes"></td>
+</tr>
+</tbody>
+</table>
+
+  <div class="lens-grid">
+    <div class='intra-div'><h4>Вътрешни разминавания</h4><ul><li><strong>diffusion_indices</strong> (80%) vs <strong>hard_activity</strong> (0%) <span class='diff'>Δ +80%</span></li><li><strong>diffusion_indices</strong> (80%) vs <strong>gdp</strong> (25%) <span class='diff'>Δ +55%</span></li></ul></div>
+    <div class='lens-anoms muted'>Няма аномалии в тази леща.</div>
+  </div>
+</section>
+
+
+<section class="brief-section lens-block" data-lens="inflation">
+  <h2>🔥 Инфлация и цени</h2>
+  
+<table class="breadth-table">
+  <thead><tr>
+    <th>Peer group</th><th>breadth ↑</th><th>breadth |z|>2</th>
+    <th>данни</th><th>посока</th><th>екстремни членове</th>
+  </tr></thead>
+  <tbody>
+<tr>
+  <td class="pg-name">cpi</td>
+  <td class="num">33%</td>
+  <td class="num">0%</td>
+  <td class="num">3/3</td>
+  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="extremes"></td>
+</tr>
+
+<tr>
+  <td class="pg-name">ppi</td>
+  <td class="num">—</td>
+  <td class="num">—</td>
+  <td class="num">1/1</td>
+  <td><span class="dir-badge dir-ins">недостатъчно данни</span></td>
+  <td class="extremes"></td>
+</tr>
+</tbody>
+</table>
+
+  <div class="lens-grid">
+    <div class='intra-div muted'>Няма notable вътрешни разминавания.</div>
+    <div class='lens-anoms muted'>Няма аномалии в тази леща.</div>
+  </div>
+</section>
+
+
+<section class="brief-section lens-block" data-lens="labor">
+  <h2>👷 Пазар на труда</h2>
+  
+<table class="breadth-table">
+  <thead><tr>
+    <th>Peer group</th><th>breadth ↑</th><th>breadth |z|>2</th>
+    <th>данни</th><th>посока</th><th>екстремни членове</th>
+  </tr></thead>
+  <tbody>
+<tr>
+  <td class="pg-name">unemployment</td>
+  <td class="num">67%</td>
+  <td class="num">33%</td>
+  <td class="num">3/3</td>
+  <td><span class="dir-badge dir-up">разширяване</span></td>
+  <td class="extremes"><code class="series-code" title="Младежка безработица (16-24 г., %)">CN_YOUTH_UNEMPLOYMENT</code></td>
+</tr>
+</tbody>
+</table>
+
+  <div class="lens-grid">
+    <div class='intra-div muted'>Няма notable вътрешни разминавания.</div>
+    <div class='lens-anoms'><h4>Аномалии в лещата</h4><ol><li><span class='arrow up'>↑</span> <code class="series-code" title="Младежка безработица (16-24 г., %)">CN_YOUTH_UNEMPLOYMENT</code> <span class='z'>z=+2.23</span>  <span class=ne>NEW MAX</span><span class='pg'>· unemployment</span></li></ol></div>
+  </div>
+</section>
+
+
+<section class="brief-section lens-block" data-lens="credit">
+  <h2>🏦 Монетарна политика и кредит</h2>
+  
+<table class="breadth-table">
+  <thead><tr>
+    <th>Peer group</th><th>breadth ↑</th><th>breadth |z|>2</th>
+    <th>данни</th><th>посока</th><th>екстремни членове</th>
+  </tr></thead>
+  <tbody>
+<tr>
+  <td class="pg-name">credit_depth</td>
+  <td class="num">60%</td>
+  <td class="num">20%</td>
+  <td class="num">5/5</td>
+  <td><span class="dir-badge dir-mix">смесено</span></td>
+  <td class="extremes"><code class="series-code" title="Кредит към частния сектор (% от БВП)">CN_CREDIT_PRIVATE</code></td>
+</tr>
+
+<tr>
+  <td class="pg-name">currency</td>
+  <td class="num">—</td>
+  <td class="num">—</td>
+  <td class="num">1/1</td>
+  <td><span class="dir-badge dir-ins">недостатъчно данни</span></td>
+  <td class="extremes"></td>
+</tr>
+
+<tr>
+  <td class="pg-name">rates</td>
+  <td class="num">0%</td>
+  <td class="num">50%</td>
+  <td class="num">6/6</td>
+  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="extremes"><code class="series-code" title="10Y China Government Bond yield">CN_CGB_10Y</code> <code class="series-code" title="1-годишен Loan Prime Rate (PBoC)">CN_LPR_1Y</code> <code class="series-code" title="Политическа лихва — PBoC 7-day repo (%)">CN_POLICY_RATE</code></td>
+</tr>
+</tbody>
+</table>
+
+  <div class="lens-grid">
+    <div class='intra-div'><h4>Вътрешни разминавания</h4><ul><li><strong>credit_depth</strong> (60%) vs <strong>rates</strong> (0%) <span class='diff'>Δ +60%</span></li></ul></div>
+    <div class='lens-anoms'><h4>Аномалии в лещата</h4><ol><li><span class='arrow down'>↓</span> <code class="series-code" title="1-годишен Loan Prime Rate (PBoC)">CN_LPR_1Y</code> <span class='z'>z=-2.56</span>  <span class=ne>NEW MIN</span><span class='pg'>· rates</span></li><li><span class='arrow down'>↓</span> <code class="series-code" title="Политическа лихва — PBoC 7-day repo (%)">CN_POLICY_RATE</code> <span class='z'>z=-2.39</span>  <span class=ne>NEW MIN</span><span class='pg'>· rates</span></li><li><span class='arrow down'>↓</span> <code class="series-code" title="10Y China Government Bond yield">CN_CGB_10Y</code> <span class='z'>z=-2.24</span><span class='pg'>· rates</span></li><li><span class='arrow up'>↑</span> <code class="series-code" title="Кредит към частния сектор (% от БВП)">CN_CREDIT_PRIVATE</code> <span class='z'>z=+2.07</span>  <span class=ne>NEW MAX</span><span class='pg'>· credit_depth</span></li></ol></div>
+  </div>
+</section>
+
+
+<section class="brief-section lens-block" data-lens="property">
+  <h2>🏗️ Имоти и търговия</h2>
+  
+<table class="breadth-table">
+  <thead><tr>
+    <th>Peer group</th><th>breadth ↑</th><th>breadth |z|>2</th>
+    <th>данни</th><th>посока</th><th>екстремни членове</th>
+  </tr></thead>
+  <tbody>
+<tr>
+  <td class="pg-name">housing</td>
+  <td class="num">—</td>
+  <td class="num">—</td>
+  <td class="num">1/1</td>
+  <td><span class="dir-badge dir-ins">недостатъчно данни</span></td>
+  <td class="extremes"></td>
+</tr>
+
+<tr>
+  <td class="pg-name">investment</td>
+  <td class="num">0%</td>
+  <td class="num">20%</td>
+  <td class="num">5/5</td>
+  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="extremes"><code class="series-code" title="ПЧИ — входящи (% от БВП)">CN_FDI_GDP</code></td>
+</tr>
+
+<tr>
+  <td class="pg-name">trade</td>
+  <td class="num">83%</td>
+  <td class="num">0%</td>
+  <td class="num">6/6</td>
+  <td><span class="dir-badge dir-up">разширяване</span></td>
+  <td class="extremes"></td>
+</tr>
+</tbody>
+</table>
+
+  <div class="lens-grid">
+    <div class='intra-div'><h4>Вътрешни разминавания</h4><ul><li><strong>investment</strong> (0%) vs <strong>trade</strong> (83%) <span class='diff'>Δ -83%</span></li></ul></div>
+    <div class='lens-anoms'><h4>Аномалии в лещата</h4><ol><li><span class='arrow down'>↓</span> <code class="series-code" title="ПЧИ — входящи (% от БВП)">CN_FDI_GDP</code> <span class='z'>z=-2.11</span>  <span class=ne>NEW MIN</span><span class='pg'>· investment</span></li></ol></div>
+  </div>
+</section>
+
+
+<section class="brief-section">
+  <h2>Non-Consensus Highlights</h2>
+  <table class="nc-table">
+    <thead><tr>
+      <th>сила</th><th>серия</th><th>име</th><th>z</th><th>peer breadth</th>
+      <th>peer посока</th><th>дев.?</th><th>тагове</th>
+    </tr></thead>
+    <tbody>
+<tr class="sig-medium">
+  <td><span class="sig-badge sig-medium">MEDIUM</span></td>
+  <td><code class="series-code" title="Младежка безработица (16-24 г., %)">CN_YOUTH_UNEMPLOYMENT</code></td>
+  <td>Младежка безработица (16-24 г., %)</td>
+  <td class="num">+2.23</td>
+  <td class="num">50%</td>
+  <td>mixed</td>
+  <td></td>
+  <td><span class='tag tag-structural'>structural</span> <span class='tag tag-non_consensus'>non_consensus</span></td>
+</tr>
+
+<tr class="sig-medium">
+  <td><span class="sig-badge sig-medium">MEDIUM</span></td>
+  <td><code class="series-code" title="ПЧИ — входящи (% от БВП)">CN_FDI_GDP</code></td>
+  <td>ПЧИ — входящи (% от БВП)</td>
+  <td class="num">-2.11</td>
+  <td class="num">0%</td>
+  <td>down</td>
+  <td></td>
+  <td><span class='tag tag-structural'>structural</span></td>
+</tr>
+
+<tr class="sig-medium">
+  <td><span class="sig-badge sig-medium">MEDIUM</span></td>
+  <td><code class="series-code" title="Кредит към частния сектор (% от БВП)">CN_CREDIT_PRIVATE</code></td>
+  <td>Кредит към частния сектор (% от БВП)</td>
+  <td class="num">+2.07</td>
+  <td class="num">50%</td>
+  <td>mixed</td>
+  <td></td>
+  <td><span class='tag tag-non_consensus'>non_consensus</span></td>
+</tr>
+
+<tr class="sig-medium">
+  <td><span class="sig-badge sig-medium">MEDIUM</span></td>
+  <td><code class="series-code" title="Коефициент на участие в работната сила (%)">CN_LABOR_PARTICIPATION</code></td>
+  <td>Коефициент на участие в работната сила (%)</td>
+  <td class="num">-1.81</td>
+  <td class="num">100%</td>
+  <td>up</td>
+  <td>✓</td>
+  <td><span class='tag tag-structural'>structural</span></td>
+</tr>
+</tbody>
+  </table>
+</section>
+
+
+<section class="brief-section">
+  <h2>Top Anomalies (6/6)</h2>
+  <table class="anom-table">
+    <thead><tr>
+      <th>#</th><th></th><th>серия</th><th>име</th>
+      <th>стойност</th><th>Δ</th><th>z</th>
+      <th>екстремум</th><th>lens</th><th>peer group</th>
+    </tr></thead>
+    <tbody>
+<tr>
+  <td class="rank">1</td>
+  <td><span class='arrow down'>↓</span></td>
+  <td><code class="series-code" title="1-годишен Loan Prime Rate (PBoC)">CN_LPR_1Y</code></td>
+  <td>1-годишен Loan Prime Rate (PBoC)</td>
+  <td class="num">3.000</td>
+  <td class="num">+0.00%</td>
+  <td class="num">-2.56</td>
+  <td><span class='ne'>NEW MIN</span></td>
+  <td>credit</td>
+  <td>rates</td>
+</tr>
+
+<tr>
+  <td class="rank">2</td>
+  <td><span class='arrow down'>↓</span></td>
+  <td><code class="series-code" title="Политическа лихва — PBoC 7-day repo (%)">CN_POLICY_RATE</code></td>
+  <td>Политическа лихва — PBoC 7-day repo (%)</td>
+  <td class="num">1.400</td>
+  <td class="num">+0.00%</td>
+  <td class="num">-2.39</td>
+  <td><span class='ne'>NEW MIN</span></td>
+  <td>credit</td>
+  <td>rates</td>
+</tr>
+
+<tr>
+  <td class="rank">3</td>
+  <td><span class='arrow down'>↓</span></td>
+  <td><code class="series-code" title="10Y China Government Bond yield">CN_CGB_10Y</code></td>
+  <td>10Y China Government Bond yield</td>
+  <td class="num">1.720</td>
+  <td class="num">-1.83%</td>
+  <td class="num">-2.24</td>
+  <td></td>
+  <td>credit</td>
+  <td>rates</td>
+</tr>
+
+<tr>
+  <td class="rank">4</td>
+  <td><span class='arrow up'>↑</span></td>
+  <td><code class="series-code" title="Младежка безработица (16-24 г., %)">CN_YOUTH_UNEMPLOYMENT</code></td>
+  <td>Младежка безработица (16-24 г., %)</td>
+  <td class="num">15.795</td>
+  <td class="num">+75 bps</td>
+  <td class="num">+2.23</td>
+  <td><span class='ne'>NEW MAX</span></td>
+  <td>labor</td>
+  <td>unemployment</td>
+</tr>
+
+<tr>
+  <td class="rank">5</td>
+  <td><span class='arrow down'>↓</span></td>
+  <td><code class="series-code" title="ПЧИ — входящи (% от БВП)">CN_FDI_GDP</code></td>
+  <td>ПЧИ — входящи (% от БВП)</td>
+  <td class="num">0.099</td>
+  <td class="num">-64.77%</td>
+  <td class="num">-2.11</td>
+  <td><span class='ne'>NEW MIN</span></td>
+  <td>property</td>
+  <td>investment</td>
+</tr>
+
+<tr>
+  <td class="rank">6</td>
+  <td><span class='arrow up'>↑</span></td>
+  <td><code class="series-code" title="Кредит към частния сектор (% от БВП)">CN_CREDIT_PRIVATE</code></td>
+  <td>Кредит към частния сектор (% от БВП)</td>
+  <td class="num">194.166</td>
+  <td class="num">+2.40%</td>
+  <td class="num">+2.07</td>
+  <td><span class='ne'>NEW MAX</span></td>
+  <td>credit</td>
+  <td>credit_depth</td>
+</tr>
+</tbody>
+  </table>
+</section>
+
+
+<section class="brief-section">
+  <h2>Предстои</h2>
+  <div class="soon-wrap">
+<div class="soon-card">
+  <div class="soon-head"><span class="soon-badge">предстои</span><h3>Исторически аналози</h3></div>
+  <p>Съпоставка на текущото състояние с минали епизоди (macro-vector + episode матрица). Изисква China-специфична historical база — китайската история е по-къса и по-рядко наблюдавана, затова този слой се изгражда отделно.</p>
+</div>
+
+<div class="soon-card">
+  <div class="soon-head"><span class="soon-badge">предстои</span><h3>Falsification criteria</h3></div>
+  <p>Какво конкретно би обезсилило текущата регимна диагноза, per China режим (recessionary/deteriorating/mixed/healthy/expansionary). Изисква авторски прагове, калибрирани за китайските серии — не наследяваме US праговете (Sahm rule, ICSA, T10Y2Y, HY OAS), които China няма.</p>
+</div>
+
+<div class="soon-card">
+  <div class="soon-head"><span class="soon-badge">предстои</span><h3>Свързани бележки (journal)</h3></div>
+  <p>Връзки към аналитичен journal по теми и режими. China dashboard все още няма journal слой.</p>
+</div>
+</div>
+</section>
+
+
+<section class="brief-section">
+  <div class="dq-card">
+    <h3>⚠ Бележки за качеството на данните</h3>
+    <div class="dq-item">Официалната безработица (~5%) не включва ~300 млн. мигрантски работници. Реалната е значително по-висока.</div><div class="dq-item">Младежката безработица (16-24 г.) беше спряна за публикуване от НБС юли–декември 2023 след рекорд 21.3%.</div><div class="dq-item">GDP данните са годишни (World Bank). Месечни данни за Китай са ограничено достъпни в международни бази.</div><div class="dq-item">PPI данни от IMF IFS са налични само до декември 2022. AkShare предоставя по-актуални данни от НБС.</div><div class="dq-item">FDI данните показват срив до ~0.1% от GDP (2024) — исторически минимум. Геополитически de-risking.</div><div class="dq-item">Цените на жилища (70 града) са от AkShare/НБС. Индексът е с база 100 — конвертиран към YoY %.</div><div class="dq-item">GDP дефлаторът е отрицателен от 2023 — широка дефлация. Номиналният GDP расте по-бавно от реалния.</div><div class="dq-item">Cross-Lens Divergence, breadth и Top Anomalies стъпват предимно на месечни серии (PMI, лихви, търговия, кредит). Годишните серии (БВП, безработица) се обновяват веднъж годишно — посоката им се движи по-бавно.</div><div class="dq-item">Z-score за аномалиите е изчислен върху цялата налична история на серията (full-sample). |z|&gt;2 = екстремно четене спрямо собствената история. peer_group с &lt;2 налични серии не дава breadth.</div>
+  </div>
+</section>
+
+
+<footer class="brief-footer">
+  <details class="methodology" open>
+    <summary><strong>Методология — как да четеш този анализ</strong></summary>
+
+    <h4>Композитен режим</h4>
+    <p class="muted">
+      Претеглен composite от 5-те лещи по China-калибрираните тегла (растеж 30% ·
+      кредит 25% · имоти 20% · инфлация 15% · труд 10%). Режимът се определя от
+      праговете в <code>config.MACRO_REGIMES</code>. Идентичен с
+      <code>run.py --modules</code> и AI слоя (<code>manifest.json</code>).
+    </p>
+
+    <h4>Breadth (% положителна момент)</h4>
+    <p class="muted">
+      Процент от сериите в peer group с положителен 1-периоден momentum.
+      <code>breadth &gt; 60%</code> → „разширяване" · <code>&lt; 40%</code> →
+      „свиване" · между → „смесено" · &lt;2 серии с данни → „недостатъчно данни".
+      За малки peer groups (2-3 серии) 1 flip = голяма pp промяна — не е грешка.
+    </p>
+
+    <h4>Z-score &amp; аномалии</h4>
+    <p class="muted">
+      Стандартизирана отдалеченост от историческата средна (full-sample).
+      <code>|z|&gt;2</code> — флаг за екстремна стойност. „NEW" екстремум = нов
+      max/min за lookback прозореца.
+    </p>
+
+    <h4>Cross-Lens Divergence — China двойки</h4>
+    <p class="muted">
+      Три икономически тези, специфични за Китай: <strong>Кредит × Реален сектор</strong>
+      (debt-deflation / liquidity trap) · <strong>Монетарно × Инфлация</strong>
+      (policy trap, Japan-style) · <strong>Външно × Вътрешно търсене</strong>
+      (export-dependence / rebalancing). Всяка съпоставя breadth между два slot-а.
+    </p>
+
+    <h4>Седмична промяна (WoW)</h4>
+    <p class="muted">
+      Сравнение с подробен briefing snapshot от <strong>≥5 дни назад</strong>.
+      Snapshot-овете се пазят в <code>data/state/briefing_YYYY-MM-DD.json</code>.
+    </p>
+  </details>
+
+  <p class="muted brief-meta">
+    Всички изчисления са детерминистични — няма LLM нарация. Китайските официални
+    данни са обект на ревизии и методологични промени; интерпретирайте с внимание.
+    As_of: 2026-05-31 · Генериран: 2026-06-02 · Серии: 43 · Лещи: 5.
+  </p>
+</footer>
+
+</main>
+</body>
+</html>
