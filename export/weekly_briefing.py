@@ -19,6 +19,7 @@ from typing import Any, Optional
 
 import pandas as pd
 
+from config import MODULE_WEIGHTS, MACRO_REGIMES
 from catalog.series import SERIES_CATALOG
 from analysis.divergence import compute_cross_lens_divergence
 from analysis.anomaly import compute_anomalies
@@ -39,21 +40,10 @@ LENS_ICON = {
     "credit": "🏦", "property": "🏗️",
 }
 
-MODULE_WEIGHTS = {
-    "growth": 0.30,
-    "inflation": 0.20,
-    "labor": 0.15,
-    "credit": 0.20,
-    "property": 0.15,
-}
-
-MACRO_REGIMES = [
-    (75, "СИЛНА ИКОНОМИКА",    "#00c853"),
-    (60, "УМЕРЕН РАСТЕЖ",      "#69f0ae"),
-    (45, "СМЕСЕНИ СИГНАЛИ",    "#ffd600"),
-    (30, "РЕЦЕСИОНЕН",         "#ff6d00"),
-    (0,  "КРИЗА",              "#d50000"),
-]
+# MODULE_WEIGHTS + MACRO_REGIMES идват от config.py (single source of truth) —
+# кохерентно с run.py --modules, export_api/manifest, deep_briefing и satellite.
+# (Преди това landing-ът имаше остаряло локално копие → composite 26.7/„КРИЗА"
+# вместо authoritative 30.4/„РЕЦЕСИОНЕН".)
 
 
 # ─── CSS ─────────────────────────────────────────────────────────
@@ -320,7 +310,7 @@ def _render_composite(results: list[dict]) -> str:
   <div class="composite-info" style="flex:1">
     <h2>Композитен Macro Score</h2>
     <span class="regime-badge" style="background:{regime_color}22;color:{regime_color};border:1px solid {regime_color}44">{regime_label}</span>
-    <div class="description">Претеглен composite от 5 lens-а: растеж (30%), кредит (20%), инфлация (20%), имоти (15%), труд (15%).</div>
+    <div class="description">Претеглен composite от 5 lens-а: растеж (30%), кредит (25%), имоти (20%), инфлация (15%), труд (10%).</div>
   </div>
   <div style="flex:1;padding-left:16px;border-left:1px solid #21262d">
     {bars_html}
