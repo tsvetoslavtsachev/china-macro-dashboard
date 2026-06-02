@@ -146,35 +146,6 @@ def _score_color(score: float) -> str:
     return "#f85149"
 
 
-def _direction_from_score(score: Optional[float]) -> str:
-    if score is None or (isinstance(score, float) and score != score):
-        return "insufficient_data"
-    if score >= 65:
-        return "expanding"
-    if score < 35:
-        return "contracting"
-    return "mixed"
-
-
-def _lens_direction(lens: str, score: Optional[float], lens_reports: dict) -> str:
-    """Посока от breadth (mean на peer_group breadth-овете) ако е налична; иначе от score."""
-    report = lens_reports.get(lens)
-    if report is not None:
-        bps = [
-            pg.breadth_positive for pg in report.peer_groups
-            if isinstance(pg.breadth_positive, (int, float))
-            and not (isinstance(pg.breadth_positive, float) and pg.breadth_positive != pg.breadth_positive)
-        ]
-        if bps:
-            mean_bp = sum(bps) / len(bps)
-            if mean_bp > 0.6:
-                return "expanding"
-            if mean_bp < 0.4:
-                return "contracting"
-            return "mixed"
-    return _direction_from_score(score)
-
-
 # ============================================================
 # HELPERS
 # ============================================================
@@ -283,7 +254,7 @@ def _render_header(today, as_of, snapshot, nc_report, anomaly_report, regime_sna
 """
 
 
-def _render_regime_headline(regime_snap, results, lens_reports, anomaly_report) -> str:
+def _render_regime_headline(regime_snap, results, anomaly_report) -> str:
     """Регимна диагноза — China composite/regime + lens summary таблица.
 
     Заменя US executive: headline-ът е претегленият module composite, лещите
@@ -304,9 +275,6 @@ def _render_regime_headline(regime_snap, results, lens_reports, anomaly_report) 
         score_str = f"{score:.1f}" if isinstance(score, (int, float)) else "—"
         sc_color = _score_color(score if isinstance(score, (int, float)) else float("nan"))
         mod_regime = html.escape(str(r.get("regime", "—")))
-        direction = _lens_direction(lens, score, lens_reports)
-        dir_cls = _direction_class(direction)
-        dir_label = DIRECTION_LABEL_BG.get(direction, direction)
         lens_anoms = anomaly_report.by_lens.get(lens, [])
         ne_count = sum(1 for a in lens_anoms if a.is_new_extreme)
         ne_badge = f"<span class='ne-inline'>{ne_count} NEW</span>" if ne_count else ""
@@ -315,7 +283,6 @@ def _render_regime_headline(regime_snap, results, lens_reports, anomaly_report) 
   <td class="pg-name">{icon} {html.escape(label)}</td>
   <td class="num" style="color:{sc_color};font-weight:600">{score_str}</td>
   <td>{mod_regime}</td>
-  <td><span class="dir-badge {dir_cls}">{html.escape(dir_label)}</span></td>
   <td class="num">{len(lens_anoms)} {ne_badge}</td>
 </tr>
 """)
@@ -334,7 +301,7 @@ def _render_regime_headline(regime_snap, results, lens_reports, anomaly_report) 
   <div class="exec-grid-single">
     <table class="regime-table">
       <thead><tr>
-        <th>Тема</th><th>Score</th><th>Режим</th><th>Посока</th><th>Аномалии</th>
+        <th>Тема</th><th>Score</th><th>Режим</th><th>Аномалии</th>
       </tr></thead>
       <tbody>{"".join(rows_html)}</tbody>
     </table>
@@ -821,7 +788,7 @@ def generate_deep_briefing(
     # ── Render ──
     sections = [
         _render_header(today, as_of, snapshot, nc_report, anomaly_report, regime_snap),
-        _render_regime_headline(regime_snap, results, lens_reports, anomaly_report),
+        _render_regime_headline(regime_snap, results, anomaly_report),
         _render_delta(delta),
         _render_cross_lens(cross_report),
     ]
