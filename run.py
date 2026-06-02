@@ -312,9 +312,26 @@ def cmd_deep(args) -> int:
     output_path = f"{OUTPUT_DIR}/briefing_deep_{datetime.now().strftime('%Y-%m-%d')}.html"
     print(f"📝 Генериране на подробен HTML → {output_path}")
 
+    # Journal (research-desk, opt-in; НЕ се подава в CI → public deep няма тази секция)
+    journal_entries = None
+    if getattr(args, "with_journal", False):
+        from scripts._utils import load_journal_entries
+        try:
+            all_entries = load_journal_entries()
+            # Ранкиране: недовършена работа първа (open_question/hypothesis), после най-новите.
+            status_priority = {"open_question": 0, "hypothesis": 1, "finding": 2, "decision": 3}
+            all_entries.sort(key=lambda e: (status_priority.get(e.status, 9), -e.date.toordinal()))
+            journal_entries = all_entries[: getattr(args, "journal_max", 5)]
+            print(f"📓 Journal: {len(journal_entries)} записа избрани (от {len(all_entries)} общо)")
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).warning(f"Journal зареждането се провали: {e}")
+            journal_entries = None
+
     generate_deep_briefing(
         snapshot=snapshot,
         output_path=output_path,
+        journal_entries=journal_entries,
     )
 
     print(f"✓ Подробен briefing готов: {output_path}")
@@ -380,6 +397,11 @@ def main() -> int:
                         help="Force-fetch всички серии преди генериране")
     parser.add_argument("--no-browser", action="store_true",
                         help="Не отваря HTML в браузъра")
+    parser.add_argument("--with-journal", action="store_true",
+                        help="Research-desk: добавя секцията Свързани бележки в --deep "
+                             "(линкове към journal/ записи). Локално; НЕ се подава в CI.")
+    parser.add_argument("--journal-max", type=int, default=5,
+                        help="Максимум брой journal записи в deep-а (default: 5).")
     args = parser.parse_args()
 
     # Гарантираме output директория

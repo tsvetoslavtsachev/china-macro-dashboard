@@ -37,3 +37,12 @@ Thumbs.db
 
 # Logs
 *.log
+
+# ─── Journal content (framework-only is public; notes are private) ──────────
+# Виж journal/HOWTO.md за обосновката. .gitkeep файловете пазят празните topic
+# папки в git; самите записи остават локални.
+journal/**/*.md
+!journal/_template.md
+!journal/HOWTO.md
+# Авто-генерираният индекс има частни заглавия — само локално.
+journal/README.md

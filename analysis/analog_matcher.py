@@ -3,23 +3,14 @@ analysis/analog_matcher.py
 ==========================
 Cosine similarity analog search над 8-dim macro state history.
 
-⚠ PHASE 4 TODO — EPISODE LABELS СА US-SPECIFIC
-==============================================
-Cosine similarity логиката е data-source agnostic, но списъкът с labeled
-episode-и (HISTORICAL_EPISODES по-долу) съдържа US history (1973 oil shock,
-Volcker disinflation, Greenspan put, GFC, COVID, Fed hiking 2022). За EA
-trebva да се замени с Eurozone-specific епизоди:
-  - Dotcom + ECB rate hikes (2000-2001)
-  - GFC (2008-2009)
-  - EU sovereign debt crisis (2010-2012) ← EA-unique
-  - Draghi "whatever it takes" (2012)
-  - ECB QE (2015-2016)
-  - COVID + PEPP (2020)
-  - ECB hiking + energy shock (2022-2023)
-  - Disinflation (2024-2026)
+China-калибриран (Phase 4): HISTORICAL_EPISODES съдържа China-specific епизоди
+от месечната ера (2008+). Cosine логиката е data-source agnostic; само episode
+лейбълите са domain-specific.
 
-Phase 4 ще пренапише HISTORICAL_EPISODES и ще постанови analog_history_start
-от 1999 (EMU era).
+⚠ Честна рамка (документирана в briefing-а): China месечната история е къса
+(~2011-2026 complete-case, ~150 месеца, почти изцяло „slowdown" ера). Probe-ът
+(2026-06-02) показа max cosine ~0.79 → НЯМА единен dominant template (0% > 0.90).
+Изходът се представя като „умерен multi-template", не „днес = точно X".
 
 Функция `find_analogs` дава top-k исторически месеци, най-близки до
 настоящия macro state, с два guard-rail-а:
@@ -59,29 +50,19 @@ import pandas as pd
 # HISTORICAL EPISODE LABELS
 # ============================================================
 
-# Известни макро-епизоди; label-ът излиза в briefing-а до датата
-# на analog-а. Краищата са inclusive. Ако един месец попада в
-# няколко епизода (рядко) — първата в списъка печели.
-# Eurozone-specific исторически епизоди (1999+ = EMU era).
-# Краищата са inclusive. Ако месец попада в няколко епизода, първата печели.
+# Известни China макро-епизоди; label-ът излиза в briefing-а до датата на
+# analog-а. Краищата са inclusive. Ако месец попада в няколко епизода, първата
+# печели. Покриват месечната complete-case ера (2008+); ръчно курирани.
 HISTORICAL_EPISODES: list[dict] = [
-    {"label": "Late 90s boom (pre-EMU)",         "start": "1999-01-01", "end": "2000-03-01"},
-    {"label": "Dotcom bust",                     "start": "2000-04-01", "end": "2001-11-01"},
-    {"label": "Early 2000s reflation",           "start": "2002-01-01", "end": "2005-08-01"},
-    {"label": "ECB rate hike cycle (2005-08)",   "start": "2005-09-01", "end": "2007-11-01"},
-    {"label": "GFC / Great Recession",           "start": "2007-12-01", "end": "2009-06-01"},
-    {"label": "Post-GFC recovery",               "start": "2009-07-01", "end": "2010-04-01"},
-    {"label": "EU sovereign debt crisis",        "start": "2010-05-01", "end": "2012-07-01"},
-    {"label": "Draghi 'whatever it takes'",      "start": "2012-08-01", "end": "2013-12-01"},
-    {"label": "ECB QE / negative rates",         "start": "2014-01-01", "end": "2016-06-01"},
-    {"label": "Brexit shock + ECB stim",         "start": "2016-07-01", "end": "2017-06-01"},
-    {"label": "Late expansion / taper talk",     "start": "2017-07-01", "end": "2019-06-01"},
-    {"label": "Late-cycle 2019",                 "start": "2019-07-01", "end": "2020-01-01"},
-    {"label": "COVID shock",                     "start": "2020-02-01", "end": "2020-06-01"},
-    {"label": "COVID + PEPP",                    "start": "2020-07-01", "end": "2021-12-01"},
-    {"label": "Energy shock + ECB hiking",       "start": "2022-01-01", "end": "2023-09-01"},
-    {"label": "Disinflation",                    "start": "2023-10-01", "end": "2025-06-01"},
-    # 2025-07+ остава unlabeled (current regime); exclude_last_months ги отрязва
+    {"label": "ГФК + стимул 4 трлн",          "start": "2008-09-01", "end": "2009-06-01"},
+    {"label": "Свръхзагряване след стимула",  "start": "2009-07-01", "end": "2011-09-01"},
+    {"label": "Забавяне / „нова норма\"",      "start": "2011-10-01", "end": "2014-10-01"},
+    {"label": "Срив на борсата + девалвация", "start": "2014-11-01", "end": "2016-02-01"},
+    {"label": "Supply-side реформа + рефлация","start": "2016-03-01", "end": "2017-12-01"},
+    {"label": "Деливъридж + търговска война", "start": "2018-01-01", "end": "2019-12-01"},
+    {"label": "COVID шок + възстановяване",    "start": "2020-01-01", "end": "2021-06-01"},
+    {"label": "Имотна криза + нулев COVID",    "start": "2021-07-01", "end": "2022-12-01"},
+    {"label": "Отваряне → дефлация",           "start": "2023-01-01", "end": "2026-12-01"},
 ]
 
 

@@ -190,7 +190,7 @@ def test_deep_renders_all_native_sections(tmp_path):
     # China-native секции
     for section in [
         "Регимна диагноза", "Седмична промяна", "Cross-Lens Divergence",
-        "Non-Consensus Highlights", "Top Anomalies", "Предстои",
+        "Non-Consensus Highlights", "Top Anomalies", "Исторически аналози",
         "качеството на данните",
     ]:
         assert section in html, f"липсва секция: {section}"
@@ -199,9 +199,13 @@ def test_deep_renders_all_native_sections(tmp_path):
     assert html.count('class="pair-card"') == 3
     assert html.count("data-lens=") == 5
 
-    # отложени слоеве: само 2 „предстои" card-а (analogs + journal) — falsifiers вече имплементирани
-    assert html.count('class="soon-card"') == 2
-    assert "Исторически аналози" in html
+    # Phase 4 — analogs имплементиран (НЕ „предстои"); честна рамка
+    assert ">Предстои<" not in html and 'class="soon-card"' not in html
+    assert html.count('class="analog-card"') >= 1
+    assert "Какво последва аналозите" in html
+    assert "римува се с" in html              # honest framing, не „днес = X"
+    # journal е research-desk opt-in → НЕ се рендира в public (без journal_entries)
+    assert "Свързани бележки" not in html
     # Phase 3 — China falsifiers секция с жив статус (не US Sahm/ICSA/T10Y2Y)
     assert "Какво би обърнало" in html
     assert html.count('class="fals-card"') >= 1
@@ -218,7 +222,7 @@ def test_deep_renders_all_native_sections(tmp_path):
 
 def test_deep_has_no_us_executive_framing(tmp_path):
     """Anti-illusion: deep НЕ показва US executive рамка / US threshold flags
-    като активни секции (само честни „предстои" обяснения)."""
+    като активни секции."""
     snap = _synthetic_snapshot()
     out = tmp_path / "deep.html"
     generate_deep_briefing(snap, str(out), today=date(2026, 5, 30),
@@ -259,3 +263,29 @@ def test_deep_handles_empty_snapshot(tmp_path):
     # graceful — секциите се рендират, без crash
     assert "Регимна диагноза" in html
     assert "Cross-Lens Divergence" in html
+    # дори при празен snapshot — честен analogs fallback (не crash, не фабрикувана секция)
+    assert "Исторически аналози" in html
+
+
+def test_deep_renders_journal_when_entries_passed(tmp_path):
+    """Research-desk opt-in: journal_entries → секция „Свързани бележки" с линкове.
+    Без entries секцията липсва (виж test_deep_renders_all_native_sections)."""
+    from datetime import date as _date
+    from scripts._utils import JournalEntry
+    entries = [
+        JournalEntry(path=Path("journal/inflation/x.md"), date=_date(2026, 6, 1),
+                     topic="inflation", title="PPI рефлация изпреварва CPI",
+                     tags=["ppi", "deflation"], status="finding"),
+        JournalEntry(path=Path("journal/analogs/y.md"), date=_date(2026, 5, 28),
+                     topic="analogs", title="Режимът няма близък аналог",
+                     tags=["cosine"], status="hypothesis"),
+    ]
+    out = tmp_path / "deep_j.html"
+    generate_deep_briefing(_synthetic_snapshot(), str(out), today=date(2026, 5, 30),
+                           state_dir=str(tmp_path / "state"), journal_entries=entries)
+    html = out.read_text(encoding="utf-8")
+    assert "Свързани бележки" in html
+    assert "PPI рефлация изпреварва CPI" in html
+    assert "Режимът няма близък аналог" in html
+    assert 'class="journal-item"' in html
+    assert "../journal/inflation/x.md" in html  # relative link спрямо output/

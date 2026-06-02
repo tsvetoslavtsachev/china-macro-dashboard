@@ -1,10 +1,10 @@
 """
 scripts/_utils.py
 =================
-Convenience layer за research desk ad hoc анализи.
+Convenience layer за research desk ad hoc анализи (China).
 
 Boilerplate за:
-  - Зареждане на ECB / Eurostat snapshot (multi-source)
+  - Зареждане на дневния China snapshot (всички регистрирани адаптери)
   - Работа с journal entries (load/save, filter по topic/status/date)
   - Създаване на нови sandbox скриптове с template
 
@@ -14,19 +14,19 @@ Boilerplate за:
 
     from pathlib import Path
     import sys
-    BASE = Path(__file__).resolve().parent.parent.parent  # eu_macro_dashboard/
+    BASE = Path(__file__).resolve().parent.parent  # china-macro-dashboard/
     sys.path.insert(0, str(BASE))
     from scripts._utils import load_briefing_snapshot, save_journal_entry
 
     snap = load_briefing_snapshot()
-    ciss = snap["EA_CISS"]
-    btp_bund = snap["IT_10Y"] - snap["DE_10Y"]
+    cpi = snap["CN_CPI_YOY_AK"]
+    ppi = snap["CN_PPI_YOY"]
     # … твоя анализ …
     save_journal_entry(
-        topic="credit",
-        title="BTP-Bund стрес без CISS confirmation",
+        topic="inflation",
+        title="PPI рефлация изпреварва CPI",
         body="...",
-        tags=["sovereign_spreads"],
+        tags=["ppi", "deflation"],
         status="finding",
     )
 """
@@ -52,7 +52,9 @@ SCRIPTS_DIR = BASE_DIR / "scripts"
 SANDBOX_DIR = SCRIPTS_DIR / "sandbox"
 OUTPUT_DIR = BASE_DIR / "output"
 
-VALID_TOPICS = ["labor", "inflation", "credit", "growth", "analogs", "regime", "methodology"]
+# China таксономия: 5-те лещи (growth/inflation/labor/credit/property) + аналитични теми.
+VALID_TOPICS = ["growth", "inflation", "labor", "credit", "property",
+                "analogs", "regime", "methodology"]
 VALID_STATUSES = ["open_question", "hypothesis", "finding", "decision"]
 
 
@@ -75,7 +77,7 @@ class JournalEntry:
 
     @property
     def relative_path(self) -> str:
-        """Път спрямо eu_macro_dashboard/."""
+        """Път спрямо china-macro-dashboard/."""
         try:
             return str(self.path.relative_to(BASE_DIR))
         except ValueError:
@@ -245,23 +247,13 @@ def _slugify(text: str, max_len: int = 60) -> str:
 # ============================================================
 
 def load_briefing_snapshot(base_dir: Optional[Path] = None) -> dict[str, pd.Series]:
-    """Зарежда multi-source snapshot от cache (ECB + Eurostat).
+    """Зарежда дневния China snapshot (всички регистрирани адаптери, ~50 серии).
 
-    Lazy import — за да няма overhead при чисти journal операции.
+    Lazy import — за да няма overhead при чисти journal операции (build_journal_index).
     """
-    from sources.ecb_adapter import EcbAdapter
-    from sources.eurostat_adapter import EurostatAdapter
-    from catalog.series import SERIES_CATALOG, series_by_source
+    from run import _build_adapters, _build_snapshot
 
-    bdir = base_dir or BASE_DIR
-    snapshot: dict[str, pd.Series] = {}
-
-    for adapter, source_name in [(EcbAdapter(base_dir=bdir), "ecb"),
-                                  (EurostatAdapter(base_dir=bdir), "eurostat")]:
-        keys = [s["_key"] for s in series_by_source(source_name)]
-        snapshot.update(adapter.get_snapshot(keys))
-
-    return snapshot
+    return _build_snapshot(_build_adapters())
 
 
 def latest_briefing_path(output_dir: Optional[Path] = None) -> Optional[Path]:
@@ -298,7 +290,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-BASE = Path(__file__).resolve().parent.parent.parent  # eu_macro_dashboard/
+BASE = Path(__file__).resolve().parent.parent.parent  # china-macro-dashboard/ (sandbox е 2 нива надолу)
 sys.path.insert(0, str(BASE))
 
 import pandas as pd
@@ -326,8 +318,8 @@ TODO: опиши въпроса в 2-4 изречения.
 def load_data() -> dict:
     snap = load_briefing_snapshot()
     # TODO: извади конкретните серии
-    # ciss = snap["EA_CISS"]
-    # btp_bund = snap["IT_10Y"] - snap["DE_10Y"]
+    # cpi = snap["CN_CPI_YOY_AK"]
+    # ppi = snap["CN_PPI_YOY"]
     return {{"snapshot": snap}}
 
 

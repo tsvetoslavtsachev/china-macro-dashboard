@@ -1,39 +1,39 @@
 """
 analysis/macro_vector.py
 ========================
-8-dimensional macro state vector за Eurozone historical analog engine.
+8-dimensional macro state vector за China historical analog engine.
 
-Дименсии (8):
-  1. unrate                  — EA_UNRATE level (%) [Eurostat]
-  2. core_hicp_yoy           — EA_HICP_CORE level (%) [вече YoY от Eurostat]
-  3. real_dfr                — ECB_DFR − EA_HICP_CORE (real policy rate, %)
-  4. yc_10y2y                — EA_BUND_10Y − EA_BUND_2Y (curve slope, pp)
-  5. sovereign_stress        — IT_10Y − DE_10Y (BTP-Bund spread, pp; EA proxy за HY OAS)
-  6. ip_yoy                  — EA_IP YoY (%, computed)
-  7. sahm                    — Sahm rule (3mma EA_UNRATE − min trailing 12m 3mma, pp)
-  8. inflation_expectations  — ECB SPF long-term HICP point forecast (%, quarterly,
-                               forward-filled to monthly)
+Дименсии (8) — всичките стъпват на свежи месечни NBS/akshare/BIS серии
+(свежи към 2026-04/05), за да не дърпа застояла серия „текущия" вектор назад:
+  1. cpi_yoy    — CN_CPI_YOY_AK (akshare NBS, вече YoY %)
+  2. ppi_yoy    — CN_PPI_YOY (akshare, вече YoY %)
+  3. m2_yoy     — CN_M2_YOY (вече YoY %)
+  4. retail_yoy — CN_RETAIL_YOY, 3-мес. mma (изглажда Lunar-New-Year Jan/Feb шум)
+  5. fai_yoy    — CN_FAI_MOM_YOY, 3-мес. mma (single-month FAI YoY е силно шумен)
+  6. house_yoy  — CN_NEW_HOUSE_PRICE (NBS 70 града, YoY %)
+  7. pmi        — CN_PMI_MFG_NBS (дифузионен индекс, ниво ~50)
+  8. real_10y   — CN_CGB_10Y − CN_CPI_YOY_AK (реален 10г. лихвен процент, pp)
 
-Window: 1999-01-01 → сега (~26 години EMU история).
-Pre-1999 синтетика (GDP-weighted DM legacy currencies) умишлено пропусната —
-твърде шумна за meaningful analog match.
+Window: 2008-01-01 → сега. Complete-case прозорецът реално започва **2011-03**
+(обвързан от началото на house price серията 2011-01 + 3mma lag) → ~150 месеца.
 
-Различия от US version:
-  - real_ffr → real_dfr (ECB Deposit Facility Rate)
-  - hy_oas → sovereign_stress (BTP-Bund proxy; iTraxx е платено)
-  - breakeven (T10YIE) → SPF long-term inflation expectations (different methodology
-    но similar role: market vs survey-based expectations anchor)
-  - Без proxy splicing — историята започва 1999
+⚠ Честни ограничения (документирани в briefing-а):
+  - z-прозорецът 2011-26 е почти изцяло „China slowdown" ера (без пълен бум-крах
+    цикъл) → z-score = отклонение от skorošната норма, не от пълен цикъл.
+  - house_yoy (NBS new-home) е policy-floored → подценява реалния имотен distress
+    (той е в BIS −7.5% / FAI); месечният property сигнал е по-мек от истинския.
+  - ppi_yoy може да носи транзитен base-effect (виж re-base находката).
 
-Запазен интерфейс (за analog_matcher.py / analog_pipeline.py):
+Различия от US/EU version:
+  - Няма Sahm rule / unemployment dim — официалната China безработица е ~5%
+    policy-pinned и не носи сигнал (виж data quality бележките).
+  - Векторът се строи ДИРЕКТНО от съществуващия 50-сериен snapshot (CN_* ключове),
+    БЕЗ отделен ANALOG_FETCH_SPEC — всички 8 серии вече са в дневния snapshot.
+
+Запазен интерфейс (за analog_matcher.py / analog_comparison.py / analog_pipeline.py):
   STATE_VECTOR_DIMS, DIM_LABELS_BG, DIM_UNITS — public consts
   MacroState — dataclass с as_array()
   build_history_matrix, z_score_matrix, build_current_vector — public functions
-
-Phase 4.5: 8-dim activated. SPF expectations (EA_SPF_HICP_LT) са quarterly
-с lag (~end-quarter release); forward-filled до monthly за alignment с другите
-dims. Анализаторът интерпретира dim 8 като "anchoring" signal — близо до 2%
-target = anchored, > 0.5pp deviation = de-anchoring risk.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -45,39 +45,51 @@ import pandas as pd
 
 # ─── Public constants ────────────────────────────────────────────
 
-ANALOG_WINDOW_START = "1999-01-01"  # EMU era
+ANALOG_WINDOW_START = "2008-01-01"  # месечната NBS/akshare ера; complete-case ~2011-03
 
 STATE_VECTOR_DIMS: list[str] = [
-    "unrate",
-    "core_hicp_yoy",
-    "real_dfr",
-    "yc_10y2y",
-    "sovereign_stress",
-    "ip_yoy",
-    "sahm",
-    "inflation_expectations",
+    "cpi_yoy",
+    "ppi_yoy",
+    "m2_yoy",
+    "retail_yoy",
+    "fai_yoy",
+    "house_yoy",
+    "pmi",
+    "real_10y",
 ]
 
 DIM_LABELS_BG: dict[str, str] = {
-    "unrate":                 "Безработица (EA)",
-    "core_hicp_yoy":          "HICP базова инфлация",
-    "real_dfr":               "Реален DFR",
-    "yc_10y2y":               "Крива 10Y-2Y",
-    "sovereign_stress":       "Sovereign стрес (BTP-Bund)",
-    "ip_yoy":                 "Промишлено производство YoY",
-    "sahm":                   "Sahm правило",
-    "inflation_expectations": "Inflation очаквания (SPF LT)",
+    "cpi_yoy":    "CPI инфлация",
+    "ppi_yoy":    "PPI (производствена инфлация)",
+    "m2_yoy":     "M2 паричен растеж",
+    "retail_yoy": "Търговия на дребно (3мма)",
+    "fai_yoy":    "Инвестиции в осн. активи (3мма)",
+    "house_yoy":  "Цени на жилища (NBS 70 града)",
+    "pmi":        "PMI производство (NBS)",
+    "real_10y":   "Реален 10г. лихвен %",
 }
 
 DIM_UNITS: dict[str, str] = {
-    "unrate":                 "%",
-    "core_hicp_yoy":          "%",
-    "real_dfr":               "%",
-    "yc_10y2y":               "pp",
-    "sovereign_stress":       "pp",
-    "ip_yoy":                 "%",
-    "sahm":                   "pp",
-    "inflation_expectations": "%",
+    "cpi_yoy":    "%",
+    "ppi_yoy":    "%",
+    "m2_yoy":     "%",
+    "retail_yoy": "%",
+    "fai_yoy":    "%",
+    "house_yoy":  "%",
+    "pmi":        "",
+    "real_10y":   "pp",
+}
+
+# Snapshot ключове → дименсии (за прозрачност + тестове)
+DIM_SOURCE_KEYS: dict[str, str] = {
+    "cpi_yoy":    "CN_CPI_YOY_AK",
+    "ppi_yoy":    "CN_PPI_YOY",
+    "m2_yoy":     "CN_M2_YOY",
+    "retail_yoy": "CN_RETAIL_YOY",
+    "fai_yoy":    "CN_FAI_MOM_YOY",
+    "house_yoy":  "CN_NEW_HOUSE_PRICE",
+    "pmi":        "CN_PMI_MFG_NBS",
+    "real_10y":   "CN_CGB_10Y",  # минус CN_CPI_YOY_AK (виж build_history_matrix)
 }
 
 
@@ -91,7 +103,7 @@ class MacroState:
     z: dict[str, float] = field(default_factory=dict)
 
     def as_array(self) -> np.ndarray:
-        """7-D z-score vector за cosine similarity."""
+        """z-score vector за cosine similarity (ред = STATE_VECTOR_DIMS)."""
         return np.array([self.z.get(d, np.nan) for d in STATE_VECTOR_DIMS])
 
     def is_complete(self) -> bool:
@@ -102,34 +114,14 @@ class MacroState:
 
 # ─── Helper transforms ────────────────────────────────────────────
 
-def _to_month_end(s: pd.Series) -> pd.Series:
-    """Resample към month-start (period start convention)."""
-    if s.empty:
-        return s
+def _to_month_start(s: pd.Series) -> pd.Series:
+    """Resample към month-start (period start convention), mean за под-месечни."""
+    if s is None or s.empty:
+        return pd.Series(dtype=float)
     s = s.copy()
     if not isinstance(s.index, pd.DatetimeIndex):
         s.index = pd.to_datetime(s.index)
-    # Resample to monthly using mean (за daily/weekly серии)
     return s.resample("MS").mean().dropna()
-
-
-def _yoy_pct(s: pd.Series) -> pd.Series:
-    """YoY процентна промяна (12-period diff на monthly серия)."""
-    if s.empty:
-        return s
-    return s.pct_change(periods=12).dropna() * 100
-
-
-def _compute_sahm_rule(unrate_monthly: pd.Series) -> pd.Series:
-    """Sahm rule: 3-month moving average UNRATE минус trailing 12m min на 3mma.
-
-    Стойност > 0.5 historically signals recession.
-    """
-    if len(unrate_monthly) < 15:
-        return pd.Series(dtype=float)
-    ma3 = unrate_monthly.rolling(window=3).mean()
-    trailing_min = ma3.rolling(window=12).min()
-    return (ma3 - trailing_min).dropna()
 
 
 # ─── History matrix builder ───────────────────────────────────────
@@ -138,74 +130,48 @@ def build_history_matrix(
     snapshot: dict[str, pd.Series],
     window_start: str = ANALOG_WINDOW_START,
 ) -> pd.DataFrame:
-    """От snapshot {series_key → pd.Series} построява monthly DataFrame
+    """От дневния snapshot {series_key → pd.Series} построява monthly DataFrame
     с колоните = STATE_VECTOR_DIMS.
 
-    Връща пуст DataFrame ако ключовите серии липсват.
+    Чете директно CN_* ключовете (виж DIM_SOURCE_KEYS). Връща празен
+    DataFrame ако ключовите серии напълно липсват.
     """
-    required = {
-        "EA_UNRATE", "EA_HICP_CORE", "ECB_DFR",
-        "EA_BUND_10Y", "EA_BUND_2Y",
-        "IT_10Y", "DE_10Y",
-        "EA_IP",
-        "EA_SPF_HICP_LT",  # quarterly, forward-filled to monthly за dim 8
-    }
-    missing = required - set(snapshot.keys())
-    if missing:
-        # Не raise-ваме — пускаме непълен matrix, downstream ще сигнализира
-        pass
-
     cols: dict[str, pd.Series] = {}
 
-    # Dim 1: unrate (level)
-    if "EA_UNRATE" in snapshot:
-        cols["unrate"] = _to_month_end(snapshot["EA_UNRATE"])
+    cpi = _to_month_start(snapshot.get("CN_CPI_YOY_AK"))
+    if not cpi.empty:
+        cols["cpi_yoy"] = cpi
 
-    # Dim 2: core_hicp_yoy (вече е YoY %)
-    if "EA_HICP_CORE" in snapshot:
-        cols["core_hicp_yoy"] = _to_month_end(snapshot["EA_HICP_CORE"])
+    ppi = _to_month_start(snapshot.get("CN_PPI_YOY"))
+    if not ppi.empty:
+        cols["ppi_yoy"] = ppi
 
-    # Dim 3: real_dfr = DFR − core_hicp_yoy
-    if "ECB_DFR" in snapshot and "EA_HICP_CORE" in snapshot:
-        dfr_m = _to_month_end(snapshot["ECB_DFR"])
-        core_m = _to_month_end(snapshot["EA_HICP_CORE"])
-        idx_common = dfr_m.index.intersection(core_m.index)
-        cols["real_dfr"] = (dfr_m.loc[idx_common] - core_m.loc[idx_common]).dropna()
+    m2 = _to_month_start(snapshot.get("CN_M2_YOY"))
+    if not m2.empty:
+        cols["m2_yoy"] = m2
 
-    # Dim 4: yc_10y2y = 10Y - 2Y
-    if "EA_BUND_10Y" in snapshot and "EA_BUND_2Y" in snapshot:
-        y10 = _to_month_end(snapshot["EA_BUND_10Y"])
-        y2 = _to_month_end(snapshot["EA_BUND_2Y"])
-        idx_common = y10.index.intersection(y2.index)
-        cols["yc_10y2y"] = (y10.loc[idx_common] - y2.loc[idx_common]).dropna()
+    retail = _to_month_start(snapshot.get("CN_RETAIL_YOY"))
+    if not retail.empty:
+        cols["retail_yoy"] = retail.rolling(3).mean()
 
-    # Dim 5: sovereign_stress = IT_10Y - DE_10Y
-    if "IT_10Y" in snapshot and "DE_10Y" in snapshot:
-        it = _to_month_end(snapshot["IT_10Y"])
-        de = _to_month_end(snapshot["DE_10Y"])
-        idx_common = it.index.intersection(de.index)
-        cols["sovereign_stress"] = (it.loc[idx_common] - de.loc[idx_common]).dropna()
+    fai = _to_month_start(snapshot.get("CN_FAI_MOM_YOY"))
+    if not fai.empty:
+        cols["fai_yoy"] = fai.rolling(3).mean()
 
-    # Dim 6: ip_yoy
-    if "EA_IP" in snapshot:
-        ip_m = _to_month_end(snapshot["EA_IP"])
-        cols["ip_yoy"] = _yoy_pct(ip_m)
+    house = _to_month_start(snapshot.get("CN_NEW_HOUSE_PRICE"))
+    if not house.empty:
+        cols["house_yoy"] = house
 
-    # Dim 7: sahm
-    if "EA_UNRATE" in snapshot:
-        unrate_m = _to_month_end(snapshot["EA_UNRATE"])
-        cols["sahm"] = _compute_sahm_rule(unrate_m)
+    pmi = _to_month_start(snapshot.get("CN_PMI_MFG_NBS"))
+    if not pmi.empty:
+        cols["pmi"] = pmi
 
-    # Dim 8: inflation_expectations (quarterly SPF → forward-filled monthly)
-    if "EA_SPF_HICP_LT" in snapshot:
-        spf = snapshot["EA_SPF_HICP_LT"].copy()
-        if not spf.empty:
-            if not isinstance(spf.index, pd.DatetimeIndex):
-                spf.index = pd.to_datetime(spf.index)
-            # Quarterly наблюдения с date = quarter-start; resample към monthly
-            # с forward-fill (всеки месец наследява последния известен SPF).
-            spf_monthly = spf.resample("MS").ffill()
-            cols["inflation_expectations"] = spf_monthly
+    # real_10y = 10г. доходност − CPI YoY (реален лихвен процент)
+    cgb = _to_month_start(snapshot.get("CN_CGB_10Y"))
+    if not cgb.empty and not cpi.empty:
+        idx = cgb.index.intersection(cpi.index)
+        if len(idx):
+            cols["real_10y"] = (cgb.loc[idx] - cpi.loc[idx]).dropna()
 
     if not cols:
         return pd.DataFrame(columns=STATE_VECTOR_DIMS)
@@ -246,8 +212,8 @@ def build_current_vector(
         today: cut-off дата (default = последната налична)
 
     Returns:
-        MacroState с raw + z за последния complete-case ред,
-        или None ако няма complete-case ред (всички dims must be present).
+        MacroState с raw + z за последния complete-case ред (всички dims),
+        или None ако няма такъв ред.
     """
     if history_df.empty:
         return None
@@ -261,7 +227,6 @@ def build_current_vector(
         if df.empty:
             return None
 
-    # Намираме последния complete-case ред (всички STATE_VECTOR_DIMS налични)
     available_dims = [d for d in STATE_VECTOR_DIMS if d in df.columns]
     if not available_dims:
         return None

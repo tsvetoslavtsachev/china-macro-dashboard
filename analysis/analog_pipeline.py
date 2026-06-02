@@ -1,17 +1,13 @@
 """
 analysis/analog_pipeline.py
 ===========================
-End-to-end pipeline за Historical Analog Engine.
+End-to-end pipeline за Historical Analog Engine (China, Phase 4).
 
-⚠ PHASE 4 TODO — ORCHESTRATION layer
-====================================
-Pipeline-ът извиква macro_vector + analog_matcher + analog_comparison +
-forward_path. Всички тези изискват EA adaptation в Phase 4. Pipeline-ът
-сам по себе си е data-source agnostic.
+Оркестрира 4-те analog modula в едно извикване. `fetched` е директно
+дневният China snapshot (CN_* ключове) — China build_history_matrix чете
+нужните серии от него (без отделен ANALOG_FETCH_SPEC):
 
-Орекстрира 4-те analog modula в едно извикване:
-
-    fetched {ANALOG_KEY: pd.Series}
+    snapshot {CN_*: pd.Series}
         → build_history_matrix
         → z_score_matrix
         → build_current_vector
@@ -80,7 +76,7 @@ def compute_analog_bundle(
         min_gap_months: Минимум месеци между избрани analog-и.
         exclude_last_months: Отрязва последните N месеца от search pool-а.
         horizons_months: Forward horizons (default [3, 6, 12]).
-        outcome_dims: Dims за forward outcomes (default [unrate, core_cpi_yoy, real_ffr, yc_10y2y]).
+        outcome_dims: Dims за forward outcomes (default China: [cpi_yoy, ppi_yoy, retail_yoy, house_yoy]).
 
     Returns:
         AnalogBundle или None ако няма complete-case ред в history.

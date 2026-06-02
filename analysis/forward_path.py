@@ -3,18 +3,15 @@ analysis/forward_path.py
 ========================
 Forward outcomes: какво се е случило 3/6/12 месеца след всеки analog.
 
-⚠ PHASE 4 TODO — DEFAULT_OUTCOME_DIMS reference US dim names
-============================================================
-Логиката е dimension-agnostic, но default-ите по-долу (DEFAULT_OUTCOME_DIMS =
-["unrate", "core_cpi_yoy", "real_ffr", "yc_10y2y"]) ползват US dim names.
-Когато Phase 4 пренапише macro_vector.py с EA dim names (real_dfr вместо
-real_ffr, sovereign_stress вместо hy_oas, и т.н.), тези defaults трябва да
-се синхронизират. Кодовата логика остава непроменена.
+China-калибриран (Phase 4): DEFAULT_OUTCOME_DIMS = China dims
+(cpi_yoy, ppi_yoy, retail_yoy, house_yoy) — най-релевантните за абонат
+„какво последва" исходи. Логиката е dimension-agnostic.
 
-Фокус върху икономически исходи (3 ниво на безработица, core инфлация YoY,
-real policy rate, 10Y-2Y curve), НЕ asset prices. Причината: asset returns са noisy, regime-dependent, и
-прилагат малък sample (3-5 analogs) в analog базата. Икономическите
-isoодят са ковариантни на analog setup-а и много по-interpretable.
+Фокус върху икономически исходи (инфлация, производствени цени, потребление,
+имотни цени), НЕ asset prices. Причината: asset returns са noisy,
+regime-dependent, и почиват на малък sample (3 analogs). Икономическите
+исходи са по-interpretable. ⚠ n=len(analogs)=3 → представяй като
+диапазон [min, max] с медиана, НЕ точкова прогноза.
 
 Функции:
     forward_outcomes(history_df, analogs, horizons_months, outcome_dims)
@@ -40,7 +37,7 @@ from analysis.analog_matcher import AnalogResult
 
 
 DEFAULT_HORIZONS_MONTHS: list[int] = [3, 6, 12]
-DEFAULT_OUTCOME_DIMS: list[str] = ["unrate", "core_hicp_yoy", "real_dfr", "yc_10y2y"]
+DEFAULT_OUTCOME_DIMS: list[str] = ["cpi_yoy", "ppi_yoy", "retail_yoy", "house_yoy"]
 
 
 # ============================================================

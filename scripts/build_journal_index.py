@@ -34,10 +34,11 @@ from scripts._utils import (  # noqa: E402
 
 
 TOPIC_LABELS_BG = {
-    "labor":       "Трудов пазар",
-    "inflation":   "Инфлация",
-    "credit":      "Кредит",
     "growth":      "Растеж",
+    "inflation":   "Инфлация",
+    "labor":       "Трудов пазар",
+    "credit":      "Кредит",
+    "property":    "Имоти",
     "analogs":     "Исторически аналози",
     "regime":      "Режими",
     "methodology": "Методология",
@@ -59,9 +60,9 @@ def build_index(journal_dir: Path = JOURNAL_DIR) -> str:
         by_topic[e.topic].append(e)
 
     lines: list[str] = []
-    lines.append("# Research Journal — Eurozone")
+    lines.append("# Research Journal — China")
     lines.append("")
-    lines.append("Структурирани записи от EA макро анализа. Всеки файл е markdown с ")
+    lines.append("Структурирани записи от China макро анализа. Всеки файл е markdown с ")
     lines.append("YAML frontmatter. Индексът е автоматично генериран — ")
     lines.append("не редактирай директно. Регенерирай с:")
     lines.append("")

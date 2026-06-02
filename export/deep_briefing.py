@@ -18,14 +18,16 @@ landing-а, `run.py --modules`, export_api (C3 manifest) и satellite.
   5. Per-lens блокове × 5 — breadth таблица + вътрешни разминавания + аномалии в лещата
   6. Non-Consensus Highlights — триажирани tagged серии
   7. Top Anomalies — серии с |z|>2
-  8. Предстои — честни placeholder-и (исторически аналози · falsifiers · journal)
-  9. Бележки за качеството на данните
- 10. Footer — методология
+  8. Какво би обърнало диагнозата (Phase 3 falsifiers — China-native, жив статус)
+  9. Исторически аналози (Phase 4 — cosine над 8-изм. China вектор, честно рамкирани)
+ 10. Свързани бележки (journal) — само при --with-journal (research-desk, не в CI)
+ 11. Бележки за качеството на данните
+ 12. Footer — методология
 
-Отложено (Фази 3-4, данни-зависимо — НЕ фабрикуваме):
-  - Historical analogs (China няма episode база/macro-vector spec)
-  - Falsification criteria per China режим (guardrails е US-калибриран)
-  - Journal (China няма journal/)
+Phase 3 (falsifiers) + Phase 4 (analogs) + journal: ИМПЛЕМЕНТИРАНИ. Аналозите са
+честно рамкирани (умерен multi-template, без претенция за повторение — виж
+_render_analogs). Journal-ът е local research-desk слой (записите са частни,
+.gitignore); публичният CI build не подава --with-journal → секцията се пропуска.
 
 Self-contained HTML: inline CSS, без JS, без CDN, без images.
 """
@@ -50,6 +52,7 @@ from analysis.divergence import (
 from analysis.non_consensus import compute_non_consensus
 from analysis.anomaly import compute_anomalies
 from analysis.guardrails import compute_china_falsifiers
+from analysis.analog_pipeline import compute_analog_bundle
 from analysis.delta import (
     build_state_snapshot,
     compute_delta,
@@ -639,31 +642,165 @@ def _render_falsifiers(falsifiers: list, regime_bg: str) -> str:
 """
 
 
-def _render_deferred() -> str:
-    """Честни placeholder-и за все още отложените слоеве (analogs · journal).
-    НЕ фабрикуваме празни US-копирани секции. Falsifiers вече са имплементирани
-    (виж _render_falsifiers)."""
-    items = [
-        ("Исторически аналози",
-         "Съпоставка на текущото състояние с минали епизоди (macro-vector + episode "
-         "матрица). Изисква China-специфична historical база — китайската история е "
-         "по-къса и по-рядко наблюдавана, затова този слой се изгражда отделно."),
-        ("Свързани бележки (journal)",
-         "Връзки към аналитичен journal по теми и режими. China dashboard все още "
-         "няма journal слой."),
-    ]
-    cards = "".join(
-        f"""
-<div class="soon-card">
-  <div class="soon-head"><span class="soon-badge">предстои</span><h3>{html.escape(t)}</h3></div>
-  <p>{html.escape(desc)}</p>
-</div>
-""" for t, desc in items
+def _render_analogs(bundle) -> str:
+    """Phase 4 — Исторически аналози (cosine similarity над 8-изм. China вектор).
+
+    Честно рамкиран: видими cosine сили, „умерен multi-template" (не „днес = X"),
+    per-analog dim сравнение, forward outcomes като диапазон + твърд caveat, че
+    трите аналога предхождаха ПОЛИТИЧЕСКИ отскок (виж falsifiers)."""
+    if bundle is None or not bundle.analogs:
+        # Честен fallback — НЕ фабрикуваме секция при недостиг на данни.
+        return """
+<section class="brief-section">
+  <h2>Исторически аналози</h2>
+  <p class="fals-intro">Недостатъчно overlapping месечна история за надежден аналог
+  в момента (8-измерният вектор иска пълен complete-case ред). Слоят се пропуска,
+  вместо да се показва празен.</p>
+</section>
+"""
+    from analysis.analog_matcher import classify_strength, STRENGTH_LABELS_BG
+    from analysis.macro_vector import DIM_LABELS_BG, DIM_UNITS
+
+    cur = bundle.current_state
+    # Най-екстремните dims на текущото състояние (за интро линията)
+    top_neg = sorted(cur.z.items(), key=lambda kv: kv[1])[:3]
+    cur_desc = " · ".join(
+        f"{DIM_LABELS_BG.get(d, d)} (z={z:+.2f})" for d, z in top_neg
     )
+
+    strength_color = {
+        "strong": "#3fb950", "good": "#58a6ff", "weak": "#d29922", "marginal": "#8b949e",
+    }
+    max_cos = max(a.similarity for a in bundle.analogs)
+
+    # ── Analog карти ──
+    cards = []
+    for a, cmp in zip(bundle.analogs, bundle.comparisons):
+        strength = classify_strength(a.similarity)
+        col = strength_color.get(strength, "#8b949e")
+        tight = [d for d in cmp.similarities if d.classification == "tight"][:3]
+        tight_html = ", ".join(
+            f"{html.escape(d.label_bg)} <span class='diff'>(Δz={d.z_diff:+.2f})</span>"
+            for d in tight
+        ) or "<span class='diff'>—</span>"
+        div_html = ", ".join(
+            f"{html.escape(d.label_bg)} <span class='diff'>(Δz={d.z_diff:+.2f})</span>"
+            for d in cmp.divergences[:2]
+        )
+        div_block = (
+            f"<div class='analog-row'><span class='analog-k'>къде се разпада</span>{div_html}</div>"
+            if div_html else ""
+        )
+        cards.append(f"""
+<div class="analog-card">
+  <div class="analog-head">
+    <span class="analog-rank">#{a.rank}</span>
+    <span class="analog-date">{a.date.strftime('%Y-%m')}</span>
+    <span class="analog-ep">{html.escape(a.episode_label or '—')}</span>
+    <span class="analog-cos" style="background:{col}22;color:{col};border-color:{col}55">
+      cos {a.similarity:+.2f} · {STRENGTH_LABELS_BG[strength]}</span>
+  </div>
+  <div class="analog-row"><span class="analog-k">най-близки</span>{tight_html}</div>
+  {div_block}
+</div>""")
+
+    # ── Forward outcomes таблица ──
+    fwd = bundle.forward
+    horizons = fwd.horizons
+    agg_idx = {(g.dim, g.horizon_months): g for g in fwd.aggregates}
+    head_cells = "".join(f"<th class='num'>+{h}м</th>" for h in horizons)
+    rows = []
+    for d in fwd.dims:
+        unit = DIM_UNITS.get(d, "")
+        cells = []
+        for h in horizons:
+            g = agg_idx.get((d, h))
+            if g and g.median_value is not None:
+                cells.append(
+                    f"<td class='num'>{g.median_value:+.1f}{unit}"
+                    f"<span class='fwd-range'>[{g.min_value:+.1f}, {g.max_value:+.1f}]</span></td>"
+                )
+            else:
+                cells.append("<td class='num'>—</td>")
+        rows.append(
+            f"<tr><td class='pg-name'>{html.escape(DIM_LABELS_BG.get(d, d))}</td>{''.join(cells)}</tr>"
+        )
+    fwd_table = f"""
+  <table class="breadth-table">
+    <thead><tr><th>Исход (YoY)</th>{head_cells}</tr></thead>
+    <tbody>{''.join(rows)}</tbody>
+  </table>"""
+
     return f"""
 <section class="brief-section">
-  <h2>Предстои</h2>
-  <div class="soon-wrap">{cards}</div>
+  <h2>Исторически аналози</h2>
+  <p class="fals-intro">Съпоставка на текущото състояние (8-измерен вектор от свежи месечни
+  серии) с месечната история <strong>2011–2026</strong> чрез cosine similarity.
+  ⚠ Китайската месечна история е къса и почти изцяло в „забавящата се" ера → z-scores
+  измерват отклонение от <em>скорошната</em> норма, не от пълен бум-крах цикъл. Най-близкият
+  аналог е „добър" (cos≈{max_cos:.2f}), но <strong>няма повторение</strong> (нула съвпадения над 0.90) —
+  чети като „<em>римува се с</em>", не „днес = X".</p>
+
+  <p class="analog-cur"><strong>Днешен профил (2026-04):</strong> {cur_desc} — дезинфлация при
+  свито потребление и омекнал кредитен импулс.</p>
+
+  <div class="analog-wrap">{''.join(cards)}</div>
+
+  <h3 class="analog-fwd-h">Какво последва аналозите (медиана · [мин, макс] от 3-те)</h3>
+  <p class="fals-intro">⚠ И трите аналога бяха последвани от <strong>политически стимулиран
+  отскок</strong> (изход от Шанхай-локдауна, пост-COVID стимул, примирие в търговската война) →
+  исходите по-долу клонят нагоре. Текущият режим е <strong>структурна дефлация</strong>;
+  такъв отскок НЕ е гарантиран — това е най-несигурната част от анализа (n=3, различен policy
+  контекст). Сверявай с „<em>Какво би обърнало тази диагноза</em>".</p>
+  {fwd_table}
+</section>
+"""
+
+
+def _render_journal(entries: list) -> str:
+    """Секция „Свързани бележки" — линкове към релевантни journal записи.
+
+    Local research-desk слой (--with-journal opt-in; НЕ се рендира в CI). Записите
+    са частни (.gitignore) → линковете работят само при локален build, където
+    briefing-ът е в output/ и journal/ е на ../journal/ спрямо него."""
+    if not entries:
+        return ""
+    STATUS_LABELS = {
+        "open_question": "Отворен въпрос", "hypothesis": "Хипотеза",
+        "finding": "Извод", "decision": "Решение",
+    }
+    TOPIC_LABELS = {
+        "growth": "Растеж", "inflation": "Инфлация", "labor": "Трудов пазар",
+        "credit": "Кредит", "property": "Имоти", "analogs": "Аналози",
+        "regime": "Режими", "methodology": "Методология",
+    }
+    rows = []
+    for e in entries:
+        topic_label = TOPIC_LABELS.get(e.topic, e.topic)
+        status_label = STATUS_LABELS.get(e.status, e.status)
+        tags_html = ""
+        if e.tags:
+            tags_html = " · ".join(
+                f'<code class="journal-tag">{html.escape(str(t))}</code>' for t in e.tags[:4]
+            )
+        rel = str(e.relative_path).replace("\\", "/")
+        href = f"../{rel}"
+        rows.append(f"""
+      <li class="journal-item">
+        <div class="journal-meta">
+          <span class="journal-date">{e.date.isoformat()}</span>
+          <span class="journal-topic">{html.escape(topic_label)}</span>
+          <span class="journal-status journal-status-{html.escape(e.status)}">{html.escape(status_label)}</span>
+        </div>
+        <a class="journal-link" href="{html.escape(href)}">{html.escape(e.title)}</a>
+        {'<div class="journal-tags">' + tags_html + '</div>' if tags_html else ''}
+      </li>""")
+    return f"""
+<section class="brief-section journal-section">
+  <h2>📓 Свързани бележки</h2>
+  <p class="fals-intro">Подбрани journal записи, релевантни за текущия режим и активните
+  аномалии. Пълен списък: <a href="../journal/README.md">journal/</a>.</p>
+  <ul class="journal-list">{"".join(rows)}</ul>
 </section>
 """
 
@@ -755,6 +892,7 @@ def generate_deep_briefing(
     today: Optional[date] = None,
     state_dir: Optional[str] = STATE_DIR_DEFAULT,
     persist_state: bool = True,
+    journal_entries: Optional[list] = None,
 ) -> str:
     """Генерира China deep briefing HTML; връща абсолютния path.
 
@@ -765,6 +903,8 @@ def generate_deep_briefing(
         today: override за тестове.
         state_dir: директория за WoW state snapshots. None → WoW delta се пропуска.
         persist_state: дали да записва текущия state за бъдещо сравнение.
+        journal_entries: optional list[JournalEntry] (research-desk opt-in, --with-journal).
+            None/празно → секцията „Свързани бележки" се пропуска (default за CI/public).
     """
     import importlib
 
@@ -833,7 +973,15 @@ def generate_deep_briefing(
     sections.append(_render_anomalies_feed(anomaly_report, snapshot))
     falsifiers = compute_china_falsifiers(snapshot, regime_key, overall)
     sections.append(_render_falsifiers(falsifiers, regime_bg))
-    sections.append(_render_deferred())
+    try:
+        analog_bundle = compute_analog_bundle(snapshot)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Analog bundle failed: {e}")
+        analog_bundle = None
+    sections.append(_render_analogs(analog_bundle))
+    if journal_entries:
+        sections.append(_render_journal(journal_entries))
     sections.append(_render_data_quality())
     sections.append(_render_footer(as_of, today))
 
@@ -1042,14 +1190,6 @@ tr.sig-high { background: #f8514911; }
 .pg { color: #8b949e; font-size: 12px; margin-left: 4px; }
 .series-code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color: #c9d1d9; padding: 1px 5px; border-radius: 3px; font-size: 12px; cursor: help; }
 
-/* "Предстои" placeholders */
-.soon-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
-.soon-card { background: #161b27; border: 1px dashed #30363d; border-radius: 8px; padding: 14px 16px; }
-.soon-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.soon-head h3 { margin: 0; font-size: 14px; font-weight: 600; color: #8b949e; }
-.soon-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #d29922; background: #d2992222; border: 1px solid #d2992244; padding: 2px 8px; border-radius: 10px; }
-.soon-card p { font-size: 12.5px; color: #8b949e; line-height: 1.5; margin: 0; }
-
 /* Falsifiers (Phase 3 — China-native, жив статус) */
 .fals-intro { font-size: 12.5px; color: #8b949e; line-height: 1.55; margin: 0 0 14px; }
 .fals-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; }
@@ -1058,6 +1198,36 @@ tr.sig-high { background: #f8514911; }
 .fals-badge { flex-shrink: 0; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #0d1117; padding: 2px 8px; border-radius: 10px; }
 .fals-crit { font-size: 13px; font-weight: 600; color: #c9d1d9; line-height: 1.4; }
 .fals-detail { font-size: 12px; color: #8b949e; line-height: 1.5; margin: 0; }
+
+/* Historical analogs (Phase 4) */
+.analog-cur { font-size: 13px; color: #c9d1d9; background: #0d1117; border-left: 3px solid #30363d; padding: 8px 12px; margin: 0 0 14px; line-height: 1.5; }
+.analog-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.analog-card { background: #161b27; border: 1px solid #30363d; border-radius: 8px; padding: 12px 15px; }
+.analog-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 9px; }
+.analog-rank { font-family: monospace; font-size: 12px; color: #8b949e; }
+.analog-date { font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; font-weight: 600; color: #e6edf3; }
+.analog-ep { font-size: 12.5px; color: #c9d1d9; flex: 1 1 auto; }
+.analog-cos { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 10px; border: 1px solid; white-space: nowrap; }
+.analog-row { font-size: 12px; color: #c9d1d9; line-height: 1.5; margin-top: 3px; }
+.analog-k { display: inline-block; min-width: 92px; padding-right: 10px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; color: #8b949e; vertical-align: top; }
+.analog-fwd-h { font-size: 14px; color: #f0f6fc; margin: 4px 0 8px; }
+.fwd-range { display: block; font-size: 10px; color: #8b949e; font-weight: 400; }
+
+/* Journal (research-desk opt-in) */
+.journal-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.journal-item { background: #161b27; border: 1px solid #30363d; border-radius: 8px; padding: 11px 14px; }
+.journal-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+.journal-date { font-family: monospace; font-size: 11.5px; color: #8b949e; }
+.journal-topic { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; color: #58a6ff; background: #58a6ff22; padding: 1px 7px; border-radius: 10px; }
+.journal-status { font-size: 10.5px; padding: 1px 7px; border-radius: 10px; }
+.journal-status-open_question { background: #d2992222; color: #d29922; }
+.journal-status-hypothesis { background: #58a6ff22; color: #58a6ff; }
+.journal-status-finding { background: #3fb95022; color: #3fb950; }
+.journal-status-decision { background: #f778ba22; color: #f778ba; }
+.journal-link { font-size: 13.5px; font-weight: 600; color: #e6edf3; text-decoration: none; }
+.journal-link:hover { color: #58a6ff; text-decoration: underline; }
+.journal-tags { margin-top: 5px; }
+.journal-tag { font-size: 10.5px; }
 
 /* Data quality */
 .dq-card { background: #161b27; border: 1px solid #d29922; border-radius: 10px; padding: 20px; }
