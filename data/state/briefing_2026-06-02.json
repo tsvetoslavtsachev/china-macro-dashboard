@@ -5,7 +5,7 @@
   "regime_label_bg": "РЕЦЕСИОНЕН",
   "cross_lens_states": {
     "credit_real_economy": "transition",
-    "monetary_inflation_trap": "a_up_b_down",
+    "monetary_inflation_trap": "transition",
     "external_domestic_balance": "a_up_b_down"
   },
   "breadth_by_pg": {
@@ -14,7 +14,7 @@
     "growth/gdp_quarterly": null,
     "growth/hard_activity": 0.333,
     "growth/investment": null,
-    "inflation/cpi": 0.333,
+    "inflation/cpi": 0.5,
     "inflation/deflator_quarterly": null,
     "inflation/ppi": 0.5,
     "labor/unemployment": 0.667,

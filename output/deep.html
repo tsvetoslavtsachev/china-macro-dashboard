@@ -152,6 +152,15 @@ tr.sig-high { background: #f8514911; }
 .soon-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #d29922; background: #d2992222; border: 1px solid #d2992244; padding: 2px 8px; border-radius: 10px; }
 .soon-card p { font-size: 12.5px; color: #8b949e; line-height: 1.5; margin: 0; }
 
+/* Falsifiers (Phase 3 — China-native, жив статус) */
+.fals-intro { font-size: 12.5px; color: #8b949e; line-height: 1.55; margin: 0 0 14px; }
+.fals-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; }
+.fals-card { background: #161b27; border: 1px solid #30363d; border-radius: 8px; padding: 13px 15px; }
+.fals-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 7px; }
+.fals-badge { flex-shrink: 0; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #0d1117; padding: 2px 8px; border-radius: 10px; }
+.fals-crit { font-size: 13px; font-weight: 600; color: #c9d1d9; line-height: 1.4; }
+.fals-detail { font-size: 12px; color: #8b949e; line-height: 1.5; margin: 0; }
+
 /* Data quality */
 .dq-card { background: #161b27; border: 1px solid #d29922; border-radius: 10px; padding: 20px; }
 .dq-card h3 { color: #d29922; font-size: 14px; margin-bottom: 12px; }
@@ -176,14 +185,14 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
   </div>
   <div class="brief-header-right">
     <div class="score-circle" style="border-color:#f85149">
-      <span class="score-num" style="color:#f85149">25.8</span>
+      <span class="score-num" style="color:#f85149">26.5</span>
       <span class="score-label">SCORE</span>
     </div>
     <div class="brief-kpis">
-      <div class="kpi"><div class="kpi-n">49</div><div class="kpi-l">серии</div></div>
+      <div class="kpi"><div class="kpi-n">50</div><div class="kpi-l">серии</div></div>
       <div class="kpi"><div class="kpi-n">7</div><div class="kpi-l">аномалии |z|>2</div></div>
       <div class="kpi"><div class="kpi-n">0</div><div class="kpi-l">non-consensus HIGH</div></div>
-      <div class="kpi"><div class="kpi-n">5</div><div class="kpi-l">non-consensus MEDIUM</div></div>
+      <div class="kpi"><div class="kpi-n">6</div><div class="kpi-l">non-consensus MEDIUM</div></div>
     </div>
   </div>
 </header>
@@ -195,9 +204,9 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
     <div class="regime-badge" style="background:#d5000022;color:#d50000;border-color:#d5000066">
       <div class="regime-label">Композитен режим</div>
       <div class="regime-val">РЕЦЕСИОНЕН</div>
-      <div class="regime-driver">composite 25.8/100</div>
+      <div class="regime-driver">composite 26.5/100</div>
     </div>
-    <div class="exec-narrative">Претеглен композитен macro score 25.8/100 → режим „РЕЦЕСИОНЕН“. Най-слаба тема: Пазар на труда (12.3 — КРИЗА НА ТРУДА); най-силна: Монетарна политика и кредит (47.9). Активни cross-lens сигнали: Монетарно разхлабване × Инфлация → ↑↓ A нагоре / B надолу; Външно търсене × Вътрешна активност → ↑↓ A нагоре / B надолу. 7 серии с |z|&gt;2 (екстремни четения).</div>
+    <div class="exec-narrative">Претеглен композитен macro score 26.5/100 → режим „РЕЦЕСИОНЕН“. Най-слаба тема: Пазар на труда (12.3 — КРИЗА НА ТРУДА); най-силна: Монетарна политика и кредит (47.9). Активни cross-lens сигнали: Външно търсене × Вътрешна активност → ↑↓ A нагоре / B надолу. 7 серии с |z|&gt;2 (екстремни четения).</div>
   </div>
   <div class="exec-grid-single">
     <table class="regime-table">
@@ -214,7 +223,7 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
 
 <tr>
   <td class="pg-name">🔥 Инфлация и цени</td>
-  <td class="num" style="color:#f85149;font-weight:600">30.5</td>
+  <td class="num" style="color:#f85149;font-weight:600">35.1</td>
   <td>ДЕФЛАЦИОНЕН РИСК</td>
   <td class="num">0 </td>
 </tr>
@@ -282,7 +291,7 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
 
 <div class="pair-card">
   <div class="pair-head">
-    <span class="pair-state state-mixed">↑↓ A нагоре / B надолу</span>
+    <span class="pair-state state-trans">⇄ преход</span>
     <h3>Монетарно разхлабване × Инфлация</h3>
   </div>
   <div class="pair-question">Води ли разхлабването на PBoC до инфлация, или политиката бута в дефлация (policy trap)?</div>
@@ -294,11 +303,11 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
     </div>
     <div class="pair-slot">
       <div class="pair-slot-label">B · Инфлация</div>
-      <div class="pair-slot-val">33%</div>
-      <div class="pair-slot-n">n=3</div>
+      <div class="pair-slot-val">50%</div>
+      <div class="pair-slot-n">n=4</div>
     </div>
   </div>
-  <div class="pair-interp">Policy trap — PBoC разхлабва, но инфлацията пада/е в дефлация. Трансмисията е счупена (Japan-style): по-ниските лихви не вдигат цените при deleveraging.</div>
+  <div class="pair-interp">Преход — посоките на политиката и инфлацията не са ясно aligned.</div>
 </div>
 
 <div class="pair-card">
@@ -399,10 +408,10 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
   <tbody>
 <tr>
   <td class="pg-name">cpi</td>
-  <td class="num">33%</td>
+  <td class="num">50%</td>
   <td class="num">0%</td>
-  <td class="num">3/3</td>
-  <td><span class="dir-badge dir-dn">свиване</span></td>
+  <td class="num">4/4</td>
+  <td><span class="dir-badge dir-mix">смесено</span></td>
   <td class="extremes"></td>
 </tr>
 
@@ -612,6 +621,17 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
   <td>✓</td>
   <td><span class='tag tag-structural'>structural</span></td>
 </tr>
+
+<tr class="sig-medium">
+  <td><span class="sig-badge sig-medium">MEDIUM</span></td>
+  <td><code class="series-code" title="БВП дефлатор (YoY %)">CN_GDP_DEFLATOR</code></td>
+  <td>БВП дефлатор (YoY %)</td>
+  <td class="num">-1.16</td>
+  <td class="num">67%</td>
+  <td>up</td>
+  <td>✓</td>
+  <td><span class='tag tag-non_consensus'>non_consensus</span></td>
+</tr>
 </tbody>
   </table>
 </section>
@@ -722,16 +742,49 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
 
 
 <section class="brief-section">
+  <h2>Какво би обърнало тази диагноза</h2>
+  <p class="fals-intro">Falsification criteria за режим „РЕЦЕСИОНЕН" — конкретните
+  условия, при които текущата диагноза би се обезсилила, със статус спрямо последните данни.
+  China-калибрирани: тракат реален distress (дефлатор · имоти · кредитна трансмисия · композит),
+  не policy-managed прагове като БВП 5% или PMI 50.</p>
+  <div class="fals-wrap">
+<div class="fals-card">
+  <div class="fals-head">
+    <span class="fals-badge" style="background:#ffd600">БЛИЗО</span>
+    <span class="fals-crit">БВП дефлатор ≥ 0 за 2 поредни тримесечия (край на debt-deflation)</span>
+  </div>
+  <p class="fals-detail">Текущ -0.06% (2026Q1); 12 поредни отрицателни тримесечия, но най-плиткият — близо до изход.</p>
+</div>
+<div class="fals-card">
+  <div class="fals-head">
+    <span class="fals-badge" style="background:#ff6d00">ДАЛЕЧ</span>
+    <span class="fals-crit">Имотите стабилизират — BIS жилищни цени YoY ≥ 0 или FAI спре свиването</span>
+  </div>
+  <p class="fals-detail">BIS имоти -7.5%; FAI -12.0% — двата дълбоко отрицателни.</p>
+</div>
+<div class="fals-card">
+  <div class="fals-head">
+    <span class="fals-badge" style="background:#ff6d00">ДАЛЕЧ</span>
+    <span class="fals-crit">Кредитна трансмисия се възстановява — M2 растеж &gt; 10% YoY</span>
+  </div>
+  <p class="fals-detail">M2 растеж 8.6% YoY — под прага 10%; лихвите паднаха, но кредитът не се ускорява.</p>
+</div>
+<div class="fals-card">
+  <div class="fals-head">
+    <span class="fals-badge" style="background:#ff6d00">ДАЛЕЧ</span>
+    <span class="fals-crit">Композитният macro score се покачи над 35</span>
+  </div>
+  <p class="fals-detail">Текущ композит 26.5; нужни +8.5 до прага 35.</p>
+</div></div>
+</section>
+
+
+<section class="brief-section">
   <h2>Предстои</h2>
   <div class="soon-wrap">
 <div class="soon-card">
   <div class="soon-head"><span class="soon-badge">предстои</span><h3>Исторически аналози</h3></div>
   <p>Съпоставка на текущото състояние с минали епизоди (macro-vector + episode матрица). Изисква China-специфична historical база — китайската история е по-къса и по-рядко наблюдавана, затова този слой се изгражда отделно.</p>
-</div>
-
-<div class="soon-card">
-  <div class="soon-head"><span class="soon-badge">предстои</span><h3>Falsification criteria</h3></div>
-  <p>Какво конкретно би обезсилило текущата регимна диагноза, per China режим (recessionary/deteriorating/mixed/healthy/expansionary). Изисква авторски прагове, калибрирани за китайските серии — не наследяваме US праговете (Sahm rule, ICSA, T10Y2Y, HY OAS), които China няма.</p>
 </div>
 
 <div class="soon-card">
@@ -795,7 +848,7 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
   <p class="muted brief-meta">
     Всички изчисления са детерминистични — няма LLM нарация. Китайските официални
     данни са обект на ревизии и методологични промени; интерпретирайте с внимание.
-    As_of: 2026-05-31 · Генериран: 2026-06-02 · Серии: 49 · Лещи: 5.
+    As_of: 2026-05-31 · Генериран: 2026-06-02 · Серии: 50 · Лещи: 5.
   </p>
 </footer>
 

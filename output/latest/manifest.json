@@ -2,9 +2,9 @@
   "schema_version": "1.0",
   "region": "CN",
   "as_of_date": "2026-06-02",
-  "generated_at": "2026-06-02T09:07:31Z",
-  "data_generated_at": "2026-06-02T09:07:31.730264Z",
-  "composite_score": 25.8,
+  "generated_at": "2026-06-02T09:43:55Z",
+  "data_generated_at": "2026-06-02T09:43:55.579097Z",
+  "composite_score": 26.5,
   "regime": {
     "key": "recessionary",
     "label_bg": "РЕЦЕСИОНЕН"
@@ -19,8 +19,8 @@
     {
       "key": "inflation",
       "label_bg": "Инфлация и цени",
-      "score": 30.5,
-      "direction": "contracting"
+      "score": 35.1,
+      "direction": "mixed"
     },
     {
       "key": "labor",
