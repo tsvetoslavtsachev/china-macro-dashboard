@@ -77,13 +77,25 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
+    # ── Свежи драйвери (re-base 2026-06) — годишните WB серии остават като readings/фон ──
+    "CN_BIS_PROPERTY_YOY": {
+        "label": "Жилищни имотни цени (YoY %, BIS номинал)",
+        "invert": False,   # по-ниски цени = по-лошо
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_FAI_MOM_YOY": {
+        "label": "Инвестиции в дълготрайни активи (месечен YoY %)",
+        "invert": False,   # свиване на инвестициите = по-лошо
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
-COMPOSITE_SERIES  = [
-    "CN_CURRENT_ACCOUNT", "CN_EXPORTS_GDP", "CN_FDI_GDP",
-    "CN_FIXED_CAPITAL", "CN_PRIVATE_CAPEX", "CN_NEW_HOUSE_PRICE",
-]
-COMPOSITE_WEIGHTS = [0.20, 0.15, 0.15, 0.20, 0.15, 0.15]
+# Композитът: 70-градски къщи (akshare, месечно) + BIS имотни цени (тримесечно, по-широко
+# покритие) + FAI (инвестиционен импулс, месечно) + текуща сметка (годишен external anchor).
+COMPOSITE_SERIES  = ["CN_NEW_HOUSE_PRICE", "CN_BIS_PROPERTY_YOY", "CN_FAI_MOM_YOY", "CN_CURRENT_ACCOUNT"]
+COMPOSITE_WEIGHTS = [0.30,                 0.25,                  0.30,             0.15]
 
 REGIMES = [
     (75, "СИЛЕН ИНВЕСТИЦИОНЕН ЦИКЪЛ", "#00c853"),

@@ -21,7 +21,7 @@ from typing import Any
 # ALLOWED VALUES (за validation)
 # ============================================================
 
-ALLOWED_SOURCES = {"worldbank", "imf_ifs", "akshare", "external", "pending", "bloomberg_bridge", "nbs_manual"}
+ALLOWED_SOURCES = {"worldbank", "imf_ifs", "akshare", "external", "pending", "bloomberg_bridge", "nbs_manual", "dbnomics"}
 ALLOWED_REGIONS = {"CN", "HK", "GLOBAL"}
 ALLOWED_LENSES = {"labor", "growth", "inflation", "credit", "property"}
 ALLOWED_TRANSFORMS = {"level", "yoy_pct", "mom_pct", "qoq_pct", "z_score", "first_diff"}
@@ -123,6 +123,23 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "typical_release": "Q1 следващата година",
         "revision_prone": False,
         "narrative_hint": "Намалява структурно (~25% 2024). Китай се опитва да задържи manufacturing base срещу reshoring натиска.",
+    },
+    "CN_IP_YOY_NBS": {
+        "source": "dbnomics",
+        "id": "NBS/M_A0201/A020101",
+        "region": "CN",
+        "name_bg": "Индустрия — добавена стойност (месечен YoY %, NBS)",
+        "name_en": "Industrial Value-Added Growth (monthly YoY, NBS)",
+        "lens": ["growth"],
+        "peer_group": "hard_activity",
+        "tags": [],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2000-01-01",
+        "release_schedule": "monthly",
+        "typical_release": "~15 дни след края на месеца",
+        "revision_prone": False,
+        "narrative_hint": "NBS месечен IP растеж чрез DBnomics — надежден заместител на akshare CN_IP_YOY (заседнал 2025-08 при източника). Главна hard-activity мярка. Китай не публикува отделен ян/фев (CNY).",
     },
     "CN_CAPEX_GDP": {
         "source": "worldbank",
@@ -230,6 +247,23 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "typical_release": "~10-15 дни след края на месеца",
         "revision_prone": False,
         "narrative_hint": "Producer prices — leading indicator за CPI с 2-3 месеца. Отрицателна PPI → дефлационен натиск в производствения сектор.",
+    },
+    "CN_PPI_YOY": {
+        "source": "akshare",
+        "id": "ppi_yoy",
+        "region": "CN",
+        "name_bg": "ИПП — производствени цени (месечен, YoY %)",
+        "name_en": "PPI YoY (monthly)",
+        "lens": ["inflation"],
+        "peer_group": "ppi",
+        "tags": ["non_consensus"],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2000-01-01",
+        "release_schedule": "monthly",
+        "typical_release": "~10-15 дни след края на месеца",
+        "revision_prone": False,
+        "narrative_hint": "Свеж месечен PPI YoY от НБС (akshare) — замества мъртвия IMF/IFS PPI (замръзнал 2022-12). Отрицателен от 2022 → дефлация в производствения сектор. Дълга история за percentile.",
     },
 
     # ───────────────────────────────────────────────────────
@@ -359,6 +393,23 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "typical_release": "Q1 следващата година",
         "revision_prone": False,
         "narrative_hint": "194% от GDP (2024) — изключително висок. Debt overhang ограничава monetary policy transmission. Кредитният импулс (промяна в новия кредит) е по-важен от нивото.",
+    },
+    "CN_BIS_CREDIT_GDP": {
+        "source": "dbnomics",
+        "id": "BIS/WS_TC/Q.CN.P.A.M.770.A",
+        "region": "CN",
+        "name_bg": "Кредит към частния нефинансов сектор (% от БВП, BIS)",
+        "name_en": "Credit to Private Non-Financial Sector (% of GDP, BIS)",
+        "lens": ["credit"],
+        "peer_group": "credit_depth",
+        "tags": ["non_consensus"],
+        "transform": "level",
+        "is_rate": False,
+        "historical_start": "2000-01-01",
+        "release_schedule": "quarterly",
+        "typical_release": "~1.5 г. лаг (BIS)",
+        "revision_prone": True,
+        "narrative_hint": "BIS канонична серия за credit-to-GDP (тримесечна, 198.1% 2024-Q4). По-свежа и стандартна от годишния WB CN_CREDIT_PRIVATE. Базата за China Credit Impulse. Висок дял = debt overhang → invert.",
     },
     "CN_M2_GDP": {
         "source": "worldbank",
@@ -500,6 +551,23 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "typical_release": "~18 дни след края на месеца",
         "revision_prone": False,
         "narrative_hint": "НБС публикува 70-градски индекс. Отрицателен YoY от 2023. Evergrande/Country Garden кризата се отразява директно тук.",
+    },
+    "CN_BIS_PROPERTY_YOY": {
+        "source": "dbnomics",
+        "id": "BIS/WS_SPP/Q.CN.N.771",
+        "region": "CN",
+        "name_bg": "Жилищни имотни цени (YoY %, BIS номинал)",
+        "name_en": "Residential Property Prices YoY (BIS nominal)",
+        "lens": ["property"],
+        "peer_group": "housing",
+        "tags": ["non_consensus"],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2000-01-01",
+        "release_schedule": "quarterly",
+        "typical_release": "~1 тримесечие лаг (BIS)",
+        "revision_prone": True,
+        "narrative_hint": "BIS жилищни имотни цени YoY (тримесечно, −7.5% 2025-Q1). По-широко покритие (вкл. вторичен пазар) и по-дълга чиста история от 70-градския akshare индекс. Дълбока имотна дефлация.",
     },
     "CN_FDI_ACTUAL": {
         "source": "akshare",

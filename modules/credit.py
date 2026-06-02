@@ -71,10 +71,37 @@ SERIES = {
         "transform": "level",
         "is_rate": False,
     },
+    # ── Свежи драйвери (re-base 2026-06) — годишните CREDIT_PRIVATE/M2_GDP остават като readings ──
+    "CN_LPR_1Y": {
+        "label": "1-годишен Loan Prime Rate (%)",
+        "invert": True,    # по-ниска = easing = по-добре
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_BIS_CREDIT_GDP": {
+        "label": "Кредит към частния нефинансов сектор (% от БВП, BIS)",
+        "invert": True,    # висок дял = debt overhang = по-лошо
+        "transform": "level",
+        "is_rate": False,
+    },
+    "CN_M2_YOY": {
+        "label": "M2 паричен агрегат (месечен YoY %)",
+        "invert": False,   # по-висок паричен растеж = повече ликвидност
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_TSF_FLOW": {
+        "label": "Total Social Financing — поток (месечен)",
+        "invert": False,   # по-висок поток = по-силен кредитен импулс
+        "transform": "level",
+        "is_rate": False,
+    },
 }
 
-COMPOSITE_SERIES  = ["CN_POLICY_RATE", "CN_LENDING_RATE", "CN_CREDIT_PRIVATE", "CN_M2_GDP", "CN_CNY_USD"]
-COMPOSITE_WEIGHTS = [0.25,              0.25,              0.25,                0.15,         0.10]
+# Композитът: LPR (текуща policy stance) + BIS кредит/БВП (debt overhang, тримесечно) +
+# M2 YoY РАСТЕЖ (реални текущи парични условия, вместо подвеждащото M2/БВП ниво) + TSF импулс.
+COMPOSITE_SERIES  = ["CN_LPR_1Y", "CN_BIS_CREDIT_GDP", "CN_M2_YOY", "CN_TSF_FLOW", "CN_CNY_USD"]
+COMPOSITE_WEIGHTS = [0.20,        0.20,                0.25,         0.20,          0.15]
 
 REGIMES = [
     (75, "СИЛНО МОНЕТАРНО СТИМУЛИРАНЕ", "#00c853"),

@@ -48,10 +48,12 @@ def _build_adapters() -> dict:
     from sources.imf_ifs import ImfIfsAdapter
     from sources.akshare_cn import AkShareAdapter
     from sources.nbs_manual import NbsManualAdapter
+    from sources.dbnomics import DBnomicsAdapter
     return {
         "worldbank":  WorldBankAdapter(),
         "imf_ifs":    ImfIfsAdapter(),
         "akshare":    AkShareAdapter(),
+        "dbnomics":   DBnomicsAdapter(),   # генеричен provider/dataset/series (BIS, NBS, …)
         "nbs_manual": NbsManualAdapter(),  # ръчни НБС тримесечни CSV (GDP/deflator) — няма API
         # NOTE: bloomberg_bridge е специален — чете parquet, не има fetch_many
         # interface. Snapshot building го handler-ва отделно в _build_snapshot.

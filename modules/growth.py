@@ -60,10 +60,44 @@ SERIES = {
         "transform": "level",
         "is_rate": False,
     },
+    # ── Свежи месечни драйвери (re-base 2026-06) — годишните горе остават като фон/readings ──
+    "CN_RETAIL_YOY": {
+        "label": "Продажби на дребно (месечен YoY %)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_PMI_MFG_NBS": {
+        "label": "NBS Manufacturing PMI",
+        "invert": False,
+        "transform": "level",
+        "is_rate": False,
+    },
+    "CN_PMI_NON_MFG_NBS": {
+        "label": "NBS Non-Manufacturing PMI",
+        "invert": False,
+        "transform": "level",
+        "is_rate": False,
+    },
+    # ── Свеж контекст (НЕ в композита) ──
+    "CN_GDP_GROWTH_Q": {
+        "label": "БВП — реален растеж (тримесечен YoY %)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_IP_YOY_NBS": {
+        "label": "Индустрия — добавена стойност (месечен YoY %, NBS)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
-COMPOSITE_SERIES  = ["CN_GDP_GROWTH", "CN_INDUSTRY_GROWTH", "CN_SERVICES_GROWTH", "CN_CAPEX_GDP"]
-COMPOSITE_WEIGHTS = [0.35,             0.30,                 0.20,                 0.15]
+# Композитът стъпва на свежи месечни (2026), И-с-дълга-история серии (валиден percentile).
+# Годишните WB серии остават като контекст/readings (фон), не драйвери — виж HANDOFF re-base.
+COMPOSITE_SERIES  = ["CN_RETAIL_YOY", "CN_PMI_MFG_NBS", "CN_PMI_NON_MFG_NBS"]
+COMPOSITE_WEIGHTS = [0.35,            0.35,             0.30]
 
 REGIMES = [
     (80, "СИЛНА ЕКСПАНЗИЯ",  "#00c853"),

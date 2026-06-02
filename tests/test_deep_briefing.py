@@ -68,16 +68,16 @@ def test_catalog_helpers_exist_and_work():
 def test_overall_composite_uses_config_weights():
     """Headline-ът трябва да е config.MODULE_WEIGHTS (= run.py --modules /
     export_api / manifest), НЕ остарялото локално копие на landing-а."""
-    # Реалните per-lens скорове от run.py --modules (verified 2026-06-01)
+    # Реалните per-lens скорове от run.py --modules след composite re-base (verified 2026-06-02)
     results = [
-        {"module": "growth", "composite": 13.4, "regime": "РЕЦЕСИЯ"},
-        {"module": "inflation", "composite": 12.9, "regime": "ДЕФЛАЦИЯ"},
+        {"module": "growth", "composite": 14.5, "regime": "РЕЦЕСИЯ"},
+        {"module": "inflation", "composite": 30.5, "regime": "ДЕФЛАЦИОНЕН РИСК"},
         {"module": "labor", "composite": 12.3, "regime": "КРИЗА НА ТРУДА"},
-        {"module": "credit", "composite": 71.5, "regime": "УМЕРЕНО СТИМУЛИРАНЕ"},
-        {"module": "property", "composite": 26.6, "regime": "ИМОТНА КРИЗА"},
+        {"module": "credit", "composite": 47.9, "regime": "НЕУТРАЛНА ПОЛИТИКА"},
+        {"module": "property", "composite": 18.2, "regime": "ИМОТНА КРИЗА"},
     ]
     overall = _overall_composite(results)
-    assert overall == 30.4   # config weights; landing-овите биха дали 26.7
+    assert overall == 25.8   # config weights, re-base на свежи 2026 данни
 
     label_bg, key, color = _overall_regime(overall)
     assert label_bg == "РЕЦЕСИОНЕН"
@@ -90,6 +90,43 @@ def test_module_weights_are_config_not_landing():
     assert MODULE_WEIGHTS["credit"] == 0.25
     assert MODULE_WEIGHTS["labor"] == 0.10
     assert MODULE_WEIGHTS["property"] == 0.20
+
+
+def test_composite_series_rebased_to_fresh():
+    """Re-base guard (2026-06-02): композитът стъпва на СВЕЖИ месечни/тримесечни
+    серии, не на застоялите годишни WB. Пази критичните hardcoded COMPOSITE_SERIES
+    срещу тих revert. Виж HANDOFF-china-rebase.md."""
+    import modules.growth as g, modules.inflation as i
+    import modules.credit as c, modules.property as p
+    # growth: свежи retail + PMI; годишният GDP вече е само контекст
+    assert "CN_RETAIL_YOY" in g.COMPOSITE_SERIES
+    assert "CN_PMI_MFG_NBS" in g.COMPOSITE_SERIES
+    assert "CN_GDP_GROWTH" not in g.COMPOSITE_SERIES
+    # credit: M2 YoY РАСТЕЖ + BIS кредит/БВП; не подвеждащото M2/БВП ниво
+    assert "CN_M2_YOY" in c.COMPOSITE_SERIES
+    assert "CN_BIS_CREDIT_GDP" in c.COMPOSITE_SERIES
+    assert "CN_M2_GDP" not in c.COMPOSITE_SERIES
+    # property: BIS имотни цени + FAI
+    assert "CN_BIS_PROPERTY_YOY" in p.COMPOSITE_SERIES
+    assert "CN_FAI_MOM_YOY" in p.COMPOSITE_SERIES
+    # inflation: свеж akshare PPI (не мъртвия IMF CN_PPI_INDEX) + тримесечен дефлатор
+    assert "CN_PPI_YOY" in i.COMPOSITE_SERIES
+    assert "CN_PPI_INDEX" not in i.COMPOSITE_SERIES
+    assert "CN_GDP_DEFLATOR_Q" in i.COMPOSITE_SERIES
+    # consistency: всеки модул има равен брой серии и тегла
+    for mod in (g, i, c, p):
+        assert len(mod.COMPOSITE_SERIES) == len(mod.COMPOSITE_WEIGHTS)
+
+
+def test_deflator_absolute_anchor():
+    """Q1 хибрид: тримесечният дефлатор се score-ва с absolute anchor, не percentile."""
+    from modules.inflation import _deflator_anchor
+    assert _deflator_anchor(-5) == 0.0      # дълбока дефлация
+    assert _deflator_anchor(-3) == 0.0
+    assert _deflator_anchor(0) == 35.0      # ценова стабилност (праг)
+    assert _deflator_anchor(2) == 60.0      # рефлация
+    assert _deflator_anchor(4) == 75.0
+    assert _deflator_anchor(-0.06) == 34.3  # текущ 2026-Q1 (още дефлация, на ръба)
 
 
 def test_overall_regime_thresholds():

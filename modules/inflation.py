@@ -58,10 +58,25 @@ SERIES = {
         "transform": "yoy_pct",
         "is_rate": True,
     },
+    # ── Свежи драйвери (re-base 2026-06) ──
+    "CN_PPI_YOY": {
+        "label": "ИПП — производствени цени (месечен YoY %)",
+        "invert": False,   # ниски/отрицателни = дефлация = нисък score
+        "transform": "level",  # akshare вече дава YoY %
+        "is_rate": True,
+    },
+    "CN_GDP_DEFLATOR_Q": {
+        "label": "БВП дефлатор (тримесечен YoY %)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
-COMPOSITE_SERIES  = ["CN_CPI_YOY", "CN_GDP_DEFLATOR", "CN_CPI_INDEX", "CN_PPI_INDEX"]
-COMPOSITE_WEIGHTS = [0.35,          0.25,              0.25,           0.15]
+# Композитът: месечен CPI + свеж месечен PPI (замества мъртвия IMF CN_PPI_INDEX, замръзнал
+# 2022-12) + тримесечен дефлатор (absolute anchor, виж _deflator_anchor) + годишен CPI (фон).
+COMPOSITE_SERIES  = ["CN_CPI_INDEX", "CN_PPI_YOY", "CN_GDP_DEFLATOR_Q", "CN_CPI_YOY"]
+COMPOSITE_WEIGHTS = [0.30,           0.25,         0.25,                0.20]
 
 REGIMES = [
     (75, "ИНФЛАЦИОНЕН НАТИСК", "#ff6d00"),
@@ -78,6 +93,30 @@ def _apply_transform(series: pd.Series, transform: str) -> pd.Series:
     if transform == "mom_pct":
         return series.pct_change().dropna() * 100
     return series
+
+
+def _deflator_anchor(v: float) -> float:
+    """Absolute-anchor score за тримесечния БВП дефлатор (Q1 хибрид).
+
+    Дефлаторът е policy-pinned серия с КЪСА история (n~14, само 2022→) → raw
+    percentile е подвеждащ (−0.06% би дал ~86, „инфлационно"). Затова го
+    анкерираме абсолютно: дефлация → нисък score, ценова стабилност → среден,
+    рефлация → по-висок. Крива:
+      ≤ −3%  → 0   (дълбока debt-deflation)
+      −3..0  → 0..35 линейно (35 при 0%)
+      0..+2  → 35..60 (здрава рефлация)
+      +2..+4 → 60..75
+      > +4   → 75
+    """
+    if v <= -3:
+        return 0.0
+    if v < 0:
+        return round(35 * (1 + v / 3), 1)      # -3→0, 0→35
+    if v <= 2:
+        return round(35 + (v / 2) * 25, 1)      # 0→35, +2→60
+    if v <= 4:
+        return round(60 + (v - 2) / 2 * 15, 1)  # +2→60, +4→75
+    return 75.0
 
 
 def _score_inflation(value: float, history: pd.Series) -> float:
@@ -124,6 +163,12 @@ def run(snapshot: dict[str, pd.Series]) -> dict[str, Any]:
                     name=meta["label"],
                     is_rate=meta.get("is_rate", False),
                 )
+
+    # Дефлаторът: absolute anchor вместо percentile (Q1 хибрид — къса policy-pinned серия)
+    if "CN_GDP_DEFLATOR_Q" in indicators:
+        cv = indicators["CN_GDP_DEFLATOR_Q"].get("current_value")
+        if cv is not None:
+            indicators["CN_GDP_DEFLATOR_Q"]["score"] = _deflator_anchor(float(cv))
 
     composite = _composite(indicators, COMPOSITE_SERIES, COMPOSITE_WEIGHTS)
     regime_label, regime_color = get_regime(composite, REGIMES)
