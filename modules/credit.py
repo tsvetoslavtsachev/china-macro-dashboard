@@ -202,25 +202,29 @@ def _key_readings(indicators: dict) -> list[dict]:
 def _build_narrative(indicators: dict) -> list[str]:
     hints = []
 
+    lpr = indicators.get("CN_LPR_1Y")
     policy = indicators.get("CN_POLICY_RATE")
-    if policy:
+    if lpr:
+        val = lpr.get("current_value", 0)
+        hints.append(f"1Y LPR {val:.2f}% — на/близо до исторически дъна; активен easing цикъл.")
+    elif policy:
         val = policy.get("current_value", 0)
-        hints.append(
-            f"PBoC policy rate {val:.2f}% — "
-            + ("активен easing цикъл." if val < 2.0 else "умерено ниво.")
-        )
+        hints.append("PBoC policy rate {:.2f}% — {}".format(
+            val, "активен easing цикъл." if val < 2.0 else "умерено ниво."))
 
-    credit = indicators.get("CN_CREDIT_PRIVATE")
-    if credit:
-        val = credit.get("current_value", 0)
+    bis = indicators.get("CN_BIS_CREDIT_GDP")
+    if bis:
+        val = bis.get("current_value", 0)
         if val > 190:
-            hints.append(f"Кредит към частния сектор {val:.0f}% от БВП — debt overhang. Ограничава monetary policy transmission.")
+            hints.append(f"Кредит към частния нефинансов сектор {val:.0f}% от БВП (BIS) — debt overhang. Ограничава трансмисията на политиката.")
 
-    m2 = indicators.get("CN_M2_GDP")
+    m2 = indicators.get("CN_M2_YOY")
     if m2:
         val = m2.get("current_value", 0)
-        if val > 200:
-            hints.append(f"M2 {val:.0f}% от БВП — най-висок в G20. Монетарна маса значително над реалната икономика.")
+        if val < 9:
+            hints.append(f"M2 растеж {val:.1f}% YoY — исторически слаб. Лихвите паднаха, но кредитът не се ускорява (слаба трансмисия).")
+        else:
+            hints.append(f"M2 растеж {val:.1f}% YoY.")
 
     cny = indicators.get("CN_CNY_USD")
     if cny:

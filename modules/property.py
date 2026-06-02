@@ -204,7 +204,19 @@ def _build_narrative(indicators: dict) -> list[str]:
         elif val < 0:
             hints.append(f"Цени на жилища {val:.1f}% YoY — отрицателни. Имотният сектор под натиск.")
         else:
-            hints.append(f"Цени на жилища +{val:.1f}% YoY — стабилизация след корекцията.")
+            hints.append(f"Цени на жилища (70 града, нови) +{val:.1f}% YoY — стабилизация след корекцията.")
+
+    fai = indicators.get("CN_FAI_MOM_YOY")
+    if fai:
+        val = fai.get("current_value", 0)
+        if val < 0:
+            hints.append(f"⚠️ Инвестиции в дълготрайни активи {val:.1f}% YoY (месечно) — рязко свиване на инвестиционния цикъл.")
+
+    bis = indicators.get("CN_BIS_PROPERTY_YOY")
+    if bis:
+        val = bis.get("current_value", 0)
+        if val < 0:
+            hints.append(f"BIS жилищни цени {val:.1f}% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.")
 
     fdi = indicators.get("CN_FDI_GDP")
     if fdi:

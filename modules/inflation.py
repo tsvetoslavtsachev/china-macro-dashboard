@@ -59,6 +59,12 @@ SERIES = {
         "is_rate": True,
     },
     # ── Свежи драйвери (re-base 2026-06) ──
+    "CN_CPI_YOY_AK": {
+        "label": "ИПЦ — инфлация (месечен YoY %)",
+        "invert": False,   # ниска/отрицателна = дефлация = нисък score
+        "transform": "level",  # akshare вече дава YoY %
+        "is_rate": True,
+    },
     "CN_PPI_YOY": {
         "label": "ИПП — производствени цени (месечен YoY %)",
         "invert": False,   # ниски/отрицателни = дефлация = нисък score
@@ -73,10 +79,11 @@ SERIES = {
     },
 }
 
-# Композитът: месечен CPI + свеж месечен PPI (замества мъртвия IMF CN_PPI_INDEX, замръзнал
-# 2022-12) + тримесечен дефлатор (absolute anchor, виж _deflator_anchor) + годишен CPI (фон).
-COMPOSITE_SERIES  = ["CN_CPI_INDEX", "CN_PPI_YOY", "CN_GDP_DEFLATOR_Q", "CN_CPI_YOY"]
-COMPOSITE_WEIGHTS = [0.30,           0.25,         0.25,                0.20]
+# Композитът: свеж месечен CPI (akshare NBS, замества застоялия IMF CN_CPI_INDEX 2025-07) +
+# свеж месечен PPI (замества мъртвия IMF CN_PPI_INDEX 2022-12) + тримесечен дефлатор (absolute
+# anchor, виж _deflator_anchor) + годишен CPI (дълга история, фон).
+COMPOSITE_SERIES  = ["CN_CPI_YOY_AK", "CN_PPI_YOY", "CN_GDP_DEFLATOR_Q", "CN_CPI_YOY"]
+COMPOSITE_WEIGHTS = [0.30,            0.25,         0.25,                0.20]
 
 REGIMES = [
     (75, "ИНФЛАЦИОНЕН НАТИСК", "#ff6d00"),
@@ -233,23 +240,32 @@ def _key_readings(indicators: dict) -> list[dict]:
 def _build_narrative(indicators: dict) -> list[str]:
     hints = []
 
-    cpi = indicators.get("CN_CPI_YOY")
-    deflator = indicators.get("CN_GDP_DEFLATOR")
-
+    cpi = indicators.get("CN_CPI_YOY_AK") or indicators.get("CN_CPI_YOY")
     if cpi:
         val = cpi.get("current_value", 0)
         if val < 0:
-            hints.append(f"⚠️ CPI {val:.2f}% — дефлация. Japan-style deflation scenario е реален риск.")
+            hints.append(f"⚠️ CPI {val:.1f}% YoY — дефлация. Japan-style сценарий е реален риск.")
         elif val < 1:
-            hints.append(f"CPI {val:.2f}% — близо до нула. Дефлационен риск. PBoC под натиск да стимулира.")
+            hints.append(f"CPI {val:.1f}% YoY — близо до нула, но рефлира от отрицателните стойности на 2025.")
         elif val <= 3:
-            hints.append(f"CPI {val:.2f}% — в optimal range (1-3%). Ценова стабилност.")
+            hints.append(f"CPI {val:.1f}% YoY — обратно в долната част на optimal range; потребителската дефлация отслабва.")
         else:
-            hints.append(f"CPI {val:.2f}% — над optimal range. Инфлационен натиск.")
+            hints.append(f"CPI {val:.1f}% YoY — над optimal range. Инфлационен натиск.")
 
+    ppi = indicators.get("CN_PPI_YOY")
+    if ppi:
+        val = ppi.get("current_value", 0)
+        if val < 0:
+            hints.append(f"PPI {val:.1f}% YoY — производствените цени още в дефлация.")
+        else:
+            hints.append(f"PPI {val:+.1f}% YoY — производствените цени излязоха от дефлация (от ~−3.6% средата на 2025). Край на 3-годишния PPI спад.")
+
+    deflator = indicators.get("CN_GDP_DEFLATOR_Q") or indicators.get("CN_GDP_DEFLATOR")
     if deflator:
         val = deflator.get("current_value", 0)
         if val < 0:
-            hints.append(f"GDP дефлатор {val:.2f}% — отрицателен. Номиналният БВП расте по-бавно от реалния. Широка дефлация.")
+            hints.append(f"БВП дефлатор {val:.2f}% (тримесечно) — още отрицателен, но най-плитък от началото на debt-deflation (2Q2023). Близо до изход.")
+        else:
+            hints.append(f"БВП дефлатор {val:+.2f}% — обратно положителен; край на debt-deflation.")
 
     return hints

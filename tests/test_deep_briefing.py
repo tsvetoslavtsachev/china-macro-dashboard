@@ -71,13 +71,13 @@ def test_overall_composite_uses_config_weights():
     # Реалните per-lens скорове от run.py --modules след composite re-base (verified 2026-06-02)
     results = [
         {"module": "growth", "composite": 14.5, "regime": "РЕЦЕСИЯ"},
-        {"module": "inflation", "composite": 30.5, "regime": "ДЕФЛАЦИОНЕН РИСК"},
+        {"module": "inflation", "composite": 35.1, "regime": "ДЕФЛАЦИОНЕН РИСК"},
         {"module": "labor", "composite": 12.3, "regime": "КРИЗА НА ТРУДА"},
         {"module": "credit", "composite": 47.9, "regime": "НЕУТРАЛНА ПОЛИТИКА"},
         {"module": "property", "composite": 18.2, "regime": "ИМОТНА КРИЗА"},
     ]
     overall = _overall_composite(results)
-    assert overall == 25.8   # config weights, re-base на свежи 2026 данни
+    assert overall == 26.5   # config weights, re-base на свежи 2026 данни (вкл. свеж CPI/PPI)
 
     label_bg, key, color = _overall_regime(overall)
     assert label_bg == "РЕЦЕСИОНЕН"
@@ -109,7 +109,9 @@ def test_composite_series_rebased_to_fresh():
     # property: BIS имотни цени + FAI
     assert "CN_BIS_PROPERTY_YOY" in p.COMPOSITE_SERIES
     assert "CN_FAI_MOM_YOY" in p.COMPOSITE_SERIES
-    # inflation: свеж akshare PPI (не мъртвия IMF CN_PPI_INDEX) + тримесечен дефлатор
+    # inflation: свеж akshare CPI + PPI (не мъртвите IMF CN_CPI_INDEX/CN_PPI_INDEX) + тримесечен дефлатор
+    assert "CN_CPI_YOY_AK" in i.COMPOSITE_SERIES
+    assert "CN_CPI_INDEX" not in i.COMPOSITE_SERIES
     assert "CN_PPI_YOY" in i.COMPOSITE_SERIES
     assert "CN_PPI_INDEX" not in i.COMPOSITE_SERIES
     assert "CN_GDP_DEFLATOR_Q" in i.COMPOSITE_SERIES

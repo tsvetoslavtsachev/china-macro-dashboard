@@ -199,25 +199,30 @@ def _key_readings(indicators: dict) -> list[dict]:
 
 
 def _build_narrative(indicators: dict) -> list[str]:
-    """China-специфични narrative hints базирани на текущите стойности."""
+    """China-специфични narrative hints — стъпват на свежите композитни драйвери."""
     hints = []
 
-    gdp = indicators.get("CN_GDP_GROWTH")
+    retail = indicators.get("CN_RETAIL_YOY")
+    if retail:
+        val = retail.get("current_value", 0)
+        if val < 2:
+            hints.append(f"Продажби на дребно {val:+.1f}% YoY — слабо потребление, структурно под пред-COVID нивата.")
+        else:
+            hints.append(f"Продажби на дребно {val:+.1f}% YoY — потреблението се държи.")
+
+    pmi = indicators.get("CN_PMI_MFG_NBS")
+    if pmi:
+        val = pmi.get("current_value", 0)
+        if val < 50:
+            hints.append(f"NBS Manufacturing PMI {val:.1f} — под 50 (свиване).")
+        elif val < 50.5:
+            hints.append(f"NBS Manufacturing PMI {val:.1f} — на границата 50; крехка активност.")
+        else:
+            hints.append(f"NBS Manufacturing PMI {val:.1f} — над 50 (експанзия).")
+
+    gdp = indicators.get("CN_GDP_GROWTH_Q") or indicators.get("CN_GDP_GROWTH")
     if gdp:
         val = gdp.get("current_value", 0)
-        if val >= 5.0:
-            hints.append(f"БВП растеж {val:.1f}% — на или над официалния таргет от ~5%.")
-        elif val >= 4.0:
-            hints.append(f"БВП растеж {val:.1f}% — под официалния таргет. Очаквайте допълнителни стимули.")
-        else:
-            hints.append(f"БВП растеж {val:.1f}% — значително под таргет. Риск от мащабни стимули.")
-
-    capex = indicators.get("CN_CAPEX_GDP")
-    if capex:
-        val = capex.get("current_value", 0)
-        if val > 42:
-            hints.append(f"Капиталообразуване {val:.1f}% от БВП — изключително висок investment-driven модел.")
-        elif val < 38:
-            hints.append(f"Капиталообразуване {val:.1f}% от БВП — намалява. Rebalancing към потребление в ход.")
+        hints.append(f"БВП растеж {val:.1f}% — около официалния таргет ~5% (policy-pinned, почти не мърда).")
 
     return hints
