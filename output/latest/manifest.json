@@ -2,9 +2,9 @@
   "schema_version": "1.0",
   "region": "CN",
   "as_of_date": "2026-06-02",
-  "generated_at": "2026-06-02T06:04:39Z",
-  "data_generated_at": "2026-06-02T06:04:39.128808Z",
-  "composite_score": 30.4,
+  "generated_at": "2026-06-02T09:07:31Z",
+  "data_generated_at": "2026-06-02T09:07:31.730264Z",
+  "composite_score": 25.8,
   "regime": {
     "key": "recessionary",
     "label_bg": "РЕЦЕСИОНЕН"
@@ -13,13 +13,13 @@
     {
       "key": "growth",
       "label_bg": "Растеж и активност",
-      "score": 13.4,
+      "score": 14.5,
       "direction": "contracting"
     },
     {
       "key": "inflation",
       "label_bg": "Инфлация и цени",
-      "score": 12.9,
+      "score": 30.5,
       "direction": "contracting"
     },
     {
@@ -31,13 +31,13 @@
     {
       "key": "credit",
       "label_bg": "Монетарна политика и кредит",
-      "score": 71.5,
-      "direction": "expanding"
+      "score": 47.9,
+      "direction": "mixed"
     },
     {
       "key": "property",
       "label_bg": "Имоти и търговия",
-      "score": 26.6,
+      "score": 18.2,
       "direction": "contracting"
     }
   ],
@@ -80,7 +80,7 @@
   ],
   "counts": {
     "lenses": 5,
-    "anomalies": 6,
+    "anomalies": 7,
     "divergences": 3
   },
   "links": {

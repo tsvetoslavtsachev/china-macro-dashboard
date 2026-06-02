@@ -11,15 +11,17 @@
   "breadth_by_pg": {
     "growth/diffusion_indices": 0.8,
     "growth/gdp": 0.25,
-    "growth/hard_activity": 0.0,
+    "growth/gdp_quarterly": null,
+    "growth/hard_activity": 0.333,
     "growth/investment": null,
     "inflation/cpi": 0.333,
-    "inflation/ppi": null,
+    "inflation/deflator_quarterly": null,
+    "inflation/ppi": 0.5,
     "labor/unemployment": 0.667,
-    "credit/credit_depth": 0.6,
+    "credit/credit_depth": 0.5,
     "credit/currency": null,
     "credit/rates": 0.0,
-    "property/housing": null,
+    "property/housing": 0.5,
     "property/investment": 0.0,
     "property/trade": 0.833
   },
@@ -30,6 +32,7 @@
     "CN_CGB_10Y",
     "CN_YOUTH_UNEMPLOYMENT",
     "CN_FDI_GDP",
+    "CN_BIS_PROPERTY_YOY",
     "CN_CREDIT_PRIVATE"
   ],
   "new_extreme_keys": [

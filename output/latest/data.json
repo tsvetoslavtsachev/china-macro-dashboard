@@ -1,23 +1,23 @@
 {
   "region": "CN",
   "as_of_date": "2026-06-02",
-  "generated_at": "2026-06-02T06:04:39.128808Z",
+  "generated_at": "2026-06-02T09:07:31.730264Z",
   "executive_summary": {
-    "composite_score": 30.4,
+    "composite_score": 25.8,
     "regime_key": "recessionary",
     "regime_label_bg": "РЕЦЕСИОНЕН",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 30.4/100 → режим „РЕЦЕСИОНЕН“. 5 лещи, 6 flagged аномалии, 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 25.8/100 → режим „РЕЦЕСИОНЕН“. 5 лещи, 7 flagged аномалии, 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
   "lenses": {
     "growth": {
-      "score": 13.4,
+      "score": 14.5,
       "direction": "contracting",
       "regime": "РЕЦЕСИЯ",
       "label_bg": "Растеж и активност",
-      "indicators_count": 5,
+      "indicators_count": 10,
       "key_readings": [
         {
           "label": "БВП — реален растеж (YoY %)",
@@ -45,11 +45,11 @@
       ]
     },
     "inflation": {
-      "score": 12.9,
+      "score": 30.5,
       "direction": "contracting",
-      "regime": "ДЕФЛАЦИЯ",
+      "regime": "ДЕФЛАЦИОНЕН РИСК",
       "label_bg": "Инфлация и цени",
-      "indicators_count": 4,
+      "indicators_count": 6,
       "key_readings": [
         {
           "label": "ИПЦ — инфлация (YoY %)",
@@ -106,11 +106,11 @@
       ]
     },
     "credit": {
-      "score": 71.5,
-      "direction": "expanding",
-      "regime": "УМЕРЕНО СТИМУЛИРАНЕ",
+      "score": 47.9,
+      "direction": "mixed",
+      "regime": "НЕУТРАЛНА ПОЛИТИКА",
       "label_bg": "Монетарна политика и кредит",
-      "indicators_count": 6,
+      "indicators_count": 10,
       "key_readings": [
         {
           "label": "Политическа лихва — PBoC 7-day repo (%)",
@@ -141,11 +141,11 @@
       ]
     },
     "property": {
-      "score": 26.6,
+      "score": 18.2,
       "direction": "contracting",
       "regime": "ИМОТНА КРИЗА",
       "label_bg": "Имоти и търговия",
-      "indicators_count": 7,
+      "indicators_count": 9,
       "key_readings": [
         {
           "label": "Текуща сметка — баланс (% от БВП)",
@@ -252,6 +252,21 @@
       "narrative_hint": "Срина се до 0.10% GDP (2024) — исторически минимум. Геополитически de-risking от западни компании. Структурна промяна в глобалните вериги на доставки."
     },
     {
+      "series_id": "CN_BIS_PROPERTY_YOY",
+      "name_bg": "Жилищни имотни цени (YoY %, BIS номинал)",
+      "lens": [
+        "property"
+      ],
+      "peer_group": "housing",
+      "z_score": -2.105,
+      "direction": "down",
+      "current_value": -7.5194,
+      "last_date": "2025-03-31",
+      "is_new_extreme": false,
+      "new_extreme_direction": null,
+      "narrative_hint": "BIS жилищни имотни цени YoY (тримесечно, −7.5% 2025-Q1). По-широко покритие (вкл. вторичен пазар) и по-дълга чиста история от 70-градския akshare индекс. Дълбока имотна дефлация."
+    },
+    {
       "series_id": "CN_CREDIT_PRIVATE",
       "name_bg": "Кредит към частния сектор (% от БВП)",
       "lens": [
@@ -276,8 +291,8 @@
       "interpretation": "Преход — кредит и реален сектор не са ясно aligned; чакай следващ TSF/FAI print.",
       "slot_a_label": "Кредитна експанзия",
       "slot_b_label": "Имоти и инвестиции",
-      "breadth_a": 0.6,
-      "breadth_b": 0.0
+      "breadth_a": 0.5,
+      "breadth_b": 0.25
     },
     {
       "pair_id": "monetary_inflation_trap",
@@ -299,7 +314,7 @@
       "slot_a_label": "Външно търсене",
       "slot_b_label": "Вътрешна активност",
       "breadth_a": 0.833,
-      "breadth_b": 0.0
+      "breadth_b": 0.333
     }
   ],
   "non_consensus_highlights": []
