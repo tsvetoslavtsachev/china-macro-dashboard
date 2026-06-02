@@ -21,7 +21,7 @@ from typing import Any
 # ALLOWED VALUES (за validation)
 # ============================================================
 
-ALLOWED_SOURCES = {"worldbank", "imf_ifs", "akshare", "external", "pending", "bloomberg_bridge"}
+ALLOWED_SOURCES = {"worldbank", "imf_ifs", "akshare", "external", "pending", "bloomberg_bridge", "nbs_manual"}
 ALLOWED_REGIONS = {"CN", "HK", "GLOBAL"}
 ALLOWED_LENSES = {"labor", "growth", "inflation", "credit", "property"}
 ALLOWED_TRANSFORMS = {"level", "yoy_pct", "mom_pct", "qoq_pct", "z_score", "first_diff"}
@@ -55,6 +55,23 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "typical_release": "Q1 следващата година",
         "revision_prone": True,
         "narrative_hint": "Официален таргет ~5%. Политически чувствителен. GDP deflator отрицателен → реалният растеж е надценен спрямо номиналния.",
+    },
+    "CN_GDP_GROWTH_Q": {
+        "source": "nbs_manual",
+        "id": "NBS_GDP_INDEX_CURRENT_QUARTER",
+        "region": "CN",
+        "name_bg": "БВП — реален растеж (тримесечен, YoY %)",
+        "name_en": "Real GDP growth (quarterly YoY)",
+        "lens": ["growth"],
+        "peer_group": "gdp_quarterly",
+        "tags": [],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2021-01-01",
+        "release_schedule": "quarterly",
+        "typical_release": "~3 седмици след тримесечието (НБС)",
+        "revision_prone": True,
+        "narrative_hint": "НБС тримесечен реален БВП (index preceding year=100 − 100). Ръчен CSV — НБС няма API. Policy-pinned ~5%; почти не мърда.",
     },
     "CN_INDUSTRY_GROWTH": {
         "source": "worldbank",
@@ -162,6 +179,23 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "typical_release": "Q1 следващата година",
         "revision_prone": False,
         "narrative_hint": "Отрицателен (-0.71% 2024) → номиналният GDP расте по-бавно от реалния. Широка дефлация в икономиката.",
+    },
+    "CN_GDP_DEFLATOR_Q": {
+        "source": "nbs_manual",
+        "id": "NBS_GDP_DEFLATOR_CURRENT_QUARTER_DERIVED",
+        "region": "CN",
+        "name_bg": "БВП дефлатор (тримесечен, YoY %)",
+        "name_en": "GDP deflator (quarterly YoY, derived)",
+        "lens": ["inflation"],
+        "peer_group": "deflator_quarterly",
+        "tags": [],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2022-01-01",
+        "release_schedule": "quarterly",
+        "typical_release": "~3 седмици след тримесечието (НБС)",
+        "revision_prone": True,
+        "narrative_hint": "Имплицитен дефлатор = номинален YoY − реален YoY (от НБС тримесечни данни). Отрицателен 12 поредни тримесечия (2Q2023–1Q2026) → debt-deflation. Ключов falsifier сигнал за recessionary режима.",
     },
     "CN_CPI_INDEX": {
         "source": "imf_ifs",

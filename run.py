@@ -47,10 +47,12 @@ def _build_adapters() -> dict:
     from sources.worldbank import WorldBankAdapter
     from sources.imf_ifs import ImfIfsAdapter
     from sources.akshare_cn import AkShareAdapter
+    from sources.nbs_manual import NbsManualAdapter
     return {
-        "worldbank": WorldBankAdapter(),
-        "imf_ifs":   ImfIfsAdapter(),
-        "akshare":   AkShareAdapter(),
+        "worldbank":  WorldBankAdapter(),
+        "imf_ifs":    ImfIfsAdapter(),
+        "akshare":    AkShareAdapter(),
+        "nbs_manual": NbsManualAdapter(),  # ръчни НБС тримесечни CSV (GDP/deflator) — няма API
         # NOTE: bloomberg_bridge е специален — чете parquet, не има fetch_many
         # interface. Snapshot building го handler-ва отделно в _build_snapshot.
     }
