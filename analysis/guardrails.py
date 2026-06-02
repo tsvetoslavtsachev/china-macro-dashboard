@@ -317,3 +317,162 @@ def _iso_date(idx) -> Optional[str]:
     if isinstance(idx, pd.Timestamp):
         return idx.strftime("%Y-%m-%d")
     return None
+
+
+# ============================================================
+# CHINA-NATIVE FALSIFIERS (Phase 3, 2026-06-02)
+# ============================================================
+# US праговете горе (Sahm/ICSA/T10Y2Y/HY OAS) НЕ съществуват за Китай. China
+# falsifier-ите тракат РЕАЛЕН distress (дефлатор · имоти · кредитна трансмисия ·
+# композит), не policy-managed абсолютни прагове — China седи на „прилични" нива
+# на БВП 5%/PMI 50, докато структурата казва рецесия. Виж HANDOFF-china-rebase.md
+# meta-извода. Ключът: тракай разпада, който ДЕФИНИРА режима, не headline-ите.
+
+CHINA_FALSIFIERS_BY_REGIME: dict[str, list[str]] = {
+    "recessionary": [
+        "БВП дефлатор ≥ 0 за 2 поредни тримесечия (край на debt-deflation)",
+        "Имотите стабилизират — BIS жилищни цени YoY ≥ 0 или FAI спре свиването",
+        "Кредитна трансмисия се възстановява — M2 растеж > 10% YoY",
+        "Композитният macro score се покачи над 35 (изход от РЕЦЕСИОНЕН)",
+    ],
+    "deteriorating": [
+        "Композитът се покачи над 50 (стабилизация)",
+        "БВП дефлатор спре да се влошава (≥ предходното тримесечие)",
+        "Имотен или кредитен lens score обърне нагоре",
+    ],
+    "mixed": [
+        "Композитът пробие над 65 (здрав) или под 50 (влошаване) — посоката се изяснява",
+        "Разминаването между лещите се свие в ясна обща посока",
+    ],
+    "healthy": [
+        "Композитът падне под 50",
+        "Имотен/кредитен distress се появи (BIS жилищни < −3% или дефлатор < 0)",
+    ],
+    "expansionary": [
+        "Композитът падне под 65",
+        "Дефлаторът се върне отрицателен (нова дефлация) или имотна корекция",
+    ],
+}
+
+STATUS_TRIGGERED = "triggered"      # falsifier-ът се е задействал → диагнозата е под въпрос
+STATUS_APPROACHING = "approaching"  # близо до задействане
+STATUS_FAR = "far"                  # далеч — диагнозата държи
+STATUS_MONITORED = "monitored"      # критерий без жива оценка (следи се)
+
+
+@dataclass
+class ChinaFalsifier:
+    key: str
+    criterion: str          # какво би обезсилило диагнозата
+    status: str             # triggered | approaching | far | monitored
+    detail: str             # жива оценка спрямо текущите данни (BG)
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+def get_china_falsifiers(regime_key: str) -> list[str]:
+    """Статичните falsification критерии за даден China режим (без жива оценка)."""
+    return list(CHINA_FALSIFIERS_BY_REGIME.get(regime_key, []))
+
+
+def _last_val(snapshot: dict, key: str) -> Optional[float]:
+    s = snapshot.get(key)
+    if s is None:
+        return None
+    clean = s.dropna()
+    return float(clean.iloc[-1]) if not clean.empty else None
+
+
+def compute_china_falsifiers(
+    snapshot: dict[str, pd.Series],
+    regime_key: str,
+    overall_composite: float,
+) -> list[ChinaFalsifier]:
+    """Оценява живия статус на falsifier-ите за ТЕКУЩИЯ режим срещу snapshot-а.
+
+    recessionary е напълно оценен (дефлатор · имоти · кредит · композит). За
+    другите режими: композит-band falsifier (жив) + статичните критерии (следи се).
+    """
+    if regime_key == "recessionary":
+        return _falsifiers_recessionary(snapshot, overall_composite)
+
+    out = [_falsifier_composite_band(regime_key, overall_composite)]
+    for crit in CHINA_FALSIFIERS_BY_REGIME.get(regime_key, [])[1:]:
+        out.append(ChinaFalsifier("static", crit, STATUS_MONITORED, "—"))
+    return out
+
+
+def _falsifiers_recessionary(
+    snapshot: dict, overall: float,
+) -> list[ChinaFalsifier]:
+    crits = CHINA_FALSIFIERS_BY_REGIME["recessionary"]
+    out: list[ChinaFalsifier] = []
+
+    # 1. Дефлатор ≥ 0 за 2 поредни тримесечия
+    defl = snapshot.get("CN_GDP_DEFLATOR_Q")
+    if defl is not None and not defl.dropna().empty:
+        clean = defl.dropna()
+        last = float(clean.iloc[-1])
+        prev = float(clean.iloc[-2]) if len(clean) >= 2 else None
+        streak = 0
+        for v in reversed(clean.values):
+            if v < 0:
+                streak += 1
+            else:
+                break
+        last_q = clean.index[-1].to_period("Q")
+        if last >= 0 and prev is not None and prev >= 0:
+            status, detail = STATUS_TRIGGERED, (
+                f"Дефлаторът е ≥ 0 две поредни тримесечия (последно {last:+.2f}%) — debt-deflation приключи.")
+        elif last >= -0.5:
+            status, detail = STATUS_APPROACHING, (
+                f"Текущ {last:+.2f}% ({last_q}); {streak} поредни отрицателни тримесечия, "
+                f"но най-плиткият — близо до изход.")
+        else:
+            status, detail = STATUS_FAR, (
+                f"Текущ {last:+.2f}% ({last_q}); {streak} поредни отрицателни тримесечия.")
+        out.append(ChinaFalsifier("deflator_positive_2q", crits[0], status, detail))
+    else:
+        out.append(ChinaFalsifier("deflator_positive_2q", crits[0], STATUS_FAR, "Няма дефлаторни данни."))
+
+    # 2. Имоти стабилизират — BIS жилищни ≥ 0 или FAI ≥ 0
+    bis = _last_val(snapshot, "CN_BIS_PROPERTY_YOY")
+    fai = _last_val(snapshot, "CN_FAI_MOM_YOY")
+    present = [(v, n) for v, n in ((bis, "BIS имоти"), (fai, "FAI")) if v is not None]
+    if present:
+        best = max(v for v, _ in present)
+        status = STATUS_TRIGGERED if best >= 0 else (STATUS_APPROACHING if best > -3 else STATUS_FAR)
+        detail = "; ".join(f"{n} {v:+.1f}%" for v, n in present)
+        if status == STATUS_FAR:
+            detail += " — двата дълбоко отрицателни."
+        out.append(ChinaFalsifier("property_stabilizes", crits[1], status, detail))
+
+    # 3. Кредитна трансмисия — M2 растеж > 10% YoY
+    m2 = _last_val(snapshot, "CN_M2_YOY")
+    if m2 is not None:
+        status = STATUS_TRIGGERED if m2 > 10 else (STATUS_APPROACHING if m2 >= 9 else STATUS_FAR)
+        detail = (f"M2 растеж {m2:.1f}% YoY — {'над' if m2 > 10 else 'под'} прага 10%; "
+                  f"лихвите паднаха, но кредитът не се ускорява.")
+        out.append(ChinaFalsifier("credit_transmission", crits[2], status, detail))
+
+    # 4. Композит над 35 (изход от РЕЦЕСИОНЕН)
+    out.append(_falsifier_composite_band("recessionary", overall))
+    return out
+
+
+def _falsifier_composite_band(regime_key: str, overall: float) -> ChinaFalsifier:
+    thresholds = {"recessionary": 35.0, "deteriorating": 50.0, "mixed": 65.0,
+                  "healthy": 50.0, "expansionary": 65.0}
+    th = thresholds.get(regime_key, 35.0)
+    # за healthy/expansionary falsifier-ът е ПАД под прага; за останалите — покачване над
+    downside = regime_key in ("healthy", "expansionary")
+    if downside:
+        crit = f"Композитният macro score падне под {th:.0f}"
+        status = STATUS_TRIGGERED if overall < th else (STATUS_APPROACHING if overall <= th + 5 else STATUS_FAR)
+        detail = f"Текущ композит {overall:.1f}; буфер {overall - th:+.1f} над прага {th:.0f}."
+    else:
+        crit = f"Композитният macro score се покачи над {th:.0f}"
+        status = STATUS_TRIGGERED if overall >= th else (STATUS_APPROACHING if overall >= th - 5 else STATUS_FAR)
+        detail = f"Текущ композит {overall:.1f}; нужни +{th - overall:.1f} до прага {th:.0f}."
+    return ChinaFalsifier("composite_exits_band", crit, status, detail)

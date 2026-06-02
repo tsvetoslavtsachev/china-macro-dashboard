@@ -49,6 +49,7 @@ from analysis.divergence import (
 )
 from analysis.non_consensus import compute_non_consensus
 from analysis.anomaly import compute_anomalies
+from analysis.guardrails import compute_china_falsifiers
 from analysis.delta import (
     build_state_snapshot,
     compute_delta,
@@ -602,19 +603,51 @@ def _render_anomalies_feed(anomaly_report, snapshot) -> str:
 """
 
 
+def _render_falsifiers(falsifiers: list, regime_bg: str) -> str:
+    """Phase 3 — China-native falsification criteria с жив статус срещу текущите данни.
+
+    Заменя старата „предстои" карта. Тракат реален distress (дефлатор · имоти ·
+    кредитна трансмисия · композит), не policy-managed прагове (БВП 5%/PMI 50)."""
+    if not falsifiers:
+        return ""
+    badges = {
+        "triggered":   ("ЗАДЕЙСТВАН", "#00c853"),
+        "approaching": ("БЛИЗО",      "#ffd600"),
+        "far":         ("ДАЛЕЧ",      "#ff6d00"),
+        "monitored":   ("СЛЕДИ СЕ",   "#90a4ae"),
+    }
+    cards = []
+    for f in falsifiers:
+        lbl, col = badges.get(f.status, ("—", "#90a4ae"))
+        cards.append(f"""
+<div class="fals-card">
+  <div class="fals-head">
+    <span class="fals-badge" style="background:{col}">{lbl}</span>
+    <span class="fals-crit">{html.escape(f.criterion)}</span>
+  </div>
+  <p class="fals-detail">{html.escape(f.detail)}</p>
+</div>""")
+    return f"""
+<section class="brief-section">
+  <h2>Какво би обърнало тази диагноза</h2>
+  <p class="fals-intro">Falsification criteria за режим „{html.escape(regime_bg)}" — конкретните
+  условия, при които текущата диагноза би се обезсилила, със статус спрямо последните данни.
+  China-калибрирани: тракат реален distress (дефлатор · имоти · кредитна трансмисия · композит),
+  не policy-managed прагове като БВП 5% или PMI 50.</p>
+  <div class="fals-wrap">{"".join(cards)}</div>
+</section>
+"""
+
+
 def _render_deferred() -> str:
-    """Честни placeholder-и за данни-зависимите секции (Фази 3-4). НЕ фабрикуваме
-    празни US-копирани секции (falsifiers с US режими, analogs с None)."""
+    """Честни placeholder-и за все още отложените слоеве (analogs · journal).
+    НЕ фабрикуваме празни US-копирани секции. Falsifiers вече са имплементирани
+    (виж _render_falsifiers)."""
     items = [
         ("Исторически аналози",
          "Съпоставка на текущото състояние с минали епизоди (macro-vector + episode "
          "матрица). Изисква China-специфична historical база — китайската история е "
          "по-къса и по-рядко наблюдавана, затова този слой се изгражда отделно."),
-        ("Falsification criteria",
-         "Какво конкретно би обезсилило текущата регимна диагноза, per China режим "
-         "(recessionary/deteriorating/mixed/healthy/expansionary). Изисква авторски "
-         "прагове, калибрирани за китайските серии — не наследяваме US праговете "
-         "(Sahm rule, ICSA, T10Y2Y, HY OAS), които China няма."),
         ("Свързани бележки (journal)",
          "Връзки към аналитичен journal по теми и режими. China dashboard все още "
          "няма journal слой."),
@@ -798,6 +831,8 @@ def generate_deep_briefing(
         ))
     sections.append(_render_non_consensus(nc_report))
     sections.append(_render_anomalies_feed(anomaly_report, snapshot))
+    falsifiers = compute_china_falsifiers(snapshot, regime_key, overall)
+    sections.append(_render_falsifiers(falsifiers, regime_bg))
     sections.append(_render_deferred())
     sections.append(_render_data_quality())
     sections.append(_render_footer(as_of, today))
@@ -1014,6 +1049,15 @@ tr.sig-high { background: #f8514911; }
 .soon-head h3 { margin: 0; font-size: 14px; font-weight: 600; color: #8b949e; }
 .soon-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #d29922; background: #d2992222; border: 1px solid #d2992244; padding: 2px 8px; border-radius: 10px; }
 .soon-card p { font-size: 12.5px; color: #8b949e; line-height: 1.5; margin: 0; }
+
+/* Falsifiers (Phase 3 — China-native, жив статус) */
+.fals-intro { font-size: 12.5px; color: #8b949e; line-height: 1.55; margin: 0 0 14px; }
+.fals-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; }
+.fals-card { background: #161b27; border: 1px solid #30363d; border-radius: 8px; padding: 13px 15px; }
+.fals-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 7px; }
+.fals-badge { flex-shrink: 0; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #0d1117; padding: 2px 8px; border-radius: 10px; }
+.fals-crit { font-size: 13px; font-weight: 600; color: #c9d1d9; line-height: 1.4; }
+.fals-detail { font-size: 12px; color: #8b949e; line-height: 1.5; margin: 0; }
 
 /* Data quality */
 .dq-card { background: #161b27; border: 1px solid #d29922; border-radius: 10px; padding: 20px; }

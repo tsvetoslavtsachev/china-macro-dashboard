@@ -131,6 +131,45 @@ def test_deflator_absolute_anchor():
     assert _deflator_anchor(-0.06) == 34.3  # текущ 2026-Q1 (още дефлация, на ръба)
 
 
+# ─── Phase 3 — China-native falsifiers ──────────────────────────
+
+def test_china_falsifiers_recessionary_live_status():
+    """Phase 3: China falsifiers оценяват ЖИВ статус срещу snapshot (не US Sahm/ICSA)."""
+    import pandas as pd
+    from analysis.guardrails import (
+        compute_china_falsifiers, get_china_falsifiers, CHINA_FALSIFIERS_BY_REGIME,
+    )
+    qidx = pd.period_range("2023Q2", "2026Q1", freq="Q").to_timestamp(how="end")
+    snap = {
+        "CN_GDP_DEFLATOR_Q": pd.Series([-0.8] * 11 + [-0.06], index=qidx),  # 12 отриц., −0.06 близо
+        "CN_BIS_PROPERTY_YOY": pd.Series([-7.5], index=[pd.Timestamp("2025-03-31")]),
+        "CN_FAI_MOM_YOY": pd.Series([-12.0], index=[pd.Timestamp("2026-04-01")]),
+        "CN_M2_YOY": pd.Series([8.6], index=[pd.Timestamp("2026-04-01")]),
+    }
+    fals = compute_china_falsifiers(snap, "recessionary", 26.5)
+    assert len(fals) == 4
+    by_key = {f.key: f for f in fals}
+    assert by_key["deflator_positive_2q"].status == "approaching"   # −0.06 най-плитък → близо
+    assert by_key["property_stabilizes"].status == "far"            # −7.5/−12 дълбоко надолу
+    assert by_key["credit_transmission"].status == "far"            # 8.6 < 10
+    assert by_key["composite_exits_band"].status == "far"           # 26.5 < 35
+    # China-native, не US
+    assert get_china_falsifiers("recessionary")
+    assert "stagflation_confirmed" not in CHINA_FALSIFIERS_BY_REGIME
+    assert set(CHINA_FALSIFIERS_BY_REGIME) == {
+        "recessionary", "deteriorating", "mixed", "healthy", "expansionary"}
+
+
+def test_china_falsifier_deflator_triggers():
+    """Дефлатор ≥ 0 за 2 поредни тримесечия → falsifier-ът се задейства."""
+    import pandas as pd
+    from analysis.guardrails import compute_china_falsifiers
+    qidx = pd.period_range("2025Q4", "2026Q1", freq="Q").to_timestamp(how="end")
+    snap = {"CN_GDP_DEFLATOR_Q": pd.Series([0.3, 0.5], index=qidx)}
+    by_key = {f.key: f for f in compute_china_falsifiers(snap, "recessionary", 26.5)}
+    assert by_key["deflator_positive_2q"].status == "triggered"
+
+
 def test_overall_regime_thresholds():
     assert _overall_regime(85)[1] == "expansionary"
     assert _overall_regime(70)[1] == "healthy"
@@ -160,10 +199,14 @@ def test_deep_renders_all_native_sections(tmp_path):
     assert html.count('class="pair-card"') == 3
     assert html.count("data-lens=") == 5
 
-    # честни „предстои" placeholder-и (3 card-а)
-    assert html.count('class="soon-card"') == 3
+    # отложени слоеве: само 2 „предстои" card-а (analogs + journal) — falsifiers вече имплементирани
+    assert html.count('class="soon-card"') == 2
     assert "Исторически аналози" in html
-    assert "Falsification criteria" in html
+    # Phase 3 — China falsifiers секция с жив статус (не US Sahm/ICSA/T10Y2Y)
+    assert "Какво би обърнало" in html
+    assert html.count('class="fals-card"') >= 1
+    for us_signal in ("Sahm", "ICSA", "T10Y2Y"):
+        assert us_signal not in html
 
     # backlink към краткия landing
     assert 'href="index.html"' in html
