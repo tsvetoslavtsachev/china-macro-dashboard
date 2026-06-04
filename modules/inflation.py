@@ -126,7 +126,7 @@ def _deflator_anchor(v: float) -> float:
     return 75.0
 
 
-def _score_inflation(value: float, history: pd.Series) -> float:
+def _score_inflation(value: float) -> float:
     """China-специфично scoring за инфлация.
 
     Optimal range: 1-3% (PBoC неформален таргет).
@@ -171,11 +171,18 @@ def run(snapshot: dict[str, pd.Series]) -> dict[str, Any]:
                     is_rate=meta.get("is_rate", False),
                 )
 
-    # Дефлаторът: absolute anchor вместо percentile (Q1 хибрид — къса policy-pinned серия)
-    if "CN_GDP_DEFLATOR_Q" in indicators:
-        cv = indicators["CN_GDP_DEFLATOR_Q"].get("current_value")
-        if cv is not None:
-            indicators["CN_GDP_DEFLATOR_Q"]["score"] = _deflator_anchor(float(cv))
+    # Инфлация = U-форма около 1-3% band (абсолютна, China-калибрована — по-надеждна
+    # от MAD-scaling за policy-pinned серии с ниска вариация). Активира _score_inflation
+    # (досега дефинирана, но НЕизползвана). Дефлаторът: специфичен absolute anchor.
+    # Виж ../macro-satellite/LENS_SCORING_METHODOLOGY.md §3 (inflation = U около цел).
+    for sid, ind in indicators.items():
+        cv = ind.get("current_value")
+        if cv is None:
+            continue
+        if sid == "CN_GDP_DEFLATOR_Q":
+            ind["score"] = _deflator_anchor(float(cv))
+        else:
+            ind["score"] = _score_inflation(float(cv))
 
     composite = _composite(indicators, COMPOSITE_SERIES, COMPOSITE_WEIGHTS)
     regime_label, regime_color = get_regime(composite, REGIMES)

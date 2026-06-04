@@ -55,15 +55,26 @@ def score_series(
     invert: bool = False,
     name: str = "",
     is_rate: bool = False,
+    polarity=None,
+    window_years: int = 10,
+    min_obs: int = 36,
+    band: float = 1.0,
 ) -> dict:
-    """Главна функция. invert=True: по-висока стойност → по-нисък score
-    (напр. безработица: висока = лошо за пазара на труда).
+    """Главна функция — РОБАСТЕН z спрямо 10-г. плъзгащ прозорец → 0–100.
+
+    Единен примитив (US/EU/CN) — виж ../macro-satellite/LENS_SCORING_METHODOLOGY.md.
+    Заменя percentile-of-full-history (който дрейфаше: китайският растеж се
+    съдеше спрямо 10–14%-ната ера → трайно затиснат). Сега нормата е последните
+    10 г. → следва структурния спад.
+
+    invert=True → polarity -1 (по-високо=по-зле). Може да се подаде явна `polarity`:
+      +1 / -1 / ("U","target",X) / ("U","self") — за U-форма (виж inflation модула).
 
     Args:
-        is_rate: True ако series-ите са rate / percentage / YoY % (т.е.
-            стойността вече е в %). Тогава YoY промяната се връща като
-            absolute pp delta вместо relative % change. Това е стандартното
-            макро convention (HICP YoY от 2.40% → 2.00% = -0.40pp, не -16.7%).
+        is_rate: True ако стойността е вече в % → YoY промяна като pp delta.
+        window_years/min_obs: 10-г. прозорец; под min_obs точки → fallback към
+            пълната налична история (CN серии с къса история).
+        band: толерантна лента (σ) за U-формата.
     """
     series = series.dropna()
     if len(series) == 0:
@@ -72,13 +83,39 @@ def score_series(
     current_val = float(series.iloc[-1])
     last_date = str(series.index[-1].date())
 
-    history = series[series.index >= pd.Timestamp(history_start)]
+    # Плъзгащ 10-г. прозорец (fallback към пълна история за къси серии)
+    if isinstance(series.index, pd.DatetimeIndex):
+        cutoff = series.index[-1] - pd.DateOffset(years=window_years)
+        window = series[series.index >= cutoff]
+    else:
+        window = series
+    if len(window) < min_obs:
+        window = series
 
-    pct = percentile_rank(current_val, history)
-    z = z_score(current_val, history)
+    med = float(window.median())
+    mad = float((window - med).abs().median())
+    scale = 1.4826 * mad
+    pct = percentile_rank(current_val, window)  # второстепенно (за display)
 
-    raw_score = pct if not invert else (100.0 - pct)
-    score = round(raw_score, 1)
+    pol = polarity if polarity is not None else (-1 if invert else 1)
+
+    if isinstance(pol, tuple) and pol and pol[0] == "U":
+        # U-форма: отклонение в двете посоки = по-зле
+        if scale == 0 or np.isnan(scale):
+            z_h, z_report = float(band), 0.0
+        else:
+            center = float(pol[2]) if pol[1] == "target" else med
+            z_report = (current_val - med) / scale
+            z_h = band - abs((current_val - center) / scale)
+    else:
+        if scale == 0 or np.isnan(scale):
+            z_h, z_report = 0.0, 0.0
+        else:
+            z_report = (current_val - med) / scale
+            sign = float(pol) if pol in (1, -1, +1) else 1.0
+            z_h = sign * z_report
+
+    score = round(50.0 * (1.0 + np.tanh(z_h / 2.0)), 1)
 
     yoy = _calc_change(series, as_pp=is_rate)
     yoy_unit = "pp" if is_rate else "%"
@@ -86,14 +123,15 @@ def score_series(
     return {
         "name": name or series.name or "unknown",
         "score": score,
+        "health_z": round(float(z_h), 3),
         "percentile": round(pct, 1),
-        "z_score": round(z, 2),
+        "z_score": round(float(z_report), 2),
         "current_value": round(current_val, 4),
         "last_date": last_date,
         "yoy_change": yoy,
         "yoy_unit": yoy_unit,
         "invert": invert,
-        "history_n": len(history),
+        "history_n": len(window),
     }
 
 
