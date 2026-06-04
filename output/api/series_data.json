@@ -1,6 +1,6 @@
 {
   "region": "CN",
-  "last_updated": "2026-06-02T10:40:21.523601Z",
+  "last_updated": "2026-06-04T18:51:16.934282Z",
   "years_included": 10,
   "series_count": 50,
   "series": {
@@ -21,9 +21,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 4.9773565917572,
-        "percentile": 8.0,
-        "z_score": -1.19,
-        "score": 8.0,
+        "percentile": 6.7,
+        "z_score": -1.51,
+        "score": 18.0,
         "regime": null
       },
       "chart": {
@@ -68,9 +68,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 5.31944222768053,
-        "percentile": 16.0,
-        "z_score": -0.89,
-        "score": 16.0,
+        "percentile": 13.3,
+        "z_score": -0.84,
+        "score": 30.2,
         "regime": null
       },
       "chart": {
@@ -115,9 +115,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 4.95580452657485,
-        "percentile": 8.0,
-        "z_score": -1.38,
-        "score": 8.0,
+        "percentile": 6.7,
+        "z_score": -2.7,
+        "score": 6.3,
         "regime": null
       },
       "chart": {
@@ -163,8 +163,8 @@
         "date": "2024-12-31",
         "value": 24.8692407436614,
         "percentile": 0.0,
-        "z_score": -1.68,
-        "score": 0.0,
+        "z_score": -1.62,
+        "score": 16.6,
         "regime": null
       },
       "chart": {
@@ -209,9 +209,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 40.6111616668625,
-        "percentile": 28.0,
-        "z_score": -0.37,
-        "score": 28.0,
+        "percentile": 40.0,
+        "z_score": -0.36,
+        "score": 41.2,
         "regime": null
       },
       "chart": {
@@ -256,9 +256,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 0.218128938439177,
-        "percentile": 8.0,
-        "z_score": -1.05,
-        "score": 8.0,
+        "percentile": 13.3,
+        "z_score": -1.06,
+        "score": 25.7,
         "regime": null
       },
       "chart": {
@@ -303,9 +303,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": -0.707200009795585,
-        "percentile": 0.0,
-        "z_score": -1.36,
-        "score": 0.0,
+        "percentile": 6.7,
+        "z_score": -1.09,
+        "score": 25.1,
         "regime": null
       },
       "chart": {
@@ -350,9 +350,9 @@
       "latest": {
         "date": "2025-12-31",
         "value": 4.615,
-        "percentile": 73.1,
-        "z_score": 0.36,
-        "score": 73.1,
+        "percentile": 76.7,
+        "z_score": 0.49,
+        "score": 61.9,
         "regime": null
       },
       "chart": {
@@ -399,9 +399,9 @@
       "latest": {
         "date": "2025-12-31",
         "value": 15.795,
-        "percentile": 96.2,
-        "z_score": 2.22,
-        "score": 96.2,
+        "percentile": 96.7,
+        "z_score": 5.46,
+        "score": 99.6,
         "regime": null
       },
       "chart": {
@@ -449,8 +449,8 @@
         "date": "2025-12-31",
         "value": 64.551,
         "percentile": 0.0,
-        "z_score": -1.78,
-        "score": 0.0,
+        "z_score": -1.65,
+        "score": 16.2,
         "regime": null
       },
       "chart": {
@@ -497,9 +497,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 194.165996844811,
-        "percentile": 96.0,
-        "z_score": 1.94,
-        "score": 96.0,
+        "percentile": 96.7,
+        "z_score": 2.55,
+        "score": 92.7,
         "regime": null
       },
       "chart": {
@@ -544,9 +544,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 227.497343015378,
-        "percentile": 96.0,
-        "z_score": 1.81,
-        "score": 96.0,
+        "percentile": 96.7,
+        "z_score": 1.44,
+        "score": 80.8,
         "regime": null
       },
       "chart": {
@@ -591,9 +591,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 2.2616499482671,
-        "percentile": 48.0,
-        "z_score": -0.32,
-        "score": 48.0,
+        "percentile": 50.0,
+        "z_score": 0.02,
+        "score": 50.6,
         "regime": null
       },
       "chart": {
@@ -638,9 +638,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 20.0229166362049,
-        "percentile": 28.0,
-        "z_score": -0.72,
-        "score": 28.0,
+        "percentile": 40.0,
+        "z_score": -0.13,
+        "score": 46.8,
         "regime": null
       },
       "chart": {
@@ -686,8 +686,8 @@
         "date": "2024-12-31",
         "value": 0.0989988051182737,
         "percentile": 0.0,
-        "z_score": -1.98,
-        "score": 0.0,
+        "z_score": -2.28,
+        "score": 9.3,
         "regime": null
       },
       "chart": {
@@ -732,9 +732,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 39.8697027685165,
-        "percentile": 36.0,
-        "z_score": -0.14,
-        "score": 36.0,
+        "percentile": 46.7,
+        "z_score": -0.08,
+        "score": 47.9,
         "regime": null
       },
       "chart": {
@@ -779,9 +779,9 @@
       "latest": {
         "date": "2023-12-31",
         "value": 33.4827446951054,
-        "percentile": 12.5,
-        "z_score": -0.86,
-        "score": 12.5,
+        "percentile": 30.0,
+        "z_score": -0.31,
+        "score": 42.3,
         "regime": null
       },
       "chart": {
@@ -824,9 +824,9 @@
       "latest": {
         "date": "2025-07-01",
         "value": 132.573216898753,
-        "percentile": 97.1,
-        "z_score": 1.4,
-        "score": 97.1,
+        "percentile": 92.6,
+        "z_score": 0.7,
+        "score": 66.8,
         "regime": null
       },
       "chart": {
@@ -1071,9 +1071,9 @@
       "latest": {
         "date": "2022-12-01",
         "value": 111.422290480923,
-        "percentile": 90.4,
-        "z_score": 1.39,
-        "score": 90.4,
+        "percentile": 87.6,
+        "z_score": 1.19,
+        "score": 76.8,
         "regime": null
       },
       "chart": {
@@ -1257,8 +1257,8 @@
         "date": "2025-06-01",
         "value": 1.4,
         "percentile": 0.0,
-        "z_score": -2.38,
-        "score": 0.0,
+        "z_score": -2.16,
+        "score": 10.4,
         "regime": null
       },
       "chart": {
@@ -1502,8 +1502,8 @@
         "date": "2025-06-01",
         "value": 4.35,
         "percentile": 0.0,
-        "z_score": -1.07,
-        "score": 0.0,
+        "z_score": 0.0,
+        "score": 50.0,
         "regime": null
       },
       "chart": {
@@ -1747,8 +1747,8 @@
         "date": "2025-06-01",
         "value": 1.5,
         "percentile": 0.0,
-        "z_score": -0.95,
-        "score": 0.0,
+        "z_score": 0.0,
+        "score": 50.0,
         "regime": null
       },
       "chart": {
@@ -1991,9 +1991,9 @@
       "latest": {
         "date": "2025-07-01",
         "value": 7.17282272727273,
-        "percentile": 61.2,
-        "z_score": 0.05,
-        "score": 61.2,
+        "percentile": 81.8,
+        "z_score": 0.83,
+        "score": 69.5,
         "regime": null
       },
       "chart": {
@@ -2238,9 +2238,9 @@
       "latest": {
         "date": "2026-04-01",
         "value": 1.2,
-        "percentile": 29.5,
-        "z_score": -0.45,
-        "score": 29.5,
+        "percentile": 43.0,
+        "z_score": -0.22,
+        "score": 44.4,
         "regime": null
       },
       "chart": {
@@ -2503,9 +2503,9 @@
       "latest": {
         "date": "2026-04-01",
         "value": 2.8,
-        "percentile": 64.3,
-        "z_score": 0.41,
-        "score": 64.3,
+        "percentile": 65.3,
+        "z_score": 0.9,
+        "score": 71.1,
         "regime": null
       },
       "chart": {
@@ -2768,9 +2768,9 @@
       "latest": {
         "date": "2026-04-01",
         "value": 0.7000000000000028,
-        "percentile": 24.5,
-        "z_score": -0.6,
-        "score": 24.5,
+        "percentile": 19.8,
+        "z_score": -1.17,
+        "score": 23.6,
         "regime": null
       },
       "chart": {
@@ -3033,9 +3033,9 @@
       "latest": {
         "date": "2023-05-01",
         "value": -18.42105263,
-        "percentile": 4.9,
-        "z_score": -1.17,
-        "score": 4.9,
+        "percentile": 3.4,
+        "z_score": -3.04,
+        "score": 4.6,
         "regime": null
       },
       "chart": {
@@ -3224,9 +3224,9 @@
       "latest": {
         "date": "2025-12-01",
         "value": 22075.0,
-        "percentile": 61.4,
-        "z_score": -0.04,
-        "score": 61.4,
+        "percentile": 57.9,
+        "z_score": 0.23,
+        "score": 55.7,
         "regime": null
       },
       "chart": {
@@ -3481,9 +3481,9 @@
       "latest": {
         "date": "2026-04-01",
         "value": -4006.0,
-        "percentile": 0.5,
-        "z_score": -1.63,
-        "score": 0.5,
+        "percentile": 0.8,
+        "z_score": -2.34,
+        "score": 8.8,
         "regime": null
       },
       "chart": {
@@ -3746,9 +3746,9 @@
       "latest": {
         "date": "2026-04-01",
         "value": 8.6,
-        "percentile": 22.7,
-        "z_score": -0.8,
-        "score": 22.7,
+        "percentile": 41.3,
+        "z_score": -0.17,
+        "score": 45.8,
         "regime": null
       },
       "chart": {
@@ -4012,14 +4012,12 @@
         "date": "2026-05-20",
         "value": 3.0,
         "percentile": 0.0,
-        "z_score": -2.56,
-        "score": 0.0,
+        "z_score": 0.0,
+        "score": 50.0,
         "regime": null
       },
       "chart": {
         "dates": [
-          "2016-06-02",
-          "2016-06-03",
           "2016-06-06",
           "2016-06-07",
           "2016-06-08",
@@ -5362,8 +5360,6 @@
           4.3,
           4.3,
           4.3,
-          4.3,
-          4.3,
           4.31,
           4.31,
           4.31,
@@ -5809,8 +5805,8 @@
         "date": "2026-05-20",
         "value": 3.5,
         "percentile": 0.0,
-        "z_score": -1.55,
-        "score": 0.0,
+        "z_score": -1.54,
+        "score": 17.6,
         "regime": null
       },
       "chart": {
@@ -6001,9 +5997,9 @@
       "latest": {
         "date": "2026-05-01",
         "value": 50.0,
-        "percentile": 29.9,
-        "z_score": -0.27,
-        "score": 29.9,
+        "percentile": 38.8,
+        "z_score": -0.08,
+        "score": 47.9,
         "regime": null
       },
       "chart": {
@@ -6268,9 +6264,9 @@
       "latest": {
         "date": "2026-05-01",
         "value": 50.1,
-        "percentile": 6.8,
-        "z_score": -1.16,
-        "score": 6.8,
+        "percentile": 12.4,
+        "z_score": -1.48,
+        "score": 18.5,
         "regime": null
       },
       "chart": {
@@ -6535,9 +6531,9 @@
       "latest": {
         "date": "2025-08-01",
         "value": 50.5,
-        "percentile": 58.4,
-        "z_score": 0.26,
-        "score": 58.4,
+        "percentile": 49.1,
+        "z_score": 0.0,
+        "score": 50.0,
         "regime": null
       },
       "chart": {
@@ -6754,9 +6750,9 @@
       "latest": {
         "date": "2025-08-01",
         "value": 53.0,
-        "percentile": 66.2,
-        "z_score": 0.28,
-        "score": 66.2,
+        "percentile": 66.7,
+        "z_score": 0.49,
+        "score": 62.0,
         "regime": null
       },
       "chart": {
@@ -7001,9 +6997,9 @@
       "latest": {
         "date": "2025-08-15",
         "value": 5.7,
-        "percentile": 15.3,
-        "z_score": -0.95,
-        "score": 15.3,
+        "percentile": 43.1,
+        "z_score": -0.17,
+        "score": 45.8,
         "regime": null
       },
       "chart": {
@@ -7232,9 +7228,9 @@
       "latest": {
         "date": "2026-04-01",
         "value": 0.2,
-        "percentile": 5.8,
-        "z_score": -1.45,
-        "score": 5.8,
+        "percentile": 10.9,
+        "z_score": -1.16,
+        "score": 23.8,
         "regime": null
       },
       "chart": {
@@ -7457,9 +7453,9 @@
       "latest": {
         "date": "2026-04-01",
         "value": -12.01,
-        "percentile": 9.9,
-        "z_score": -0.91,
-        "score": 9.9,
+        "percentile": 17.8,
+        "z_score": -1.42,
+        "score": 19.5,
         "regime": null
       },
       "chart": {
@@ -7682,9 +7678,9 @@
       "latest": {
         "date": "2025-08-07",
         "value": 7.2,
-        "percentile": 34.6,
-        "z_score": -0.41,
-        "score": 34.6,
+        "percentile": 53.4,
+        "z_score": 0.03,
+        "score": 50.8,
         "regime": null
       },
       "chart": {
@@ -7923,9 +7919,9 @@
       "latest": {
         "date": "2025-08-07",
         "value": 4.1,
-        "percentile": 39.0,
-        "z_score": -0.43,
-        "score": 39.0,
+        "percentile": 62.4,
+        "z_score": 0.33,
+        "score": 58.1,
         "regime": null
       },
       "chart": {
@@ -8166,9 +8162,9 @@
       "latest": {
         "date": "2026-04-01",
         "value": 3410.547,
-        "percentile": 91.6,
-        "z_score": 1.11,
-        "score": 91.6,
+        "percentile": 98.3,
+        "z_score": 2.89,
+        "score": 94.7,
         "regime": null
       },
       "chart": {
@@ -8432,8 +8428,8 @@
         "date": "2025-12-01",
         "value": 5.2,
         "percentile": 20.0,
-        "z_score": -0.73,
-        "score": 20.0,
+        "z_score": -0.57,
+        "score": 36.1,
         "regime": null
       },
       "chart": {
@@ -8480,9 +8476,9 @@
       "latest": {
         "date": "2024-12-31",
         "value": 198.1,
-        "percentile": 96.0,
-        "z_score": 1.35,
-        "score": 96.0,
+        "percentile": 90.2,
+        "z_score": 0.98,
+        "score": 72.7,
         "regime": null
       },
       "chart": {
@@ -8579,9 +8575,9 @@
       "latest": {
         "date": "2025-03-31",
         "value": -7.5194,
-        "percentile": 2.6,
-        "z_score": -2.09,
-        "score": 2.6,
+        "percentile": 4.9,
+        "z_score": -1.35,
+        "score": 20.5,
         "regime": null
       },
       "chart": {
@@ -8681,8 +8677,8 @@
         "date": "2026-03-31",
         "value": 5.0,
         "percentile": 55.6,
-        "z_score": 0.3,
-        "score": 55.6,
+        "z_score": 0.39,
+        "score": 59.5,
         "regime": null
       },
       "chart": {
@@ -8746,8 +8742,8 @@
         "date": "2026-03-31",
         "value": -0.06,
         "percentile": 85.7,
-        "z_score": 1.12,
-        "score": 85.7,
+        "z_score": 3.07,
+        "score": 95.5,
         "regime": null
       },
       "chart": {
@@ -8803,8 +8799,8 @@
         "date": "2026-04-01",
         "value": 53.1,
         "percentile": 88.9,
-        "z_score": 0.93,
-        "score": 88.9,
+        "z_score": 1.4,
+        "score": 80.2,
         "regime": null
       },
       "chart": {
@@ -8903,9 +8899,9 @@
       "latest": {
         "date": "2026-05-31",
         "value": 6.7635,
-        "percentile": 59.5,
-        "z_score": 0.27,
-        "score": 59.5,
+        "percentile": 37.2,
+        "z_score": -0.31,
+        "score": 42.3,
         "regime": null
       },
       "chart": {
@@ -9172,9 +9168,9 @@
       "latest": {
         "date": "2026-05-31",
         "value": 1.72,
-        "percentile": 2.4,
-        "z_score": -2.23,
-        "score": 2.4,
+        "percentile": 5.0,
+        "z_score": -2.3,
+        "score": 9.1,
         "regime": null
       },
       "chart": {
