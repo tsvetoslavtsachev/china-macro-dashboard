@@ -75,6 +75,80 @@ def test_anomalies_run():
         assert a.direction in ("up", "down")
 
 
+def test_anomaly_staleness_gate_excludes_stale():
+    """Застояла серия (дата твърде назад за каденцията си) не бива да чете
+    като текущ екстремум — изключва се от top/total_flagged, броим я отделно.
+    Свежа серия със същия spike остава флагната.
+
+    Регресия за: годишна 2024 стойност, маркирана 'НОВ ЕКСТРЕМУМ днес' на
+    публичната CN страница (audit 2026-06-07, находка #3).
+    """
+    # Свежа МЕСЕЧНА серия (60 точки), завършваща на as_of → 0 периода зад.
+    fresh = _monthly([2.0] * 57 + [9.0, 9.4, 9.9])
+
+    # Застояла ГОДИШНА серия (20 точки): последна точка 2024-12-31 (~1.3 годишни
+    # периода зад as_of 2026-05-01 → над прага 1.0 за annually).
+    stale_dates = pd.to_datetime([f"{y}-12-31" for y in range(2005, 2025)])  # край 2024
+    stale = pd.Series([2.0] * 17 + [9.0, 9.4, 9.9], index=stale_dates)
+
+    monthly_key = next(
+        k for k, m in SERIES_CATALOG.items() if m.get("release_schedule") == "monthly"
+    )
+    annual_key = next(
+        k for k, m in SERIES_CATALOG.items() if m.get("release_schedule") == "annually"
+    )
+
+    snap = {monthly_key: fresh, annual_key: stale}
+    rep = compute_anomalies(snap, z_threshold=2.0, top_n=10)
+
+    top_keys = {a.series_key for a in rep.top}
+    assert monthly_key in top_keys, "свежата серия трябва да е флагната"
+    assert annual_key not in top_keys, "застоялата серия не бива да е в top"
+    assert annual_key in rep.stale_excluded_keys
+    assert rep.stale_excluded >= 1
+    assert rep.total_flagged == 1  # само текущата
+
+    fresh_reading = next(a for a in rep.top if a.series_key == monthly_key)
+    assert fresh_reading.stale is False
+    assert fresh_reading.last_date is not None
+    assert fresh_reading.periods_behind == 0.0
+
+
+def test_anomaly_recent_annual_kept():
+    """Годишна серия с последна точка ~5 месеца стара (най-скорошната годишна,
+    0.4 периода зад) НЕ е застояла — остава, но с показана дата.
+    Регресия: да не изхвърлим валидни годишни четения (напр. младежка безработица).
+    """
+    spike = [2.0] * 17 + [9.0, 9.4, 9.9]
+    # Годишна серия с край 2025-12-31; as_of ще е 2026-05-01 от месечния spike.
+    recent_dates = pd.to_datetime([f"{y}-12-31" for y in range(2006, 2026)])  # край 2025
+    recent_annual = pd.Series(spike, index=recent_dates)
+    fresh_monthly = _monthly([2.0] * 57 + [9.0, 9.4, 9.9])
+
+    annual_key = next(
+        k for k, m in SERIES_CATALOG.items() if m.get("release_schedule") == "annually"
+    )
+    monthly_key = next(
+        k for k, m in SERIES_CATALOG.items() if m.get("release_schedule") == "monthly"
+    )
+    snap = {annual_key: recent_annual, monthly_key: fresh_monthly}
+    rep = compute_anomalies(snap, z_threshold=2.0, top_n=10)
+
+    top_keys = {a.series_key for a in rep.top}
+    assert annual_key in top_keys, "скорошна годишна серия трябва да остане"
+    assert annual_key not in rep.stale_excluded_keys
+
+
+def test_briefing_renders_date_column(tmp_path):
+    """Top Anomalies таблицата показва колона Дата с last_date (находка #4)."""
+    snap = _synthetic_snapshot()
+    out = tmp_path / "briefing.html"
+    generate_weekly_briefing(snap, str(out), today=date(2026, 5, 30))
+    html = out.read_text(encoding="utf-8")
+    assert ">Дата<" in html              # хедър на колоната
+    assert "2026-05-01" in html          # реална дата на четенето в ред
+
+
 def test_briefing_renders_new_sections(tmp_path):
     snap = _synthetic_snapshot()
     out = tmp_path / "briefing.html"

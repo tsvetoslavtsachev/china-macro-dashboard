@@ -48,6 +48,33 @@ Z_THRESHOLD_DEFAULT = 2.0
 TOP_N_DEFAULT = 10
 LOOKBACK_YEARS_DEFAULT = 5
 
+# ── Staleness gate ──────────────────────────────────────────────────────────
+# anomaly.py е "какво точно СЕГА е в краен отскок" (виж docstring горе). Стойност,
+# чиято дата е твърде назад спрямо as_of за СОБСТВЕНАТА ѝ каденция, не е "сега" —
+# затова не бива да влиза в Top Anomalies / total_flagged като текущ екстремум
+# (иначе годишна 2024 стойност чете като "НОВ МИНИМУМ днес" на публичната страница).
+# Прагът е ПО КАДЕНЦИЯ, защото единен праг не разделя чисто: годишна серия ~1.4
+# периода зад (текуща, само ѝ липсва 2025) и месечна серия ~1.2 периода зад
+# (текуща, зад daily as_of) се припокриват.
+_PERIOD_DAYS = {
+    "daily": 1.0,
+    "weekly": 7.0,
+    "monthly": 30.0,
+    "quarterly": 91.0,
+    "annually": 365.0,
+    "annual": 365.0,
+}
+_MAX_PERIODS_BEHIND = {
+    "daily": 21.0,       # ~3 седмици без отпечатък
+    "weekly": 5.0,
+    "monthly": 3.0,      # >3 месеца зад → застояла
+    "quarterly": 2.0,
+    "annually": 1.0,     # липсва цяла следваща година
+    "annual": 1.0,
+}
+_DEFAULT_PERIOD_DAYS = 30.0
+_DEFAULT_MAX_PERIODS = 3.0   # непозната каденция → третирай като месечна
+
 
 # ============================================================
 # DATA CLASSES
@@ -68,6 +95,8 @@ class AnomalyReading:
     new_extreme_direction: Optional[str]   # "max" | "min" | None
     lookback_years: int
     narrative_hint: str
+    stale: bool = False                     # дата твърде назад за каденцията си
+    periods_behind: float = 0.0            # колко СОБСТВЕНИ периода зад as_of
 
     def to_dict(self) -> dict:
         d = asdict(self)
@@ -85,6 +114,8 @@ class AnomalyReport:
     total_flagged: int
     top: list[AnomalyReading] = field(default_factory=list)
     by_lens: dict[str, list[AnomalyReading]] = field(default_factory=dict)
+    stale_excluded: int = 0                          # брой застояли четения извън flagged
+    stale_excluded_keys: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
@@ -92,6 +123,8 @@ class AnomalyReport:
             "threshold": self.threshold,
             "lookback_years": self.lookback_years,
             "total_flagged": self.total_flagged,
+            "stale_excluded": self.stale_excluded,
+            "stale_excluded_keys": list(self.stale_excluded_keys),
             "top": [r.to_dict() for r in self.top],
             "by_lens": {
                 lens: [r.to_dict() for r in readings]
@@ -120,9 +153,12 @@ def compute_anomalies(
 
     Returns:
         AnomalyReport с top (truncated), by_lens (всички flagged, multi-lens dedupe-ат се),
-        и total_flagged (pre-truncate брой).
+        total_flagged (pre-truncate брой на ТЕКУЩИ аномалии), и stale_excluded
+        (брой четения изключени като застояли — за прозрачност, без тих cap).
     """
-    flagged: list[AnomalyReading] = []
+    as_of_ts = _max_date_ts(snapshot, list(snapshot.keys()))
+
+    candidates: list[AnomalyReading] = []
 
     for key, series in snapshot.items():
         meta = SERIES_CATALOG.get(key)
@@ -141,16 +177,20 @@ def compute_anomalies(
 
         clean = series.dropna()
         last_value = float(clean.iloc[-1])
-        last_date = (
-            clean.index[-1].strftime("%Y-%m-%d")
-            if isinstance(clean.index[-1], pd.Timestamp) else None
+        last_ts = (
+            clean.index[-1] if isinstance(clean.index[-1], pd.Timestamp) else None
         )
+        last_date = last_ts.strftime("%Y-%m-%d") if last_ts is not None else None
+
+        sched = meta.get("release_schedule")
+        periods_behind = _periods_behind(last_ts, as_of_ts, sched)
+        stale = _is_stale(periods_behind, sched)
 
         ne = new_extreme(series, lookback_years=lookback_years)
         is_new_extreme = ne is not None
         new_extreme_dir = ne["direction"] if ne else None
 
-        flagged.append(AnomalyReading(
+        candidates.append(AnomalyReading(
             series_key=key,
             series_name_bg=meta.get("name_bg", key),
             lens=list(meta.get("lens", [])),
@@ -164,7 +204,15 @@ def compute_anomalies(
             new_extreme_direction=new_extreme_dir,
             lookback_years=lookback_years,
             narrative_hint=meta.get("narrative_hint", ""),
+            stale=stale,
+            periods_behind=round(periods_behind, 2),
         ))
+
+    # Staleness gate: застояло четене не е "сега" → вън от текущите аномалии.
+    # Броим изключените (без тих cap) — годишна/тримесечна серия, чиято последна
+    # точка е твърде назад за каденцията си, повече не чете като текущ екстремум.
+    flagged = [r for r in candidates if not r.stale]
+    dropped = [r for r in candidates if r.stale]
 
     # Сортиране по |z| desc
     flagged.sort(key=lambda r: abs(r.z_score), reverse=True)
@@ -179,7 +227,7 @@ def compute_anomalies(
             if lens in ALLOWED_LENSES:
                 by_lens[lens].append(r)
 
-    as_of = _compute_as_of(snapshot, list(snapshot.keys()))
+    as_of = as_of_ts.strftime("%Y-%m-%d") if as_of_ts is not None else None
 
     return AnomalyReport(
         as_of=as_of,
@@ -188,6 +236,8 @@ def compute_anomalies(
         total_flagged=total,
         top=top,
         by_lens=dict(by_lens),
+        stale_excluded=len(dropped),
+        stale_excluded_keys=[r.series_key for r in dropped],
     )
 
 
@@ -195,11 +245,11 @@ def compute_anomalies(
 # INTERNAL
 # ============================================================
 
-def _compute_as_of(
+def _max_date_ts(
     snapshot: dict[str, pd.Series],
     keys: list[str],
-) -> Optional[str]:
-    """Най-скорошна дата сред сериите."""
+) -> Optional[pd.Timestamp]:
+    """Най-скорошната дата сред сериите (като Timestamp)."""
     dates: list[pd.Timestamp] = []
     for k in keys:
         s = snapshot.get(k)
@@ -211,6 +261,40 @@ def _compute_as_of(
         last = s_clean.index[-1]
         if isinstance(last, pd.Timestamp):
             dates.append(last)
-    if not dates:
-        return None
-    return max(dates).strftime("%Y-%m-%d")
+    return max(dates) if dates else None
+
+
+def _compute_as_of(
+    snapshot: dict[str, pd.Series],
+    keys: list[str],
+) -> Optional[str]:
+    """Най-скорошна дата сред сериите (ISO стринг)."""
+    ts = _max_date_ts(snapshot, keys)
+    return ts.strftime("%Y-%m-%d") if ts is not None else None
+
+
+def _periods_behind(
+    last_ts: Optional[pd.Timestamp],
+    as_of_ts: Optional[pd.Timestamp],
+    release_schedule: Optional[str],
+) -> float:
+    """Колко СОБСТВЕНИ release-периода назад е last_ts спрямо as_of.
+
+    Месечна серия 1 месец зад → ~1.0; годишна серия 1 година зад → ~1.0.
+    Нормализира по каденция, за да е прагът сравним между честоти.
+    """
+    if last_ts is None or as_of_ts is None:
+        return 0.0
+    days = (as_of_ts - last_ts).days
+    if days <= 0:
+        return 0.0
+    period = _PERIOD_DAYS.get((release_schedule or "").lower(), _DEFAULT_PERIOD_DAYS)
+    return days / period
+
+
+def _is_stale(periods_behind: float, release_schedule: Optional[str]) -> bool:
+    """True ако четенето е твърде назад за каденцията си → не е 'сега'."""
+    threshold = _MAX_PERIODS_BEHIND.get(
+        (release_schedule or "").lower(), _DEFAULT_MAX_PERIODS
+    )
+    return periods_behind > threshold

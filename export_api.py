@@ -180,6 +180,8 @@ def build_macro_state(snapshot: dict, today: date) -> dict:
             "last_date": getattr(a, "last_date", None),
             "is_new_extreme": getattr(a, "is_new_extreme", None),
             "new_extreme_direction": getattr(a, "new_extreme_direction", None),
+            "stale": getattr(a, "stale", False),
+            "periods_behind": _clean(getattr(a, "periods_behind", None)),
             "narrative_hint": getattr(a, "narrative_hint", None),
         })
 
@@ -198,9 +200,13 @@ def build_macro_state(snapshot: dict, today: date) -> dict:
             "breadth_b": _clean(getattr(p, "breadth_b", None)),
         })
 
+    stale_note = (
+        f" ({anomaly_report.stale_excluded} застояли изключени)"
+        if anomaly_report.stale_excluded else ""
+    )
     narrative = (
         f"Претеглен композитен macro score {overall:.1f}/100 → режим „{regime_label_bg}“. "
-        f"{len(lenses_out)} лещи, {anomaly_report.total_flagged} flagged аномалии, "
+        f"{len(lenses_out)} лещи, {anomaly_report.total_flagged} flagged аномалии{stale_note}, "
         f"{len(cross_divs)} cross-lens двойки."
     )
 
@@ -219,6 +225,8 @@ def build_macro_state(snapshot: dict, today: date) -> dict:
         },
         "lenses": lenses_out,
         "top_anomalies": top_anomalies,
+        "anomalies_stale_excluded": anomaly_report.stale_excluded,
+        "anomalies_stale_excluded_keys": list(anomaly_report.stale_excluded_keys),
         "cross_lens_divergences": cross_divs,
         "non_consensus_highlights": [],
     }

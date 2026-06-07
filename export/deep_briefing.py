@@ -583,6 +583,7 @@ def _render_anomalies_feed(anomaly_report, snapshot) -> str:
   <td>{_arrow(a.direction)}</td>
   <td>{_code(a.series_key)}</td>
   <td>{html.escape(a.series_name_bg)}</td>
+  <td class="adate">{a.last_date or '—'}</td>
   <td class="num">{value_cell}</td>
   <td class="num">{delta_cell}</td>
   <td class="num">{a.z_score:+.2f}</td>
@@ -596,7 +597,7 @@ def _render_anomalies_feed(anomaly_report, snapshot) -> str:
   <h2>Top Anomalies ({len(anomaly_report.top)}/{anomaly_report.total_flagged})</h2>
   <table class="anom-table">
     <thead><tr>
-      <th>#</th><th></th><th>серия</th><th>име</th>
+      <th>#</th><th></th><th>серия</th><th>име</th><th>дата</th>
       <th>стойност</th><th>Δ</th><th>z</th>
       <th>екстремум</th><th>lens</th><th>peer group</th>
     </tr></thead>
@@ -1182,6 +1183,7 @@ tr.sig-high { background: #f8514911; }
 
 /* Anomalies */
 .rank { color: #8b949e; font-family: monospace; }
+.adate { color: #8b949e; font-family: 'Consolas', 'Monaco', monospace; font-size: 11.5px; white-space: nowrap; }
 .arrow { font-family: monospace; font-weight: 600; }
 .arrow.up { color: #3fb950; }
 .arrow.down { color: #f85149; }

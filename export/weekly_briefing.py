@@ -205,6 +205,7 @@ body {
 .anom-arrow-down { color: #f85149; font-weight: 700; }
 .anom-z { font-family: 'Consolas','Monaco',monospace; font-weight: 600; }
 .anom-code { font-family: 'Consolas','Monaco',monospace; background: #21262d; color: #c9d1d9; padding: 1px 5px; border-radius: 3px; font-size: 11.5px; }
+.anom-date { font-family: 'Consolas','Monaco',monospace; color: #8b949e; font-size: 11.5px; white-space: nowrap; }
 .anom-ne { display: inline-block; background: #d2992222; color: #d29922; font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 600; font-family: monospace; }
 .anom-empty { color: #8b949e; font-style: italic; font-size: 13px; }
 .lens-tag { color: #8b949e; font-size: 11px; }
@@ -485,6 +486,7 @@ def _render_anomalies(anomaly_report) -> str:
           <td class="{arrow_cls}">{arrow}</td>
           <td><span class="anom-code">{a.series_key}</span></td>
           <td>{a.series_name_bg}</td>
+          <td class="anom-date">{a.last_date or '—'}</td>
           <td class="num">{_fmt_val(a.last_value)}</td>
           <td class="num anom-z" style="color:{'#3fb950' if a.direction == 'up' else '#f85149'}">{a.z_score:+.2f}</td>
           <td>{ne}</td>
@@ -498,7 +500,7 @@ def _render_anomalies(anomaly_report) -> str:
   <table class="anom-table">
     <thead>
       <tr>
-        <th>#</th><th></th><th>Серия</th><th>Показател</th>
+        <th>#</th><th></th><th>Серия</th><th>Показател</th><th>Дата</th>
         <th style="text-align:right">Стойност</th><th style="text-align:right">z</th>
         <th>Екстремум</th><th>Lens</th>
       </tr>
