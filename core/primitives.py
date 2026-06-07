@@ -87,12 +87,15 @@ def yoy_pct(series: pd.Series) -> pd.Series:
     if s.empty:
         return pd.Series(dtype=float)
     freq_periods = _infer_yoy_periods(s)
-    return s.pct_change(periods=freq_periods) * 100
+    # Zero/near-zero база guard: при база минаваща през 0 (ratio/спред/нетна позиция)
+    # pct_change → ±inf (фалшив екстремум). Заменяме с NaN (легитимно "недефинирано").
+    # Parity с US/EU; CN _calc_change вече пази (old_val==0 → None).
+    return (s.pct_change(periods=freq_periods) * 100).replace([np.inf, -np.inf], np.nan)
 
 
 def mom_pct(series: pd.Series) -> pd.Series:
     """Month-over-month процентна промяна."""
-    return series.dropna().pct_change(periods=1) * 100
+    return (series.dropna().pct_change(periods=1) * 100).replace([np.inf, -np.inf], np.nan)
 
 
 def rolling_mean(series: pd.Series, window: int) -> pd.Series:
