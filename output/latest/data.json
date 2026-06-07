@@ -1,13 +1,13 @@
 {
   "region": "CN",
   "as_of_date": "2026-06-07",
-  "generated_at": "2026-06-07T19:16:17.814365Z",
+  "generated_at": "2026-06-07T20:56:36.844287Z",
   "executive_summary": {
     "composite_score": 37.0,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 37.0/100 → режим „ВЛОШАВАЩ СЕ“. 5 лещи, 7 flagged аномалии, 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 37.0/100 → режим „ВЛОШАВАЩ СЕ“. 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
@@ -194,22 +194,9 @@
       "last_date": "2026-05-20",
       "is_new_extreme": true,
       "new_extreme_direction": "min",
+      "stale": false,
+      "periods_behind": 0.37,
       "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
-    },
-    {
-      "series_id": "CN_POLICY_RATE",
-      "name_bg": "Политическа лихва — PBoC 7-day repo (%)",
-      "lens": [
-        "credit"
-      ],
-      "peer_group": "rates",
-      "z_score": -2.39,
-      "direction": "down",
-      "current_value": 1.4,
-      "last_date": "2025-06-01",
-      "is_new_extreme": true,
-      "new_extreme_direction": "min",
-      "narrative_hint": "PBoC benchmark rate. Намален до 1.4% (2025). Monetary easing цикъл в ход."
     },
     {
       "series_id": "CN_CGB_10Y",
@@ -224,6 +211,8 @@
       "last_date": "2026-05-31",
       "is_new_extreme": false,
       "new_extreme_direction": null,
+      "stale": false,
+      "periods_behind": 0.0,
       "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
     },
     {
@@ -239,53 +228,17 @@
       "last_date": "2025-12-31",
       "is_new_extreme": true,
       "new_extreme_direction": "max",
+      "stale": false,
+      "periods_behind": 0.41,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
-    },
-    {
-      "series_id": "CN_FDI_GDP",
-      "name_bg": "ПЧИ — входящи (% от БВП)",
-      "lens": [
-        "property"
-      ],
-      "peer_group": "investment",
-      "z_score": -2.114,
-      "direction": "down",
-      "current_value": 0.099,
-      "last_date": "2024-12-31",
-      "is_new_extreme": true,
-      "new_extreme_direction": "min",
-      "narrative_hint": "Срина се до 0.10% GDP (2024) — исторически минимум. Геополитически de-risking от западни компании. Структурна промяна в глобалните вериги на доставки."
-    },
-    {
-      "series_id": "CN_BIS_PROPERTY_YOY",
-      "name_bg": "Жилищни имотни цени (YoY %, BIS номинал)",
-      "lens": [
-        "property"
-      ],
-      "peer_group": "housing",
-      "z_score": -2.105,
-      "direction": "down",
-      "current_value": -7.5194,
-      "last_date": "2025-03-31",
-      "is_new_extreme": false,
-      "new_extreme_direction": null,
-      "narrative_hint": "BIS жилищни имотни цени YoY (тримесечно, −7.5% 2025-Q1). По-широко покритие (вкл. вторичен пазар) и по-дълга чиста история от 70-градския akshare индекс. Дълбока имотна дефлация."
-    },
-    {
-      "series_id": "CN_CREDIT_PRIVATE",
-      "name_bg": "Кредит към частния сектор (% от БВП)",
-      "lens": [
-        "credit"
-      ],
-      "peer_group": "credit_depth",
-      "z_score": 2.074,
-      "direction": "up",
-      "current_value": 194.166,
-      "last_date": "2024-12-31",
-      "is_new_extreme": true,
-      "new_extreme_direction": "max",
-      "narrative_hint": "194% от GDP (2024) — изключително висок. Debt overhang ограничава monetary policy transmission. Кредитният импулс (промяна в новия кредит) е по-важен от нивото."
     }
+  ],
+  "anomalies_stale_excluded": 4,
+  "anomalies_stale_excluded_keys": [
+    "CN_CREDIT_PRIVATE",
+    "CN_FDI_GDP",
+    "CN_POLICY_RATE",
+    "CN_BIS_PROPERTY_YOY"
   ],
   "cross_lens_divergences": [
     {

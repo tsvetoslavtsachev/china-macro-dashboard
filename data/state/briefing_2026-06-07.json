@@ -28,18 +28,11 @@
   "high_nc_keys": [],
   "top_anomaly_keys": [
     "CN_LPR_1Y",
-    "CN_POLICY_RATE",
     "CN_CGB_10Y",
-    "CN_YOUTH_UNEMPLOYMENT",
-    "CN_FDI_GDP",
-    "CN_BIS_PROPERTY_YOY",
-    "CN_CREDIT_PRIVATE"
+    "CN_YOUTH_UNEMPLOYMENT"
   ],
   "new_extreme_keys": [
-    "CN_CREDIT_PRIVATE",
-    "CN_FDI_GDP",
     "CN_LPR_1Y",
-    "CN_POLICY_RATE",
     "CN_YOUTH_UNEMPLOYMENT"
   ]
 }

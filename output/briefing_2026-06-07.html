@@ -161,6 +161,7 @@ body {
 .anom-arrow-down { color: #f85149; font-weight: 700; }
 .anom-z { font-family: 'Consolas','Monaco',monospace; font-weight: 600; }
 .anom-code { font-family: 'Consolas','Monaco',monospace; background: #21262d; color: #c9d1d9; padding: 1px 5px; border-radius: 3px; font-size: 11.5px; }
+.anom-date { font-family: 'Consolas','Monaco',monospace; color: #8b949e; font-size: 11.5px; white-space: nowrap; }
 .anom-ne { display: inline-block; background: #d2992222; color: #d29922; font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 600; font-family: monospace; }
 .anom-empty { color: #8b949e; font-style: italic; font-size: 13px; }
 .lens-tag { color: #8b949e; font-size: 11px; }
@@ -780,12 +781,12 @@ body {
   <div class="narrative"><div class="narrative-item">Цени на жилища (70 града, нови) +0.9% YoY — стабилизация след корекцията.</div><div class="narrative-item warn">⚠️ Инвестиции в дълготрайни активи -12.0% YoY (месечно) — рязко свиване на инвестиционния цикъл.</div><div class="narrative-item">BIS жилищни цени -7.5% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.</div><div class="narrative-item">ПЧИ 0.10% от БВП — исторически минимум. Геополитически de-risking от западни компании.</div><div class="narrative-item">Текуща сметка +2.3% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU.</div></div>
 </div>
 </div>
-<h2 class="section-title">Top Anomalies (7/7)</h2>
+<h2 class="section-title">Top Anomalies (3/3)</h2>
 <div class="anom-card">
   <table class="anom-table">
     <thead>
       <tr>
-        <th>#</th><th></th><th>Серия</th><th>Показател</th>
+        <th>#</th><th></th><th>Серия</th><th>Показател</th><th>Дата</th>
         <th style="text-align:right">Стойност</th><th style="text-align:right">z</th>
         <th>Екстремум</th><th>Lens</th>
       </tr>
@@ -796,6 +797,7 @@ body {
           <td class="anom-arrow-down">↓</td>
           <td><span class="anom-code">CN_LPR_1Y</span></td>
           <td>1-годишен Loan Prime Rate (PBoC)</td>
+          <td class="anom-date">2026-05-20</td>
           <td class="num">3.00</td>
           <td class="num anom-z" style="color:#f85149">-2.56</td>
           <td><span class="anom-ne">NEW MIN</span></td>
@@ -805,19 +807,9 @@ body {
         <tr>
           <td class="anom-rank">2</td>
           <td class="anom-arrow-down">↓</td>
-          <td><span class="anom-code">CN_POLICY_RATE</span></td>
-          <td>Политическа лихва — PBoC 7-day repo (%)</td>
-          <td class="num">1.40</td>
-          <td class="num anom-z" style="color:#f85149">-2.39</td>
-          <td><span class="anom-ne">NEW MIN</span></td>
-          <td><span class="lens-tag">credit</span></td>
-        </tr>
-        
-        <tr>
-          <td class="anom-rank">3</td>
-          <td class="anom-arrow-down">↓</td>
           <td><span class="anom-code">CN_CGB_10Y</span></td>
           <td>10Y China Government Bond yield</td>
+          <td class="anom-date">2026-05-31</td>
           <td class="num">1.72</td>
           <td class="num anom-z" style="color:#f85149">-2.24</td>
           <td></td>
@@ -825,47 +817,15 @@ body {
         </tr>
         
         <tr>
-          <td class="anom-rank">4</td>
+          <td class="anom-rank">3</td>
           <td class="anom-arrow-up">↑</td>
           <td><span class="anom-code">CN_YOUTH_UNEMPLOYMENT</span></td>
           <td>Младежка безработица (16-24 г., %)</td>
+          <td class="anom-date">2025-12-31</td>
           <td class="num">15.79</td>
           <td class="num anom-z" style="color:#3fb950">+2.23</td>
           <td><span class="anom-ne">NEW MAX</span></td>
           <td><span class="lens-tag">labor</span></td>
-        </tr>
-        
-        <tr>
-          <td class="anom-rank">5</td>
-          <td class="anom-arrow-down">↓</td>
-          <td><span class="anom-code">CN_FDI_GDP</span></td>
-          <td>ПЧИ — входящи (% от БВП)</td>
-          <td class="num">0.10</td>
-          <td class="num anom-z" style="color:#f85149">-2.11</td>
-          <td><span class="anom-ne">NEW MIN</span></td>
-          <td><span class="lens-tag">property</span></td>
-        </tr>
-        
-        <tr>
-          <td class="anom-rank">6</td>
-          <td class="anom-arrow-down">↓</td>
-          <td><span class="anom-code">CN_BIS_PROPERTY_YOY</span></td>
-          <td>Жилищни имотни цени (YoY %, BIS номинал)</td>
-          <td class="num">-7.52</td>
-          <td class="num anom-z" style="color:#f85149">-2.10</td>
-          <td></td>
-          <td><span class="lens-tag">property</span></td>
-        </tr>
-        
-        <tr>
-          <td class="anom-rank">7</td>
-          <td class="anom-arrow-up">↑</td>
-          <td><span class="anom-code">CN_CREDIT_PRIVATE</span></td>
-          <td>Кредит към частния сектор (% от БВП)</td>
-          <td class="num">194.17</td>
-          <td class="num anom-z" style="color:#3fb950">+2.07</td>
-          <td><span class="anom-ne">NEW MAX</span></td>
-          <td><span class="lens-tag">credit</span></td>
         </tr>
         </tbody>
   </table>
@@ -879,7 +839,7 @@ body {
 <div class="footer">
   <strong>China Macro Dashboard</strong> — автоматично генериран briefing.<br>
   Данни: World Bank Indicators API (годишни) · IMF IFS via DBnomics (месечни) · AkShare/НБС (месечни).<br>
-  Генериран: 2026-06-07 19:16 UTC · Серии: 50 · Lens-ове: 5.<br>
+  Генериран: 2026-06-07 20:56 UTC · Серии: 50 · Lens-ове: 5.<br>
   <em>Забележка: Китайските официални данни са обект на ревизии и методологични промени. Интерпретирайте с внимание.</em>
 </div>
 

@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "region": "CN",
   "as_of_date": "2026-06-07",
-  "generated_at": "2026-06-07T19:16:18Z",
-  "data_generated_at": "2026-06-07T19:16:17.814365Z",
+  "generated_at": "2026-06-07T20:56:37Z",
+  "data_generated_at": "2026-06-07T20:56:36.844287Z",
   "composite_score": 37.0,
   "regime": {
     "key": "deteriorating",
@@ -50,13 +50,6 @@
       "direction": "down"
     },
     {
-      "series_id": "CN_POLICY_RATE",
-      "name_bg": "Политическа лихва — PBoC 7-day repo (%)",
-      "lens": "credit",
-      "z_score": -2.39,
-      "direction": "down"
-    },
-    {
       "series_id": "CN_CGB_10Y",
       "name_bg": "10Y China Government Bond yield",
       "lens": "credit",
@@ -69,18 +62,11 @@
       "lens": "labor",
       "z_score": 2.225,
       "direction": "up"
-    },
-    {
-      "series_id": "CN_FDI_GDP",
-      "name_bg": "ПЧИ — входящи (% от БВП)",
-      "lens": "property",
-      "z_score": -2.114,
-      "direction": "down"
     }
   ],
   "counts": {
     "lenses": 5,
-    "anomalies": 7,
+    "anomalies": 3,
     "divergences": 3
   },
   "links": {

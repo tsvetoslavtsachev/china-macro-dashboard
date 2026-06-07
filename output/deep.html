@@ -136,6 +136,7 @@ tr.sig-high { background: #f8514911; }
 
 /* Anomalies */
 .rank { color: #8b949e; font-family: monospace; }
+.adate { color: #8b949e; font-family: 'Consolas', 'Monaco', monospace; font-size: 11.5px; white-space: nowrap; }
 .arrow { font-family: monospace; font-weight: 600; }
 .arrow.up { color: #3fb950; }
 .arrow.down { color: #f85149; }
@@ -212,7 +213,7 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
     </div>
     <div class="brief-kpis">
       <div class="kpi"><div class="kpi-n">50</div><div class="kpi-l">серии</div></div>
-      <div class="kpi"><div class="kpi-n">7</div><div class="kpi-l">аномалии |z|>2</div></div>
+      <div class="kpi"><div class="kpi-n">3</div><div class="kpi-l">аномалии |z|>2</div></div>
       <div class="kpi"><div class="kpi-n">0</div><div class="kpi-l">non-consensus HIGH</div></div>
       <div class="kpi"><div class="kpi-n">6</div><div class="kpi-l">non-consensus MEDIUM</div></div>
     </div>
@@ -228,7 +229,7 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
       <div class="regime-val">ВЛОШАВАЩ СЕ</div>
       <div class="regime-driver">composite 37.0/100</div>
     </div>
-    <div class="exec-narrative">Претеглен композитен macro score 37.0/100 → режим „ВЛОШАВАЩ СЕ“. Най-слаба тема: Пазар на труда (18.6 — КРИЗА НА ТРУДА); най-силна: Инфлация и цени (50.6). Активни cross-lens сигнали: Външно търсене × Вътрешна активност → ↑↓ A нагоре / B надолу. 7 серии с |z|&gt;2 (екстремни четения).</div>
+    <div class="exec-narrative">Претеглен композитен macro score 37.0/100 → режим „ВЛОШАВАЩ СЕ“. Най-слаба тема: Пазар на труда (18.6 — КРИЗА НА ТРУДА); най-силна: Инфлация и цени (50.6). Активни cross-lens сигнали: Външно търсене × Вътрешна активност → ↑↓ A нагоре / B надолу. 3 серии с |z|&gt;2 (екстремни четения).</div>
   </div>
   <div class="exec-grid-single">
     <table class="regime-table">
@@ -261,14 +262,14 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
   <td class="pg-name">🏦 Монетарна политика и кредит</td>
   <td class="num" style="color:#d29922;font-weight:600">48.5</td>
   <td>НЕУТРАЛНА ПОЛИТИКА</td>
-  <td class="num">4 <span class='ne-inline'>3 NEW</span></td>
+  <td class="num">2 <span class='ne-inline'>1 NEW</span></td>
 </tr>
 
 <tr>
   <td class="pg-name">🏗️ Имоти и търговия</td>
   <td class="num" style="color:#f85149;font-weight:600">31.1</td>
   <td>ИМОТНА КОРЕКЦИЯ</td>
-  <td class="num">2 <span class='ne-inline'>1 NEW</span></td>
+  <td class="num">0 </td>
 </tr>
 </tbody>
     </table>
@@ -531,7 +532,7 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
 
   <div class="lens-grid">
     <div class='intra-div'><h4>Вътрешни разминавания</h4><ul><li><strong>credit_depth</strong> (50%) vs <strong>rates</strong> (0%) <span class='diff'>Δ +50%</span></li></ul></div>
-    <div class='lens-anoms'><h4>Аномалии в лещата</h4><ol><li><span class='arrow down'>↓</span> <code class="series-code" title="1-годишен Loan Prime Rate (PBoC)">CN_LPR_1Y</code> <span class='z'>z=-2.56</span>  <span class=ne>NEW MIN</span><span class='pg'>· rates</span></li><li><span class='arrow down'>↓</span> <code class="series-code" title="Политическа лихва — PBoC 7-day repo (%)">CN_POLICY_RATE</code> <span class='z'>z=-2.39</span>  <span class=ne>NEW MIN</span><span class='pg'>· rates</span></li><li><span class='arrow down'>↓</span> <code class="series-code" title="10Y China Government Bond yield">CN_CGB_10Y</code> <span class='z'>z=-2.24</span><span class='pg'>· rates</span></li><li><span class='arrow up'>↑</span> <code class="series-code" title="Кредит към частния сектор (% от БВП)">CN_CREDIT_PRIVATE</code> <span class='z'>z=+2.07</span>  <span class=ne>NEW MAX</span><span class='pg'>· credit_depth</span></li></ol></div>
+    <div class='lens-anoms'><h4>Аномалии в лещата</h4><ol><li><span class='arrow down'>↓</span> <code class="series-code" title="1-годишен Loan Prime Rate (PBoC)">CN_LPR_1Y</code> <span class='z'>z=-2.56</span>  <span class=ne>NEW MIN</span><span class='pg'>· rates</span></li><li><span class='arrow down'>↓</span> <code class="series-code" title="10Y China Government Bond yield">CN_CGB_10Y</code> <span class='z'>z=-2.24</span><span class='pg'>· rates</span></li></ol></div>
   </div>
 </section>
 
@@ -576,7 +577,7 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
 
   <div class="lens-grid">
     <div class='intra-div'><h4>Вътрешни разминавания</h4><ul><li><strong>housing</strong> (100%) vs <strong>investment</strong> (0%) <span class='diff'>Δ +100%</span></li><li><strong>investment</strong> (0%) vs <strong>trade</strong> (83%) <span class='diff'>Δ -83%</span></li></ul></div>
-    <div class='lens-anoms'><h4>Аномалии в лещата</h4><ol><li><span class='arrow down'>↓</span> <code class="series-code" title="ПЧИ — входящи (% от БВП)">CN_FDI_GDP</code> <span class='z'>z=-2.11</span>  <span class=ne>NEW MIN</span><span class='pg'>· investment</span></li><li><span class='arrow down'>↓</span> <code class="series-code" title="Жилищни имотни цени (YoY %, BIS номинал)">CN_BIS_PROPERTY_YOY</code> <span class='z'>z=-2.10</span><span class='pg'>· housing</span></li></ol></div>
+    <div class='lens-anoms muted'>Няма аномалии в тази леща.</div>
   </div>
 </section>
 
@@ -660,10 +661,10 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
 
 
 <section class="brief-section">
-  <h2>Top Anomalies (7/7)</h2>
+  <h2>Top Anomalies (3/3)</h2>
   <table class="anom-table">
     <thead><tr>
-      <th>#</th><th></th><th>серия</th><th>име</th>
+      <th>#</th><th></th><th>серия</th><th>име</th><th>дата</th>
       <th>стойност</th><th>Δ</th><th>z</th>
       <th>екстремум</th><th>lens</th><th>peer group</th>
     </tr></thead>
@@ -673,6 +674,7 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
   <td><span class='arrow down'>↓</span></td>
   <td><code class="series-code" title="1-годишен Loan Prime Rate (PBoC)">CN_LPR_1Y</code></td>
   <td>1-годишен Loan Prime Rate (PBoC)</td>
+  <td class="adate">2026-05-20</td>
   <td class="num">3.000</td>
   <td class="num">+0.00%</td>
   <td class="num">-2.56</td>
@@ -684,21 +686,9 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
 <tr>
   <td class="rank">2</td>
   <td><span class='arrow down'>↓</span></td>
-  <td><code class="series-code" title="Политическа лихва — PBoC 7-day repo (%)">CN_POLICY_RATE</code></td>
-  <td>Политическа лихва — PBoC 7-day repo (%)</td>
-  <td class="num">1.400</td>
-  <td class="num">+0.00%</td>
-  <td class="num">-2.39</td>
-  <td><span class='ne'>NEW MIN</span></td>
-  <td>credit</td>
-  <td>rates</td>
-</tr>
-
-<tr>
-  <td class="rank">3</td>
-  <td><span class='arrow down'>↓</span></td>
   <td><code class="series-code" title="10Y China Government Bond yield">CN_CGB_10Y</code></td>
   <td>10Y China Government Bond yield</td>
+  <td class="adate">2026-05-31</td>
   <td class="num">1.720</td>
   <td class="num">-1.83%</td>
   <td class="num">-2.24</td>
@@ -708,55 +698,17 @@ code { font-family: 'Consolas', 'Monaco', monospace; background: #21262d; color:
 </tr>
 
 <tr>
-  <td class="rank">4</td>
+  <td class="rank">3</td>
   <td><span class='arrow up'>↑</span></td>
   <td><code class="series-code" title="Младежка безработица (16-24 г., %)">CN_YOUTH_UNEMPLOYMENT</code></td>
   <td>Младежка безработица (16-24 г., %)</td>
+  <td class="adate">2025-12-31</td>
   <td class="num">15.795</td>
   <td class="num">+75 bps</td>
   <td class="num">+2.23</td>
   <td><span class='ne'>NEW MAX</span></td>
   <td>labor</td>
   <td>unemployment</td>
-</tr>
-
-<tr>
-  <td class="rank">5</td>
-  <td><span class='arrow down'>↓</span></td>
-  <td><code class="series-code" title="ПЧИ — входящи (% от БВП)">CN_FDI_GDP</code></td>
-  <td>ПЧИ — входящи (% от БВП)</td>
-  <td class="num">0.099</td>
-  <td class="num">-64.77%</td>
-  <td class="num">-2.11</td>
-  <td><span class='ne'>NEW MIN</span></td>
-  <td>property</td>
-  <td>investment</td>
-</tr>
-
-<tr>
-  <td class="rank">6</td>
-  <td><span class='arrow down'>↓</span></td>
-  <td><code class="series-code" title="Жилищни имотни цени (YoY %, BIS номинал)">CN_BIS_PROPERTY_YOY</code></td>
-  <td>Жилищни имотни цени (YoY %, BIS номинал)</td>
-  <td class="num">-7.519</td>
-  <td class="num">-12.23%</td>
-  <td class="num">-2.10</td>
-  <td></td>
-  <td>property</td>
-  <td>housing</td>
-</tr>
-
-<tr>
-  <td class="rank">7</td>
-  <td><span class='arrow up'>↑</span></td>
-  <td><code class="series-code" title="Кредит към частния сектор (% от БВП)">CN_CREDIT_PRIVATE</code></td>
-  <td>Кредит към частния сектор (% от БВП)</td>
-  <td class="num">194.166</td>
-  <td class="num">+2.40%</td>
-  <td class="num">+2.07</td>
-  <td><span class='ne'>NEW MAX</span></td>
-  <td>credit</td>
-  <td>credit_depth</td>
 </tr>
 </tbody>
   </table>
