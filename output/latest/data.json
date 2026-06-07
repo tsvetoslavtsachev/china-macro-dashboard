@@ -1,13 +1,13 @@
 {
   "region": "CN",
-  "as_of_date": "2026-06-04",
-  "generated_at": "2026-06-04T18:51:16.876243Z",
+  "as_of_date": "2026-06-07",
+  "generated_at": "2026-06-07T19:16:17.814365Z",
   "executive_summary": {
-    "composite_score": 35.9,
+    "composite_score": 37.0,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 35.9/100 → режим „ВЛОШАВАЩ СЕ“. 5 лещи, 7 flagged аномалии, 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 37.0/100 → режим „ВЛОШАВАЩ СЕ“. 5 лещи, 7 flagged аномалии, 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
@@ -144,9 +144,9 @@
       ]
     },
     "property": {
-      "score": 25.6,
+      "score": 31.1,
       "direction": "contracting",
-      "regime": "ИМОТНА КРИЗА",
+      "regime": "ИМОТНА КОРЕКЦИЯ",
       "label_bg": "Имоти и търговия",
       "indicators_count": 9,
       "key_readings": [
@@ -172,7 +172,7 @@
         }
       ],
       "narrative": [
-        "Цени на жилища (70 града, нови) +0.7% YoY — стабилизация след корекцията.",
+        "Цени на жилища (70 града, нови) +0.9% YoY — стабилизация след корекцията.",
         "⚠️ Инвестиции в дълготрайни активи -12.0% YoY (месечно) — рязко свиване на инвестиционния цикъл.",
         "BIS жилищни цени -7.5% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.",
         "ПЧИ 0.10% от БВП — исторически минимум. Геополитически de-risking от западни компании.",
@@ -297,7 +297,7 @@
       "slot_a_label": "Кредитна експанзия",
       "slot_b_label": "Имоти и инвестиции",
       "breadth_a": 0.5,
-      "breadth_b": 0.25
+      "breadth_b": 0.5
     },
     {
       "pair_id": "monetary_inflation_trap",

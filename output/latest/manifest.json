@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-06-04",
-  "generated_at": "2026-06-04T18:51:17Z",
-  "data_generated_at": "2026-06-04T18:51:16.876243Z",
-  "composite_score": 35.9,
+  "as_of_date": "2026-06-07",
+  "generated_at": "2026-06-07T19:16:18Z",
+  "data_generated_at": "2026-06-07T19:16:17.814365Z",
+  "composite_score": 37.0,
   "regime": {
     "key": "deteriorating",
     "label_bg": "ВЛОШАВАЩ СЕ"
@@ -37,7 +37,7 @@
     {
       "key": "property",
       "label_bg": "Имоти и търговия",
-      "score": 25.6,
+      "score": 31.1,
       "direction": "contracting"
     }
   ],
