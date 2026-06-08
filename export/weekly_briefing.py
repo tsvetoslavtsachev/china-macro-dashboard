@@ -215,6 +215,8 @@ body {
 # ─── Helpers ─────────────────────────────────────────────────────
 
 def _score_color(score: float) -> str:
+    if score is None or score != score:   # None / NaN → недостатъчно данни (#9)
+        return "#8b949e"
     if score >= 65: return "#3fb950"
     if score >= 45: return "#d29922"
     return "#f85149"
@@ -239,6 +241,8 @@ def _val_class(v) -> str:
 
 
 def _pct_bar_html(pct: float, color: str) -> str:
+    if pct is None or pct != pct:          # None / NaN percentile (thin window, #12)
+        return '<span class="pct-bar-wrap"></span>'
     w = max(0, min(100, pct))
     return (
         f'<span class="pct-bar-wrap">'
@@ -289,14 +293,17 @@ def _render_composite(results: list[dict]) -> str:
         lc = _score_color(sc)
         label = LENS_LABEL_BG.get(lens, lens)
         icon = LENS_ICON.get(lens, "")
+        sc_ok = sc is not None and sc == sc       # не-None и не-NaN (#9)
+        sc_w = sc if sc_ok else 0
+        sc_txt = f"{sc:.1f}" if sc_ok else "—"
         bars_html += f"""
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
           <span style="font-size:14px;flex:0 0 20px">{icon}</span>
           <span style="color:#8b949e;font-size:12px;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{label}">{label}</span>
           <div style="flex:1 1 80px;height:6px;background:#21262d;border-radius:3px;overflow:hidden">
-            <div style="width:{sc:.0f}%;height:100%;background:{lc};border-radius:3px"></div>
+            <div style="width:{sc_w:.0f}%;height:100%;background:{lc};border-radius:3px"></div>
           </div>
-          <span style="font-size:13px;font-weight:700;color:{lc};flex:0 0 35px;text-align:right">{sc:.1f}</span>
+          <span style="font-size:13px;font-weight:700;color:{lc};flex:0 0 35px;text-align:right">{sc_txt}</span>
         </div>
         """
 
@@ -326,14 +333,18 @@ def _render_lens_card(result: dict) -> str:
     regime = result["regime"]
     regime_color = result.get("regime_color", "#8b949e")
     score_color = _score_color(score)
+    score_ok = score is not None and score == score   # не-None и не-NaN (#9)
+    score_w = score if score_ok else 0
+    score_txt = f"{score:.1f}" if score_ok else "—"
 
     readings = result.get("key_readings", [])
     rows_html = ""
     for r in readings:
         val = _fmt_val(r.get("value"))
         vc = _val_class(r.get("value"))
-        pct = r.get("percentile", 50)
+        pct = r.get("percentile")
         bar = _pct_bar_html(pct, score_color)
+        pct_txt = f"{pct:.0f}%" if (pct is not None and pct == pct) else "—"
         date_str = r.get("date", "")
         if date_str:
             try:
@@ -346,7 +357,7 @@ def _render_lens_card(result: dict) -> str:
           <td style="color:#e6edf3;line-height:1.3"
               title="{r.get('label', '')}">{lbl}</td>
           <td class="{vc}" style="text-align:right;font-weight:600">{val}</td>
-          <td style="text-align:center">{bar} <span style="color:#8b949e;font-size:11px">{pct:.0f}%</span></td>
+          <td style="text-align:center">{bar} <span style="color:#8b949e;font-size:11px">{pct_txt}</span></td>
           <td style="color:#8b949e;font-size:11px">{date_str}</td>
         </tr>
         """
@@ -366,9 +377,9 @@ def _render_lens_card(result: dict) -> str:
 
   <div class="lens-score-row">
     <div class="lens-score-bar-wrap">
-      <div class="lens-score-bar" style="width:{score:.0f}%;background:{score_color}"></div>
+      <div class="lens-score-bar" style="width:{score_w:.0f}%;background:{score_color}"></div>
     </div>
-    <span class="lens-score-num" style="color:{score_color}">{score:.1f}</span>
+    <span class="lens-score-num" style="color:{score_color}">{score_txt}</span>
   </div>
 
   <span class="lens-regime" style="background:{regime_color}22;color:{regime_color};border:1px solid {regime_color}44">

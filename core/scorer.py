@@ -161,6 +161,8 @@ def composite_score(scores: list, weights: Optional[list] = None) -> float:
 def get_regime(score: float, regimes: list) -> tuple:
     """(label, color) за score спрямо regime таблица.
     regimes = [(threshold, label, color), ...] — сортирани низходящо."""
+    if score is None or score != score:   # леща без композит (#9) → недостатъчно данни
+        return "Недостатъчно данни", "#8b949e"
     for threshold, label, color in sorted(regimes, reverse=True):
         if score >= threshold:
             return label, color

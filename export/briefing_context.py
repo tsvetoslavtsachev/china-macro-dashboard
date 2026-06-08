@@ -23,6 +23,16 @@ def _get_regime(score: float) -> str:
     return "НЕИЗВЕСТЕН"
 
 
+def _fmt_score(s) -> str:
+    """None/NaN composite (леща без данни, #9) → '—', иначе .1f."""
+    return f"{s:.1f}" if isinstance(s, (int, float)) and s == s else "—"
+
+
+def _fmt_pct(p) -> str:
+    """None/NaN percentile (thin window, #12) → '—', иначе .0f%."""
+    return f"{p:.0f}%" if isinstance(p, (int, float)) and p == p else "—"
+
+
 def generate_briefing_context(
     snapshot: dict,
     output_path: str,
@@ -73,14 +83,14 @@ def generate_briefing_context(
     lines.append("| Lens | Score | Режим |")
     lines.append("|------|-------|-------|")
     for r in results:
-        lines.append(f"| {r.get('label', r['module'])} | {r['composite']:.1f} | {r['regime']} |")
+        lines.append(f"| {r.get('label', r['module'])} | {_fmt_score(r['composite'])} | {r['regime']} |")
     lines.append("")
     lines.append("---")
     lines.append("")
 
     for r in results:
         lines.append(f"## {r.get('icon', '')} {r.get('label', r['module'])}")
-        lines.append(f"**Score:** {r['composite']:.1f}  **Режим:** {r['regime']}")
+        lines.append(f"**Score:** {_fmt_score(r['composite'])}  **Режим:** {r['regime']}")
         lines.append("")
 
         readings = r.get("key_readings", [])
@@ -92,9 +102,9 @@ def generate_briefing_context(
             for rd in readings:
                 val = rd.get("value")
                 val_str = f"{float(val):.2f}" if val is not None else "—"
-                pct = rd.get("percentile", 50)
+                pct = rd.get("percentile")
                 date_str = str(rd.get("date", ""))[:10]
-                lines.append(f"| {rd.get('label', '')} | {val_str} | {pct:.0f}% | {date_str} |")
+                lines.append(f"| {rd.get('label', '')} | {val_str} | {_fmt_pct(pct)} | {date_str} |")
             lines.append("")
 
         narrative = r.get("narrative", [])
