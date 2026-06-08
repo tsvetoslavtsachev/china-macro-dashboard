@@ -9,27 +9,15 @@ from pathlib import Path
 from typing import Optional
 
 from catalog.series import SERIES_CATALOG
-
-
-MODULE_WEIGHTS = {
-    "growth": 0.30,
-    "inflation": 0.20,
-    "labor": 0.15,
-    "credit": 0.20,
-    "property": 0.15,
-}
-
-MACRO_REGIMES = [
-    (75, "СИЛНА ИКОНОМИКА"),
-    (60, "УМЕРЕН РАСТЕЖ"),
-    (45, "СМЕСЕНИ СИГНАЛИ"),
-    (30, "РЕЦЕСИОНЕН"),
-    (0,  "КРИЗА"),
-]
+# Единствен източник на тегла/режими — config.py. По-рано briefing_context държеше
+# СОБСТВЕНИ (различни) MODULE_WEIGHTS/MACRO_REGIMES, заради което context.md и
+# macro_state.json/deep.html казваха РАЗЛИЧЕН режим за същите данни (audit #8).
+from config import MODULE_WEIGHTS, MACRO_REGIMES
 
 
 def _get_regime(score: float) -> str:
-    for threshold, label in MACRO_REGIMES:
+    # MACRO_REGIMES в config са 3-element (threshold, label, color) → разопаковаме *_.
+    for threshold, label, *_ in MACRO_REGIMES:
         if score >= threshold:
             return label
     return "НЕИЗВЕСТЕН"
