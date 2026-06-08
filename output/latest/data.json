@@ -1,7 +1,7 @@
 {
   "region": "CN",
   "as_of_date": "2026-06-08",
-  "generated_at": "2026-06-08T12:30:44.871793Z",
+  "generated_at": "2026-06-08T13:21:09.154178Z",
   "executive_summary": {
     "composite_score": 36.9,
     "regime_key": "deteriorating",
@@ -22,22 +22,22 @@
         {
           "label": "БВП — реален растеж (YoY %)",
           "value": 4.9774,
-          "percentile": 6.7
+          "percentile": null
         },
         {
           "label": "Индустрия — реален растеж (YoY %)",
           "value": 5.3194,
-          "percentile": 13.3
+          "percentile": null
         },
         {
           "label": "Услуги — реален растеж (YoY %)",
           "value": 4.9558,
-          "percentile": 6.7
+          "percentile": null
         },
         {
           "label": "Брутно капиталообразуване (% от БВП)",
           "value": 40.6112,
-          "percentile": 40.0
+          "percentile": null
         }
       ],
       "narrative": [
@@ -56,12 +56,12 @@
         {
           "label": "ИПЦ — инфлация (YoY %)",
           "value": 0.2181,
-          "percentile": 13.3
+          "percentile": null
         },
         {
           "label": "БВП дефлатор (YoY %)",
           "value": -0.7072,
-          "percentile": 6.7
+          "percentile": null
         },
         {
           "label": "ИПЦ — индекс (месечен, YoY %)",
@@ -90,17 +90,17 @@
         {
           "label": "Безработица — официална (ILO, %)",
           "value": 4.615,
-          "percentile": 76.7
+          "percentile": null
         },
         {
           "label": "Младежка безработица (16-24 г., %)",
           "value": 15.795,
-          "percentile": 96.7
+          "percentile": null
         },
         {
           "label": "Коефициент на участие в работната сила (%)",
           "value": 64.551,
-          "percentile": 0.0
+          "percentile": null
         }
       ],
       "narrative": [
@@ -133,7 +133,7 @@
         {
           "label": "Кредит към частния сектор (% от БВП)",
           "value": 194.166,
-          "percentile": 96.7
+          "percentile": null
         }
       ],
       "narrative": [
@@ -153,22 +153,22 @@
         {
           "label": "Текуща сметка — баланс (% от БВП)",
           "value": 2.2616,
-          "percentile": 50.0
+          "percentile": null
         },
         {
           "label": "Износ — дял от БВП (%)",
           "value": 20.0229,
-          "percentile": 40.0
+          "percentile": null
         },
         {
           "label": "ПЧИ — входящи (% от БВП)",
           "value": 0.099,
-          "percentile": 0.0
+          "percentile": null
         },
         {
           "label": "Брутно фиксирано капиталообразуване (% от БВП)",
           "value": 39.8697,
-          "percentile": 46.7
+          "percentile": null
         }
       ],
       "narrative": [
