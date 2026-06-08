@@ -167,11 +167,11 @@ def run(snapshot: dict[str, pd.Series]) -> dict[str, Any]:
     }
 
 
-def _composite(scores: dict, series_list: list, weights: list) -> float:
+def _composite(scores: dict, series_list: list, weights: list) -> float | None:
     vals = [scores[s]["score"] for s in series_list if s in scores]
     wts = [weights[i] for i, s in enumerate(series_list) if s in scores]
     if not vals:
-        return 50.0
+        return None   # няма композитни серии → изключи лещата от headline (#9)
     return round(sum(v * w for v, w in zip(vals, wts)) / sum(wts), 1)
 
 

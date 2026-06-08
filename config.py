@@ -84,5 +84,22 @@ MACRO_REGIMES = [
 ]
 
 
+def overall_composite(results: list) -> float:
+    """Претеглен composite само върху лещи с НЕ-None composite (reweight).
+
+    Леща без нито една композитна серия връща composite=None (modules._composite),
+    за да не влачи фалшиво 50 в headline-а при (cache-miss ∩ akshare outage) — audit #9.
+    Изключва се ЕДНОВРЕМЕННО от сумата И от теглата (reweight върху backed лещи).
+    Единен източник за всички артефакти (export_api / briefing_context / deep /
+    weekly / run) — да не дрейфа headline-ът между тях.
+    """
+    backed = [r for r in results if r.get("composite") is not None]
+    total_w = sum(MODULE_WEIGHTS.get(r["module"], 0) for r in backed)
+    if not total_w:
+        return 50.0
+    weighted = sum(r["composite"] * MODULE_WEIGHTS.get(r["module"], 0) for r in backed)
+    return round(weighted / total_w, 1)
+
+
 # ─── Изходна папка ───────────────────────────────────────────────────────────
 OUTPUT_DIR = "output"

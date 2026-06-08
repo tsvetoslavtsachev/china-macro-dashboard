@@ -38,7 +38,7 @@ sys.path.insert(0, str(BASE_DIR))
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
-from config import MODULE_WEIGHTS, MACRO_REGIMES, OUTPUT_DIR
+from config import MODULE_WEIGHTS, MACRO_REGIMES, OUTPUT_DIR, overall_composite
 
 
 # ─── Adapter factory ─────────────────────────────────────────────────────────
@@ -211,12 +211,7 @@ def cmd_modules(args) -> int:
             print(f"       → {hint}")
 
     if results:
-        weighted = sum(
-            r["composite"] * MODULE_WEIGHTS.get(r["module"], 0)
-            for r in results
-        )
-        total_weight = sum(MODULE_WEIGHTS.get(r["module"], 0) for r in results)
-        overall = round(weighted / total_weight, 1) if total_weight else 50.0
+        overall = overall_composite(results)   # config: None-safe reweight (#9)
         print()
         print(f"  📊 Композитен Macro Score: {overall:.1f}")
 

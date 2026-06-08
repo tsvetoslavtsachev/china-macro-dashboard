@@ -43,7 +43,7 @@ try:
 except Exception:
     pass
 
-from config import MODULE_WEIGHTS, MACRO_REGIMES
+from config import MODULE_WEIGHTS, MACRO_REGIMES, overall_composite
 from catalog.series import SERIES_CATALOG
 from core.scorer import score_series
 from analysis.divergence import compute_cross_lens_divergence
@@ -117,9 +117,7 @@ def _run_modules(snapshot: dict) -> list[dict]:
 
 
 def _overall_composite(results: list[dict]) -> float:
-    weighted = sum(r["composite"] * MODULE_WEIGHTS.get(r["module"], 0) for r in results)
-    total_w = sum(MODULE_WEIGHTS.get(r["module"], 0) for r in results)
-    return round(weighted / total_w, 1) if total_w else 50.0
+    return overall_composite(results)   # config: None-safe reweight върху backed лещи (#9)
 
 
 def _overall_regime(overall: float) -> tuple[str, str]:

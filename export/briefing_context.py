@@ -12,7 +12,7 @@ from catalog.series import SERIES_CATALOG
 # Единствен източник на тегла/режими — config.py. По-рано briefing_context държеше
 # СОБСТВЕНИ (различни) MODULE_WEIGHTS/MACRO_REGIMES, заради което context.md и
 # macro_state.json/deep.html казваха РАЗЛИЧЕН режим за същите данни (audit #8).
-from config import MODULE_WEIGHTS, MACRO_REGIMES
+from config import MODULE_WEIGHTS, MACRO_REGIMES, overall_composite
 
 
 def _get_regime(score: float) -> str:
@@ -56,9 +56,7 @@ def generate_briefing_context(
             import logging
             logging.getLogger(__name__).error(f"Module {name} failed: {e}")
 
-    weighted = sum(r["composite"] * MODULE_WEIGHTS.get(r["module"], 0) for r in results)
-    total_weight = sum(MODULE_WEIGHTS.get(r["module"], 0) for r in results)
-    overall = round(weighted / total_weight, 1) if total_weight else 50.0
+    overall = overall_composite(results)   # config: None-safe reweight върху backed лещи (#9)
     regime = _get_regime(overall)
 
     lines = []

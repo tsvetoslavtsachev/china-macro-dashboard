@@ -89,7 +89,10 @@ def score_series(
         window = series[series.index >= cutoff]
     else:
         window = series
-    if len(window) < min_obs:
+    # 10г прозорец под min_obs → fallback към пълна история, но маркирай: percentile/z
+    # върху ~14-17 точки (policy-pinned тримесечни) са ненадеждни за display (#12).
+    thin_window = len(window) < min_obs
+    if thin_window:
         window = series
 
     med = float(window.median())
@@ -124,14 +127,15 @@ def score_series(
         "name": name or series.name or "unknown",
         "score": score,
         "health_z": round(float(z_h), 3),
-        "percentile": round(pct, 1),
-        "z_score": round(float(z_report), 2),
+        "percentile": None if thin_window else round(pct, 1),
+        "z_score": None if thin_window else round(float(z_report), 2),
         "current_value": round(current_val, 4),
         "last_date": last_date,
         "yoy_change": yoy,
         "yoy_unit": yoy_unit,
         "invert": invert,
         "history_n": len(window),
+        "thin_window": thin_window,
     }
 
 
@@ -242,4 +246,5 @@ def _empty_score(name: str) -> dict:
         "yoy_unit": "%",
         "invert": False,
         "history_n": 0,
+        "thin_window": True,
     }

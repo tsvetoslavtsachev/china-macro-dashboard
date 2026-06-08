@@ -19,7 +19,7 @@ from typing import Any, Optional
 
 import pandas as pd
 
-from config import MODULE_WEIGHTS, MACRO_REGIMES
+from config import MODULE_WEIGHTS, MACRO_REGIMES, overall_composite
 from catalog.series import SERIES_CATALOG
 from analysis.divergence import compute_cross_lens_divergence
 from analysis.anomaly import compute_anomalies
@@ -270,9 +270,7 @@ def _render_composite(results: list[dict]) -> str:
     if not results:
         return ""
 
-    weighted = sum(r["composite"] * MODULE_WEIGHTS.get(r["module"], 0) for r in results)
-    total_weight = sum(MODULE_WEIGHTS.get(r["module"], 0) for r in results)
-    overall = round(weighted / total_weight, 1) if total_weight else 50.0
+    overall = overall_composite(results)   # config: None-safe reweight върху backed лещи (#9)
 
     regime_label = "—"
     regime_color = "#8b949e"
