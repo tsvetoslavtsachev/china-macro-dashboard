@@ -1,13 +1,13 @@
 {
   "region": "CN",
-  "as_of_date": "2026-06-08",
-  "generated_at": "2026-06-08T17:25:35.544258Z",
+  "as_of_date": "2026-06-15",
+  "generated_at": "2026-06-15T11:41:21.641472Z",
   "executive_summary": {
-    "composite_score": 36.9,
+    "composite_score": 35.3,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 36.9/100 → режим „ВЛОШАВАЩ СЕ“. 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 35.3/100 → режим „ВЛОШАВАЩ СЕ“. 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
@@ -109,9 +109,9 @@
       ]
     },
     "credit": {
-      "score": 48.5,
+      "score": 42.4,
       "direction": "mixed",
-      "regime": "НЕУТРАЛНА ПОЛИТИКА",
+      "regime": "УМЕРЕНО ЗАТЯГАНЕ",
       "label_bg": "Монетарна политика и кредит",
       "indicators_count": 10,
       "key_readings": [
