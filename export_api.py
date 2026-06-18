@@ -128,6 +128,15 @@ def _overall_regime(overall: float) -> tuple[str, str]:
     return "—", "unknown"
 
 
+def _series_regime(score) -> str | None:
+    """Per-series режим-етикет от 0–100 score (същите MACRO_REGIMES прагове като
+    композита). Заменя `score_data.get("regime_label")` — score_series НЕ връща
+    такъв ключ (нито `regime`), затова `latest.regime` беше null по конструкция."""
+    if score is None or (isinstance(score, float) and math.isnan(score)):
+        return None
+    return _overall_regime(score)[0]
+
+
 # ── macro_state.json builder ─────────────────────────────────────────────────
 def build_macro_state(snapshot: dict, today: date) -> dict:
     print("  🧮 Изпълнявам 5-те модула...")
@@ -278,7 +287,7 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
                 "percentile": _clean(score_data.get("percentile")),
                 "z_score": _clean(score_data.get("z_score")),
                 "score": _clean(score_data.get("score")),
-                "regime": score_data.get("regime_label"),
+                "regime": _series_regime(score_data.get("score")),
             },
             "chart": {"dates": dates, "values": values},
         }
