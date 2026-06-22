@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-06-15",
-  "generated_at": "2026-06-15T11:41:21Z",
-  "data_generated_at": "2026-06-15T11:41:21.641472Z",
-  "composite_score": 35.3,
+  "as_of_date": "2026-06-22",
+  "generated_at": "2026-06-22T11:28:52Z",
+  "data_generated_at": "2026-06-22T11:28:52.556482Z",
+  "composite_score": 33.9,
   "regime": {
-    "key": "deteriorating",
-    "label_bg": "ВЛОШАВАЩ СЕ"
+    "key": "recessionary",
+    "label_bg": "РЕЦЕСИОНЕН"
   },
   "lenses": [
     {
@@ -19,7 +19,7 @@
     {
       "key": "inflation",
       "label_bg": "Инфлация и цени",
-      "score": 50.6,
+      "score": 48.0,
       "direction": "mixed"
     },
     {
@@ -37,7 +37,7 @@
     {
       "key": "property",
       "label_bg": "Имоти и търговия",
-      "score": 30.5,
+      "score": 25.2,
       "direction": "contracting"
     }
   ],
