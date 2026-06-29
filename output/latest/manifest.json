@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-06-22",
-  "generated_at": "2026-06-22T11:28:52Z",
-  "data_generated_at": "2026-06-22T11:28:52.556482Z",
-  "composite_score": 33.9,
+  "as_of_date": "2026-06-29",
+  "generated_at": "2026-06-29T10:17:37Z",
+  "data_generated_at": "2026-06-29T10:17:36.943237Z",
+  "composite_score": 33.3,
   "regime": {
     "key": "recessionary",
     "label_bg": "РЕЦЕСИОНЕН"
@@ -13,7 +13,7 @@
     {
       "key": "growth",
       "label_bg": "Растеж и активност",
-      "score": 30.6,
+      "score": 29.9,
       "direction": "contracting"
     },
     {
@@ -37,7 +37,7 @@
     {
       "key": "property",
       "label_bg": "Имоти и търговия",
-      "score": 25.2,
+      "score": 23.2,
       "direction": "contracting"
     }
   ],
@@ -46,14 +46,7 @@
       "series_id": "CN_LPR_1Y",
       "name_bg": "1-годишен Loan Prime Rate (PBoC)",
       "lens": "credit",
-      "z_score": -2.564,
-      "direction": "down"
-    },
-    {
-      "series_id": "CN_CGB_10Y",
-      "name_bg": "10Y China Government Bond yield",
-      "lens": "credit",
-      "z_score": -2.237,
+      "z_score": -2.558,
       "direction": "down"
     },
     {
@@ -66,7 +59,7 @@
   ],
   "counts": {
     "lenses": 5,
-    "anomalies": 3,
+    "anomalies": 2,
     "divergences": 3
   },
   "links": {

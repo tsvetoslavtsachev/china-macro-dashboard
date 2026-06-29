@@ -1,19 +1,19 @@
 {
   "region": "CN",
-  "as_of_date": "2026-06-22",
-  "generated_at": "2026-06-22T11:28:52.556482Z",
+  "as_of_date": "2026-06-29",
+  "generated_at": "2026-06-29T10:17:36.943237Z",
   "executive_summary": {
-    "composite_score": 33.9,
+    "composite_score": 33.3,
     "regime_key": "recessionary",
     "regime_label_bg": "РЕЦЕСИОНЕН",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 33.9/100 → режим „РЕЦЕСИОНЕН“. 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 33.3/100 → режим „РЕЦЕСИОНЕН“. 5 лещи, 2 flagged аномалии (5 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
   "lenses": {
     "growth": {
-      "score": 30.6,
+      "score": 29.9,
       "direction": "contracting",
       "regime": "РЕЦЕСИЯ",
       "label_bg": "Растеж и активност",
@@ -41,7 +41,7 @@
         }
       ],
       "narrative": [
-        "Продажби на дребно +0.2% YoY — слабо потребление, структурно под пред-COVID нивата.",
+        "Продажби на дребно -0.6% YoY — слабо потребление, структурно под пред-COVID нивата.",
         "NBS Manufacturing PMI 50.0 — на границата 50; крехка активност.",
         "БВП растеж 5.0% — около официалния таргет ~5% (policy-pinned, почти не мърда)."
       ]
@@ -144,7 +144,7 @@
       ]
     },
     "property": {
-      "score": 25.2,
+      "score": 23.2,
       "direction": "contracting",
       "regime": "ИМОТНА КРИЗА",
       "label_bg": "Имоти и търговия",
@@ -173,7 +173,7 @@
       ],
       "narrative": [
         "Цени на жилища (70 града, нови) +0.6% YoY — стабилизация след корекцията.",
-        "⚠️ Инвестиции в дълготрайни активи -12.0% YoY (месечно) — рязко свиване на инвестиционния цикъл.",
+        "⚠️ Инвестиции в дълготрайни активи -17.1% YoY (месечно) — рязко свиване на инвестиционния цикъл.",
         "BIS жилищни цени -7.5% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.",
         "ПЧИ 0.10% от БВП — исторически минимум. Геополитически de-risking от западни компании.",
         "Текуща сметка +2.3% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU."
@@ -188,32 +188,15 @@
         "credit"
       ],
       "peer_group": "rates",
-      "z_score": -2.564,
+      "z_score": -2.558,
       "direction": "down",
       "current_value": 3.0,
-      "last_date": "2026-05-20",
+      "last_date": "2026-06-22",
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
-      "periods_behind": 0.37,
-      "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
-    },
-    {
-      "series_id": "CN_CGB_10Y",
-      "name_bg": "10Y China Government Bond yield",
-      "lens": [
-        "credit"
-      ],
-      "peer_group": "rates",
-      "z_score": -2.237,
-      "direction": "down",
-      "current_value": 1.72,
-      "last_date": "2026-05-31",
-      "is_new_extreme": false,
-      "new_extreme_direction": null,
-      "stale": false,
       "periods_behind": 0.0,
-      "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
+      "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
     },
     {
       "series_id": "CN_YOUTH_UNEMPLOYMENT",
@@ -229,16 +212,17 @@
       "is_new_extreme": true,
       "new_extreme_direction": "max",
       "stale": false,
-      "periods_behind": 0.41,
+      "periods_behind": 0.47,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
     }
   ],
-  "anomalies_stale_excluded": 4,
+  "anomalies_stale_excluded": 5,
   "anomalies_stale_excluded_keys": [
     "CN_CREDIT_PRIVATE",
     "CN_FDI_GDP",
     "CN_POLICY_RATE",
-    "CN_BIS_PROPERTY_YOY"
+    "CN_BIS_PROPERTY_YOY",
+    "CN_CGB_10Y"
   ],
   "cross_lens_divergences": [
     {

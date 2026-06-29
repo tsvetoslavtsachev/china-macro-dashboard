@@ -1,0 +1,37 @@
+{
+  "as_of": "2026-06-22",
+  "generated_on": "2026-06-29",
+  "regime_label": "recessionary",
+  "regime_label_bg": "РЕЦЕСИОНЕН",
+  "cross_lens_states": {
+    "credit_real_economy": "transition",
+    "monetary_inflation_trap": "a_up_b_down",
+    "external_domestic_balance": "a_up_b_down"
+  },
+  "breadth_by_pg": {
+    "growth/diffusion_indices": 0.8,
+    "growth/gdp": 0.25,
+    "growth/gdp_quarterly": null,
+    "growth/hard_activity": 0.333,
+    "growth/investment": null,
+    "inflation/cpi": 0.25,
+    "inflation/deflator_quarterly": null,
+    "inflation/ppi": 0.5,
+    "labor/unemployment": 0.667,
+    "credit/credit_depth": 0.5,
+    "credit/currency": null,
+    "credit/rates": 0.0,
+    "property/housing": 0.5,
+    "property/investment": 0.0,
+    "property/trade": 0.833
+  },
+  "high_nc_keys": [],
+  "top_anomaly_keys": [
+    "CN_LPR_1Y",
+    "CN_YOUTH_UNEMPLOYMENT"
+  ],
+  "new_extreme_keys": [
+    "CN_LPR_1Y",
+    "CN_YOUTH_UNEMPLOYMENT"
+  ]
+}
