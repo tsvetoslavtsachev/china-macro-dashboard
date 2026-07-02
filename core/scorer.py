@@ -98,25 +98,48 @@ def score_series(
     med = float(window.median())
     mad = float((window - med).abs().median())
     scale = 1.4826 * mad
+
+    # REVIEW-03 т.0.9 (P3-fix-B): административно пиннати серии (LPR клас) —
+    # медианата доминира прозореца (>50% еднакви котировки) → MAD=0 → фалшиво
+    # "неутрално" (score 50) при реален всеисторически екстремум. Fallback:
+    # нормата от пълната история (огледално на thin_window пътя). Ако и тя е
+    # дегенерирала (константа навсякъде) → неутрално, но с изричен флаг.
+    scale_fallback = False
+    if (scale == 0 or np.isnan(scale)) and not thin_window and len(series) > len(window):
+        window = series
+        med = float(window.median())
+        mad = float((window - med).abs().median())
+        scale = 1.4826 * mad
+        scale_fallback = True
+
+    degenerate = bool(scale == 0 or np.isnan(scale))
     pct = percentile_rank(current_val, window)  # второстепенно (за display)
 
     pol = polarity if polarity is not None else (-1 if invert else 1)
 
     if isinstance(pol, tuple) and pol and pol[0] == "U":
         # U-форма: отклонение в двете посоки = по-зле
-        if scale == 0 or np.isnan(scale):
-            z_h, z_report = float(band), 0.0
+        if degenerate:
+            # Преди: z_h=band → score ~73 от константа. Сега: неутрално + флаг.
+            z_h, z_report = 0.0, 0.0
         else:
             center = float(pol[2]) if pol[1] == "target" else med
             z_report = (current_val - med) / scale
             z_h = band - abs((current_val - center) / scale)
     else:
-        if scale == 0 or np.isnan(scale):
+        if degenerate:
             z_h, z_report = 0.0, 0.0
         else:
             z_report = (current_val - med) / scale
             sign = float(pol) if pol in (1, -1, +1) else 1.0
             z_h = sign * z_report
+
+    if scale_fallback:
+        # Full-history MAD на пиннати серии е миниатюрен (плата от еднакви
+        # котировки) → козметично огромни z (LPR даваше 88σ). Клип по display
+        # конвенцията ±6σ (както US anomaly cap); score-ът е ~сатуриран така или иначе.
+        z_h = float(np.clip(z_h, -6.0, 6.0))
+        z_report = float(np.clip(z_report, -6.0, 6.0))
 
     score = round(50.0 * (1.0 + np.tanh(z_h / 2.0)), 1)
 
@@ -136,6 +159,10 @@ def score_series(
         "invert": invert,
         "history_n": len(window),
         "thin_window": thin_window,
+        # REVIEW-03 т.0.9: True когато 10-г. прозорец е MAD=0 и нормата идва
+        # от пълната история; degenerate=True когато и тя е константа.
+        "scale_fallback": scale_fallback,
+        "degenerate": degenerate,
     }
 
 
