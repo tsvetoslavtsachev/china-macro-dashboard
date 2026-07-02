@@ -50,6 +50,12 @@ from analysis.divergence import compute_cross_lens_divergence
 from analysis.anomaly import compute_anomalies
 from run import _build_adapters, _build_snapshot, _auto_refresh_stale
 
+import modules.growth
+import modules.credit
+import modules.property
+import modules.inflation
+import modules.labor
+
 # ── константи ───────────────────────────────────────────────────────────────
 OUTPUT_DIR = BASE_DIR / "output" / "api"
 HISTORY_START = "1999-01-01"
@@ -62,6 +68,44 @@ MODULES_ORDER = [
     ("credit", "modules.credit"),
     ("property", "modules.property"),
 ]
+
+# REVIEW-03 т.0.2 (P3-fix-A): агрегатен invert/transform lookup от петте
+# модула — build_series_data() трябва да score-ва СЪЩАТА (invert+трансформ.)
+# серия като модулите (modules/*.py), иначе export-ът дава грешен score
+# (напр. CN_YOUTH_UNEMPLOYMENT invert=True излизаше "отличен" при рекорден
+# връх; CN_CPI_INDEX transform=yoy_pct се score-ваше на суровото ниво).
+# Единен източник = модулните SERIES dict-ове (НЕ hardcode копие тук).
+_META_MODULES = [
+    modules.growth.SERIES,
+    modules.credit.SERIES,
+    modules.property.SERIES,
+    modules.inflation.SERIES,
+    modules.labor.SERIES,
+]
+SERIES_META: dict[str, dict[str, Any]] = {}
+for _series_dict in _META_MODULES:
+    for _sid, _meta in _series_dict.items():
+        SERIES_META[_sid] = {
+            "invert": _meta.get("invert", False),
+            "transform": _meta.get("transform", "level"),
+        }
+del _series_dict, _sid, _meta, _META_MODULES
+
+
+def _apply_transform(series: pd.Series, transform: str) -> pd.Series:
+    """Union на всички transform типове, наблюдавани в петте модула
+    (modules/growth.py, credit.py, inflation.py, property.py, labor.py).
+    Огледален механизъм — level е no-op passthrough (fallback за неизвестен
+    transform стринг), както при всеки модул."""
+    if transform == "yoy_pct":
+        return series.pct_change(periods=12).dropna() * 100
+    if transform == "qoq_pct":
+        return series.pct_change(periods=4).dropna() * 100
+    if transform == "mom_pct":
+        return series.pct_change().dropna() * 100
+    if transform == "first_diff":
+        return series.diff().dropna()
+    return series
 
 # China MACRO_REGIMES BG label → english slug (за regime_key, симетрия с US/EU)
 REGIME_KEY_MAP = {
@@ -256,10 +300,22 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
         primary_lens = lens_list[0] if lens_list else "other"
         is_rate = meta.get("is_rate", False)
 
+        # REVIEW-03 т.0.2 (P3-fix-A): invert/transform от SERIES_META (петте
+        # модула) — БЕЗ това, invert=True серии (CN_YOUTH_UNEMPLOYMENT) и
+        # transform=yoy_pct серии (CN_CPI_INDEX) score-ваха грешно (виж
+        # docstring на SERIES_META по-горе). Ключ извън SERIES_META (нито
+        # един модул не го носи) → fallback към старото поведение
+        # (invert=False, level passthrough) — БЕЗ exception.
+        series_meta = SERIES_META.get(series_id, {})
+        series_invert = series_meta.get("invert", False)
+        series_transform = series_meta.get("transform", "level")
+        scored_series = _apply_transform(raw_series, series_transform)
+
         try:
             score_data = score_series(
-                raw_series,
+                scored_series,
                 history_start=meta.get("historical_start", HISTORY_START),
+                invert=series_invert,
                 name=series_id,
                 is_rate=is_rate,
             )
