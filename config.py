@@ -83,8 +83,14 @@ MACRO_REGIMES = [
     (0,  "РЕЦЕСИОНЕН",     "#d50000"),
 ]
 
+# REVIEW-03 т.0.8 (P3-fix-A): под за брой backed лещи, преди композитът да е
+# смислен headline. При <3/5 backed лещи, reweight формулата долу би дала
+# число, съставено от 1-2 лещи, представено под етикета "Композитен Macro
+# Score" — availability flip (demo: labor-only 18.6 → "РЕЦЕСИОНЕН"), не сигнал.
+MIN_BACKED_LENSES = 3
 
-def overall_composite(results: list) -> float:
+
+def overall_composite(results: list) -> float | None:
     """Претеглен composite само върху лещи с НЕ-None composite (reweight).
 
     Леща без нито една композитна серия връща composite=None (modules._composite),
@@ -92,11 +98,19 @@ def overall_composite(results: list) -> float:
     Изключва се ЕДНОВРЕМЕННО от сумата И от теглата (reweight върху backed лещи).
     Единен източник за всички артефакти (export_api / briefing_context / deep /
     weekly / run) — да не дрейфа headline-ът между тях.
+
+    REVIEW-03 т.0.8 (P3-fix-A): под MIN_BACKED_LENSES (3/5) backed лещи →
+    None (недостатъчно за headline), вместо reweight върху 1-2 лещи.
+    Старият `total_w == 0 → 50.0` клон е недостижим по спец сега (MIN_BACKED_
+    LENSES гейтът хваща 0-backed случая по-рано с None) — заменен изрично,
+    не изтрит тихо.
     """
     backed = [r for r in results if r.get("composite") is not None]
+    if len(backed) < MIN_BACKED_LENSES:
+        return None
     total_w = sum(MODULE_WEIGHTS.get(r["module"], 0) for r in backed)
     if not total_w:
-        return 50.0
+        return None
     weighted = sum(r["composite"] * MODULE_WEIGHTS.get(r["module"], 0) for r in backed)
     return round(weighted / total_w, 1)
 

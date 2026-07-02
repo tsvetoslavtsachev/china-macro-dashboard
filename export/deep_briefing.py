@@ -130,8 +130,14 @@ def _overall_composite(results: list[dict]) -> float:
     return overall_composite(results)   # config: None-safe reweight върху backed лещи (#9)
 
 
-def _overall_regime(overall: float) -> tuple[str, str, str]:
-    """(regime_label_bg, regime_key, color) по MACRO_REGIMES праговете."""
+def _overall_regime(overall: float | None) -> tuple[str, str, str]:
+    """(regime_label_bg, regime_key, color) по MACRO_REGIMES праговете.
+
+    REVIEW-03 т.0.8 (P3-fix-A): overall=None (< MIN_BACKED_LENSES backed лещи,
+    config.overall_composite) → изричен "insufficient" ключ, не TypeError и
+    не фалшив режимен label от default клона."""
+    if overall is None or overall != overall:
+        return "Недостатъчно данни", "insufficient", "#8b949e"
     for threshold, label, color in MACRO_REGIMES:
         if overall >= threshold:
             return label, REGIME_KEY_MAP.get(label, label), color
@@ -231,7 +237,10 @@ def _render_header(today, as_of, snapshot, nc_report, anomaly_report, regime_sna
     n_anom = anomaly_report.total_flagged
 
     color = _score_color(regime_snap.composite)
-    score_str = "—" if regime_snap.composite != regime_snap.composite else f"{regime_snap.composite:.1f}"
+    # REVIEW-03 т.0.8 (P3-fix-A): composite=None (< MIN_BACKED_LENSES) — старата
+    # `!= self` проверка хващаше само NaN, не None (None != None е False в Python).
+    _c = regime_snap.composite
+    score_str = "—" if (_c is None or _c != _c) else f"{_c:.1f}"
 
     return f"""
 <header class="brief-header">
@@ -289,6 +298,13 @@ def _render_regime_headline(regime_snap, results, anomaly_report) -> str:
 </tr>
 """)
 
+    # REVIEW-03 т.0.8 (P3-fix-A): composite=None (< MIN_BACKED_LENSES) — избягва
+    # TypeError от f"{None:.1f}".
+    _composite_txt = (
+        f"{regime_snap.composite:.1f}"
+        if isinstance(regime_snap.composite, (int, float)) and regime_snap.composite == regime_snap.composite
+        else "—"
+    )
     return f"""
 <section class="brief-section exec-section">
   <h2>Регимна диагноза</h2>
@@ -296,7 +312,7 @@ def _render_regime_headline(regime_snap, results, anomaly_report) -> str:
     <div class="regime-badge" style="background:{color}22;color:{color};border-color:{color}66">
       <div class="regime-label">Композитен режим</div>
       <div class="regime-val">{regime_bg}</div>
-      <div class="regime-driver">composite {regime_snap.composite:.1f}/100</div>
+      <div class="regime-driver">composite {_composite_txt}/100</div>
     </div>
     <div class="exec-narrative">{html.escape(regime_snap.narrative_bg)}</div>
   </div>
@@ -1001,8 +1017,12 @@ def generate_deep_briefing(
 
 
 def _build_narrative(overall, regime_bg, results, anomaly_report, cross_report) -> str:
-    """Детерминистичен factual narrative — без invented causal claims."""
-    parts = [f"Претеглен композитен macro score {overall:.1f}/100 → режим „{regime_bg}“."]
+    """Детерминистичен factual narrative — без invented causal claims.
+
+    REVIEW-03 т.0.8 (P3-fix-A): overall=None (< MIN_BACKED_LENSES backed лещи)
+    → текстов "—" вместо TypeError от f"{None:.1f}"."""
+    overall_txt = f"{overall:.1f}" if isinstance(overall, (int, float)) else "—"
+    parts = [f"Претеглен композитен macro score {overall_txt}/100 → режим „{regime_bg}“."]
 
     scored = [r for r in results if isinstance(r.get("composite"), (int, float))]
     if scored:

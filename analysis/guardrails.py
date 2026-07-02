@@ -461,7 +461,17 @@ def _falsifiers_recessionary(
     return out
 
 
-def _falsifier_composite_band(regime_key: str, overall: float) -> ChinaFalsifier:
+def _falsifier_composite_band(regime_key: str, overall: float | None) -> ChinaFalsifier:
+    # REVIEW-03 т.0.8 (P3-fix-A) каскада: regime_key="insufficient" идва с
+    # overall=None (config.overall_composite < MIN_BACKED_LENSES backed лещи)
+    # — без жив композит за band-сравнение, критерият е "следи се", не triggered.
+    if overall is None or overall != overall:
+        return ChinaFalsifier(
+            "composite_exits_band",
+            "Композитният macro score (недостатъчно backed лещи за оценка)",
+            STATUS_MONITORED,
+            "—",
+        )
     thresholds = {"recessionary": 35.0, "deteriorating": 50.0, "mixed": 65.0,
                   "healthy": 50.0, "expansionary": 65.0}
     th = thresholds.get(regime_key, 35.0)

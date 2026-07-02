@@ -164,8 +164,14 @@ def _overall_composite(results: list[dict]) -> float:
     return overall_composite(results)   # config: None-safe reweight върху backed лещи (#9)
 
 
-def _overall_regime(overall: float) -> tuple[str, str]:
-    """Връща (regime_label_bg, regime_key) по MACRO_REGIMES праговете."""
+def _overall_regime(overall: float | None) -> tuple[str, str]:
+    """Връща (regime_label_bg, regime_key) по MACRO_REGIMES праговете.
+
+    REVIEW-03 т.0.8 (P3-fix-A): overall=None (< MIN_BACKED_LENSES backed лещи,
+    config.overall_composite) → изричен "insufficient" ключ, не фалшив
+    „СМЕСЕН"/MIXED от default клона и не TypeError от None >= threshold."""
+    if overall is None or overall != overall:
+        return "Недостатъчно данни", "insufficient"
     for threshold, label, _color in MACRO_REGIMES:
         if overall >= threshold:
             return label, REGIME_KEY_MAP.get(label, label)
@@ -255,8 +261,17 @@ def build_macro_state(snapshot: dict, today: date) -> dict:
         f" ({anomaly_report.stale_excluded} застояли изключени)"
         if anomaly_report.stale_excluded else ""
     )
+    # REVIEW-03 т.0.8 (P3-fix-A): "X/5 backed" — ВИНАГИ попълнено (не само при
+    # проблем), за да е ясно колко лещи стоят зад композита.
+    n_backed = sum(1 for r in results if r.get("composite") is not None)
+    lenses_backed = f"{n_backed}/{len(MODULES_ORDER)}"
+
+    # overall=None (< MIN_BACKED_LENSES) → narrative текст без TypeError от
+    # f"{None:.1f}".
+    overall_txt = f"{overall:.1f}" if isinstance(overall, (int, float)) and overall == overall else "—"
     narrative = (
-        f"Претеглен композитен macro score {overall:.1f}/100 → режим „{regime_label_bg}“. "
+        f"Претеглен композитен macro score {overall_txt}/100 → режим „{regime_label_bg}“ "
+        f"({lenses_backed} лещи). "
         f"{len(lenses_out)} лещи, {anomaly_report.total_flagged} flagged аномалии{stale_note}, "
         f"{len(cross_divs)} cross-lens двойки."
     )
@@ -269,6 +284,7 @@ def build_macro_state(snapshot: dict, today: date) -> dict:
             "composite_score": overall,
             "regime_key": regime_key,
             "regime_label_bg": regime_label_bg,
+            "lenses_backed": lenses_backed,
             "css_class": None,
             "narrative": narrative,
             "supporting_signals": [],

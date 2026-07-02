@@ -278,11 +278,17 @@ def _render_composite(results: list[dict]) -> str:
 
     regime_label = "—"
     regime_color = "#8b949e"
-    for threshold, label, color in MACRO_REGIMES:
-        if overall >= threshold:
-            regime_label = label
-            regime_color = color
-            break
+    # REVIEW-03 т.0.8 (P3-fix-A) каскада: overall=None (< MIN_BACKED_LENSES
+    # backed лещи, config.overall_composite) — "Недостатъчно данни" вместо
+    # TypeError от None >= threshold.
+    if overall is None or overall != overall:
+        regime_label = "Недостатъчно данни"
+    else:
+        for threshold, label, color in MACRO_REGIMES:
+            if overall >= threshold:
+                regime_label = label
+                regime_color = color
+                break
 
     score_color = _score_color(overall)
 
@@ -307,10 +313,12 @@ def _render_composite(results: list[dict]) -> str:
         </div>
         """
 
+    # REVIEW-03 т.0.8 (P3-fix-A) каскада: overall=None → "—" вместо TypeError.
+    overall_txt = f"{overall:.1f}" if isinstance(overall, (int, float)) and overall == overall else "—"
     return f"""
 <div class="composite-card">
   <div class="score-circle" style="border-color:{score_color}">
-    <span class="score-num" style="color:{score_color}">{overall:.1f}</span>
+    <span class="score-num" style="color:{score_color}">{overall_txt}</span>
     <span class="score-label">SCORE</span>
   </div>
   <div class="composite-info" style="flex:1">
