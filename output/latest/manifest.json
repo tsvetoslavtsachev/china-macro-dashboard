@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-06-29",
-  "generated_at": "2026-06-29T10:17:37Z",
-  "data_generated_at": "2026-06-29T10:17:36.943237Z",
-  "composite_score": 33.3,
+  "as_of_date": "2026-07-06",
+  "generated_at": "2026-07-06T09:49:39Z",
+  "data_generated_at": "2026-07-06T09:49:39.540925Z",
+  "composite_score": 35.7,
   "regime": {
-    "key": "recessionary",
-    "label_bg": "РЕЦЕСИОНЕН"
+    "key": "deteriorating",
+    "label_bg": "ВЛОШАВАЩ СЕ"
   },
   "lenses": [
     {
@@ -31,7 +31,7 @@
     {
       "key": "credit",
       "label_bg": "Монетарна политика и кредит",
-      "score": 42.4,
+      "score": 52.3,
       "direction": "mixed"
     },
     {
