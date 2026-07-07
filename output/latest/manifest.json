@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-07-06",
-  "generated_at": "2026-07-06T09:49:39Z",
-  "data_generated_at": "2026-07-06T09:49:39.540925Z",
+  "as_of_date": "2026-07-08",
+  "generated_at": "2026-07-07T21:20:07Z",
+  "data_generated_at": "2026-07-07T21:20:06.954048Z",
   "composite_score": 35.7,
   "regime": {
     "key": "deteriorating",
@@ -55,11 +55,18 @@
       "lens": "labor",
       "z_score": 2.225,
       "direction": "up"
+    },
+    {
+      "series_id": "CN_CGB_10Y",
+      "name_bg": "10Y China Government Bond yield",
+      "lens": "credit",
+      "z_score": -2.221,
+      "direction": "down"
     }
   ],
   "counts": {
     "lenses": 5,
-    "anomalies": 2,
+    "anomalies": 3,
     "divergences": 3
   },
   "links": {

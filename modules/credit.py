@@ -78,6 +78,16 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
+    # S7 CN-1 fix: catalog-only досега → SERIES_META fallback invert=False →
+    # рекордно нисък ипотечен LPR четеше "17.6 РЕЦЕСИОНЕН" вместо easing (~82).
+    # LPR клас = rate, по-ниска = easing = по-добре → invert=True. Reading, НЕ в
+    # композита (COMPOSITE_SERIES остава непроменен — 1Y LPR носи policy stance).
+    "CN_LPR_5Y": {
+        "label": "5-годишен Loan Prime Rate — mortgage benchmark (%)",
+        "invert": True,    # по-ниска = easing = по-добре (ипотечен бенчмарк)
+        "transform": "level",
+        "is_rate": True,
+    },
     "CN_BIS_CREDIT_GDP": {
         "label": "Кредит към частния нефинансов сектор (% от БВП, BIS)",
         "invert": True,    # висок дял = debt overhang = по-лошо

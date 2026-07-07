@@ -47,7 +47,7 @@ from config import MODULE_WEIGHTS, MACRO_REGIMES, overall_composite
 from catalog.series import SERIES_CATALOG
 from core.scorer import score_series
 from analysis.divergence import compute_cross_lens_divergence
-from analysis.anomaly import compute_anomalies
+from analysis.anomaly import compute_anomalies, _periods_behind, _is_stale
 from run import _build_adapters, _build_snapshot, _auto_refresh_stale
 
 import modules.growth
@@ -341,6 +341,18 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
         dates = [str(d.date()) for d in filtered.index]
         values = [_clean(float(v)) for v in filtered.values]
 
+        # S7 CN-1: staleness gate — карта със застояли данни за каденцията си НЕ
+        # бива да „свети ЗДРАВ" (застоял PPI от 2022-12 показваше 76.8/ЗДРАВ).
+        # N = каденция-нормиран праг, преизползван от anomaly слоя (един източник):
+        # monthly >3 периода (90д) · quarterly >2 · annually >1 · daily >21д.
+        # Стар (замразен) отпечатък: regime → "ЗАСТОЯЛ" (не здрав етикет) + явни
+        # флагове stale/periods_behind, за да не се цитира като „сега".
+        release_sched = meta.get("release_schedule", "monthly")
+        periods_behind = _periods_behind(
+            filtered.index[-1], pd.Timestamp(today), release_sched
+        )
+        stale = _is_stale(periods_behind, release_sched)
+
         series_out[series_id] = {
             "meta": {
                 "name_bg": meta.get("name_bg", series_id),
@@ -350,7 +362,7 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
                 "peer_group": meta.get("peer_group", ""),
                 "transform": meta.get("transform", "level"),
                 "is_rate": is_rate,
-                "release_schedule": meta.get("release_schedule", "monthly"),
+                "release_schedule": release_sched,
                 "narrative_hint": meta.get("narrative_hint", ""),
             },
             "latest": {
@@ -359,7 +371,9 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
                 "percentile": _clean(score_data.get("percentile")),
                 "z_score": _clean(score_data.get("z_score")),
                 "score": _clean(score_data.get("score")),
-                "regime": _series_regime(score_data.get("score")),
+                "regime": "ЗАСТОЯЛ" if stale else _series_regime(score_data.get("score")),
+                "stale": stale,
+                "periods_behind": round(periods_behind, 2),
             },
             "chart": {"dates": dates, "values": values},
         }

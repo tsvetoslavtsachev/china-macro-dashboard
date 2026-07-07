@@ -1,14 +1,14 @@
 {
   "region": "CN",
-  "as_of_date": "2026-07-06",
-  "generated_at": "2026-07-06T09:49:39.540925Z",
+  "as_of_date": "2026-07-08",
+  "generated_at": "2026-07-07T21:20:06.954048Z",
   "executive_summary": {
     "composite_score": 35.7,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "lenses_backed": "5/5",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 35.7/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 2 flagged аномалии (5 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 35.7/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
@@ -114,7 +114,7 @@
       "direction": "mixed",
       "regime": "НЕУТРАЛНА ПОЛИТИКА",
       "label_bg": "Монетарна политика и кредит",
-      "indicators_count": 10,
+      "indicators_count": 11,
       "key_readings": [
         {
           "label": "Политическа лихва — PBoC 7-day repo (%)",
@@ -196,7 +196,7 @@
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
-      "periods_behind": 0.0,
+      "periods_behind": 0.27,
       "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
     },
     {
@@ -213,17 +213,33 @@
       "is_new_extreme": true,
       "new_extreme_direction": "max",
       "stale": false,
-      "periods_behind": 0.47,
+      "periods_behind": 0.5,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
+    },
+    {
+      "series_id": "CN_CGB_10Y",
+      "name_bg": "10Y China Government Bond yield",
+      "lens": [
+        "credit"
+      ],
+      "peer_group": "rates",
+      "z_score": -2.221,
+      "direction": "down",
+      "current_value": 1.718,
+      "last_date": "2026-06-30",
+      "is_new_extreme": false,
+      "new_extreme_direction": null,
+      "stale": false,
+      "periods_behind": 0.0,
+      "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
     }
   ],
-  "anomalies_stale_excluded": 5,
+  "anomalies_stale_excluded": 4,
   "anomalies_stale_excluded_keys": [
     "CN_CREDIT_PRIVATE",
     "CN_FDI_GDP",
     "CN_POLICY_RATE",
-    "CN_BIS_PROPERTY_YOY",
-    "CN_CGB_10Y"
+    "CN_BIS_PROPERTY_YOY"
   ],
   "cross_lens_divergences": [
     {
