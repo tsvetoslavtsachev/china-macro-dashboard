@@ -1,24 +1,24 @@
 {
   "region": "CN",
   "as_of_date": "2026-07-08",
-  "generated_at": "2026-07-07T21:20:06.954048Z",
+  "generated_at": "2026-07-07T21:35:28.826547Z",
   "executive_summary": {
-    "composite_score": 35.7,
+    "composite_score": 40.1,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "lenses_backed": "5/5",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 35.7/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 40.1/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
   "lenses": {
     "growth": {
-      "score": 29.9,
-      "direction": "contracting",
-      "regime": "РЕЦЕСИЯ",
+      "score": 44.5,
+      "direction": "mixed",
+      "regime": "ПОД ТАРГЕТ",
       "label_bg": "Растеж и активност",
-      "indicators_count": 10,
+      "indicators_count": 11,
       "key_readings": [
         {
           "label": "БВП — реален растеж (YoY %)",

@@ -2,9 +2,9 @@
   "schema_version": "1.0",
   "region": "CN",
   "as_of_date": "2026-07-08",
-  "generated_at": "2026-07-07T21:20:07Z",
-  "data_generated_at": "2026-07-07T21:20:06.954048Z",
-  "composite_score": 35.7,
+  "generated_at": "2026-07-07T21:35:29Z",
+  "data_generated_at": "2026-07-07T21:35:28.826547Z",
+  "composite_score": 40.1,
   "regime": {
     "key": "deteriorating",
     "label_bg": "ВЛОШАВАЩ СЕ"
@@ -13,8 +13,8 @@
     {
       "key": "growth",
       "label_bg": "Растеж и активност",
-      "score": 29.9,
-      "direction": "contracting"
+      "score": 44.5,
+      "direction": "mixed"
     },
     {
       "key": "inflation",

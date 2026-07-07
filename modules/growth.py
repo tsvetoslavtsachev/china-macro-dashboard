@@ -9,13 +9,20 @@ Growth lens за China macro dashboard.
   - GDP deflator отрицателен → реалният растеж е надценен спрямо номиналния
   - Капиталообразуването (~40% GDP) е investment-driven growth модел
 
-Composite weights:
-  GDP growth        0.35 — headline, политически benchmark
-  Industry growth   0.30 — реална активност, по-малко манипулируема
-  Services growth   0.20 — структурен преход
-  Capital formation 0.15 — investment cycle proxy
+Composite (re-base 2026-06 + S7 CN-2 независимост) — реалните драйвери, НЕ годишните:
+  Retail sales YoY      0.30 — потребление (месечен, свеж)
+  NBS Manufacturing PMI 0.25 — официален производствен PMI
+  NBS Non-Mfg PMI       0.20 — официален услугов/строителен PMI
+  Caixin Composite PMI  0.25 — НЕЗАВИСИМ частен survey (S&P/Markit, ~650 фирми),
+                               cross-check на официалните NBS PMI-та (bloomberg-bridge)
+Годишните WB серии (GDP/Industry/Services/Capital) остават като фон/readings, НЕ драйвери.
 
-Convention: висок YoY % растеж = висок score = здрав растеж.
+S7 CN-2 забележка: Caixin mfg/svcs (CN_PMI_*_CAIXIN akshare) + внос (CN_IMPORTS_USD_YOY)
+са ЗАМРАЗЕНИ при akshare източника от 2025-08 (~340 дни) → съзнателно НЕ влизат в
+композита (биха внесли 11-мес. стар отпечатък, срещу staleness дисциплината). Само
+bloomberg-bridge Caixin composite е свеж (2026-05). Чака source refresh за останалите.
+
+Convention: висок YoY % растеж / PMI > 50 = висок score = здрав растеж.
 """
 from __future__ import annotations
 from typing import Any
@@ -79,6 +86,14 @@ SERIES = {
         "transform": "level",
         "is_rate": False,
     },
+    # S7 CN-2: независим частен PMI (S&P/Markit Caixin ~650 фирми) — cross-check на
+    # официалните NBS; bloomberg-bridge източник (свеж, за разлика от akshare Caixin).
+    "CN_PMI_COMPOSITE_CAIXIN": {
+        "label": "Caixin Composite PMI (независим частен survey)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": False,
+    },
     # ── Свеж контекст (НЕ в композита) ──
     "CN_GDP_GROWTH_Q": {
         "label": "БВП — реален растеж (тримесечен YoY %)",
@@ -96,8 +111,9 @@ SERIES = {
 
 # Композитът стъпва на свежи месечни (2026), И-с-дълга-история серии (валиден percentile).
 # Годишните WB серии остават като контекст/readings (фон), не драйвери — виж HANDOFF re-base.
-COMPOSITE_SERIES  = ["CN_RETAIL_YOY", "CN_PMI_MFG_NBS", "CN_PMI_NON_MFG_NBS"]
-COMPOSITE_WEIGHTS = [0.35,            0.35,             0.30]
+# S7 CN-2: + Caixin composite (независим) за да не стъпва композитът само на NBS.
+COMPOSITE_SERIES  = ["CN_RETAIL_YOY", "CN_PMI_MFG_NBS", "CN_PMI_NON_MFG_NBS", "CN_PMI_COMPOSITE_CAIXIN"]
+COMPOSITE_WEIGHTS = [0.30,            0.25,             0.20,                 0.25]
 
 REGIMES = [
     (80, "СИЛНА ЕКСПАНЗИЯ",  "#00c853"),
