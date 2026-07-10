@@ -72,6 +72,14 @@ def test_transform_yoy_pct_scores_on_transformed_series():
         f"score трябва да е near-неутрален (40-60), а не {latest['score']} "
         f"— ако score-ва суровото ниво (винаги нов връх), score ще е ~100."
     )
+    # O3 G7-2: percentile-ът също е върху ТРАНСФОРМИРАНАТА величина (YoY), не суровия
+    # индекс. Суровото ниво (монотонен растеж) би дало percentile ~100 (винаги нов
+    # максимум); YoY-темпът е константен → percentile НЕ е екстремен.
+    pct = latest["percentile"]
+    assert pct is None or pct < 90, (
+        f"CN_CPI_INDEX percentile={pct} — ако беше върху суровото ниво щеше да е ~100."
+    )
+    assert "percentile_window" in latest
 
 
 # ── (в) регресионно: ключ без запис в SERIES_META → fallback без exception ──

@@ -45,6 +45,9 @@ except Exception:
 
 from config import MODULE_WEIGHTS, MACRO_REGIMES, overall_composite
 from catalog.series import SERIES_CATALOG
+from catalog.polarity import (
+    polarity_for, REGION_INCOMPARABLE_LENSES, INFLATION_COMPARABILITY_NOTE,
+)
 from core.scorer import score_series
 from analysis.divergence import compute_cross_lens_divergence
 from analysis.anomaly import compute_anomalies, _periods_behind, _is_stale
@@ -221,6 +224,11 @@ def build_macro_state(snapshot: dict, today: date) -> dict:
             "key_readings": readings,
             "narrative": r.get("narrative", []),
         }
+        # O3 (Вълна 1): инфлационната леща е несравнима между региони ПО ДИЗАЙН
+        # (CN линейна дефлационна леща vs US/EU U-форма). Етикетът пътува до JSON-а,
+        # за да не се сравни наивно „висок инфлационен percentile" между региони.
+        if r["module"] in REGION_INCOMPARABLE_LENSES:
+            lenses_out[r["module"]]["comparability_note"] = INFLATION_COMPARABILITY_NOTE
 
     # ── Top anomalies (огледало на US/EU сериализацията) ─────────────────────
     top_anomalies = []
@@ -323,15 +331,18 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
         # един модул не го носи) → fallback към старото поведение
         # (invert=False, level passthrough) — БЕЗ exception.
         series_meta = SERIES_META.get(series_id, {})
-        series_invert = series_meta.get("invert", False)
         series_transform = series_meta.get("transform", "level")
+        # O3 (Вълна 1): полярността идва от централния каталог (polarity_for), не от
+        # тихия invert=False fallback в SERIES_META — това затваря S7 CN-1 дупката.
+        # Percentile-ът се смята върху ТРАНСФОРМИРАНАТА серия (scored_series), както
+        # в модулите — score_series percentile-ва каквото получи (тук вече темпът).
         scored_series = _apply_transform(raw_series, series_transform)
 
         try:
             score_data = score_series(
                 scored_series,
                 history_start=meta.get("historical_start", HISTORY_START),
-                invert=series_invert,
+                polarity=polarity_for(series_id),
                 name=series_id,
                 is_rate=is_rate,
             )
@@ -369,7 +380,9 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
                 "date": str(filtered.index[-1].date()),
                 "value": _clean(float(filtered.iloc[-1])),
                 "percentile": _clean(score_data.get("percentile")),
-                "z_score": _clean(score_data.get("z_score")),
+                "percentile_window": score_data.get("percentile_window"),
+                "z_score": _clean(score_data.get("z_score")),   # oriented (знак=здраве)
+                "z_raw": _clean(score_data.get("z_raw")),        # суров (над/под медиана)
                 "score": _clean(score_data.get("score")),
                 "regime": "ЗАСТОЯЛ" if stale else _series_regime(score_data.get("score")),
                 "stale": stale,

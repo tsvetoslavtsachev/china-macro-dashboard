@@ -146,17 +146,28 @@ def score_series(
     yoy = _calc_change(series, as_pp=is_rate)
     yoy_unit = "pp" if is_rate else "%"
 
+    # O3 конвенция (Вълна 1): прозорецът НА ЛИЦЕТО + z_score=oriented, суровият→z_raw.
+    # percentile се смята върху `window` (10-г. плъзгащ, или пълна история при
+    # thin/scale_fallback) → етикетът е честен за прозореца на самото percentile.
+    percentile_window = "пълна история" if (thin_window or scale_fallback) else "10г"
+    # invert полето отразява ЕФЕКТИВНАТА полярност (модулите вече подават polarity=,
+    # не invert=) — линейна пол. -1 ⇒ invert; U-форма → пада към подадения invert.
+    eff_invert = bool(pol == -1) if pol in (1, -1, +1) else invert
     return {
         "name": name or series.name or "unknown",
         "score": score,
         "health_z": round(float(z_h), 3),
         "percentile": None if thin_window else round(pct, 1),
-        "z_score": None if thin_window else round(float(z_report), 2),
+        "percentile_window": percentile_window,
+        # z_score = полярностно-ориентиран (знак=здраве) — единна семантика US/EU/CN
+        # (O3 правило 5: едно име = едно значение). Суровият (над/под медианата) → z_raw.
+        "z_score": None if thin_window else round(float(z_h), 2),
+        "z_raw": None if thin_window else round(float(z_report), 2),
         "current_value": round(current_val, 4),
         "last_date": last_date,
         "yoy_change": yoy,
         "yoy_unit": yoy_unit,
-        "invert": invert,
+        "invert": eff_invert,
         "history_n": len(window),
         "thin_window": thin_window,
         # REVIEW-03 т.0.9: True когато 10-г. прозорец е MAD=0 и нормата идва
@@ -267,8 +278,11 @@ def _empty_score(name: str) -> dict:
     return {
         "name": name,
         "score": 50.0,
+        "health_z": 0.0,
         "percentile": 50.0,
+        "percentile_window": "пълна история",
         "z_score": 0.0,
+        "z_raw": 0.0,
         "current_value": None,
         "last_date": None,
         "yoy_change": None,
@@ -276,4 +290,6 @@ def _empty_score(name: str) -> dict:
         "invert": False,
         "history_n": 0,
         "thin_window": True,
+        "scale_fallback": False,
+        "degenerate": True,
     }

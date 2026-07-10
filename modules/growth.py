@@ -33,6 +33,7 @@ from core.scorer import (
     score_series, build_sparkline, build_historical_context, get_regime,
 )
 from config import HISTORY_START
+from catalog.polarity import polarity_for
 
 
 # ─── Серии в lens-а ──────────────────────────────────────────────
@@ -148,7 +149,7 @@ def run(snapshot: dict[str, pd.Series]) -> dict[str, Any]:
                 indicators[sid] = score_series(
                     ts,
                     history_start=HISTORY_START,
-                    invert=meta["invert"],
+                    polarity=polarity_for(sid),   # O3: централен каталог, не per-серия invert
                     name=meta["label"],
                     is_rate=meta.get("is_rate", False),
                 )
