@@ -245,9 +245,14 @@ def _render_header(today, as_of, snapshot, nc_report, anomaly_report, regime_sna
     return f"""
 <header class="brief-header">
   <div class="brief-title">
-    <a class="brief-backlink" href="index.html">← Кратък преглед</a>
+    <a class="brief-backlink" href="quick.html">← Кратък преглед</a>
     <h1><span class="flag">🇨🇳</span> China Macro — Подробен анализ</h1>
     <div class="brief-subtitle">Генериран {today.isoformat()} · Данни към {html.escape(as_of or '—')}</div>
+    <div class="brief-crosslink" style="margin-top:6px;font-size:12px;color:#8b949e;" title="Живата снимка = macro-web (текущите стойности на уредите сега, на живо). Това е седмичното четиво — разказ, контекст, история; за моментната снимка отвори macro-web (табът Китай).">
+      Живата снимка → Макро web:
+      <a href="http://localhost:8765/#CN" style="color:#58a6ff;text-decoration:none;">локално</a>
+      · <a href="https://tsvetoslavtsachev.github.io/macro-web-dashboard/#CN" style="color:#58a6ff;text-decoration:none;">публично</a>
+    </div>
   </div>
   <div class="brief-header-right">
     <div class="score-circle" style="border-color:{color}">

@@ -279,6 +279,15 @@ def cmd_briefing(args) -> int:
     )
 
     print(f"✓ Briefing готов: {output_path}")
+
+    # ─── Стабилен quick.html (М25) ─────────────────────────────────────────
+    # Краткият преглед вече НЕ е входната страница (М25: входът = deep четивото).
+    # Държим го под стабилно име quick.html — deep-ът линква „← Кратък преглед"
+    # насам, но никой вход не го показва. (Production Pages прави същото в CI.)
+    quick_path = Path(OUTPUT_DIR) / "quick.html"
+    quick_path.write_bytes(Path(output_path).read_bytes())
+    print(f"✓ quick.html ← {Path(output_path).name}")
+
     if not args.no_browser:
         try:
             webbrowser.open(f"file://{Path(output_path).resolve()}")
@@ -330,6 +339,17 @@ def cmd_deep(args) -> int:
     )
 
     print(f"✓ Подробен briefing готов: {output_path}")
+
+    # ─── Landing index.html + стабилен deep.html (М25, М22-стил) ───────────
+    # Локалният сървър на output/ (порт 8774) показва index.html като вход —
+    # то трябва да е DEEP четивото (седмичният разказ), не краткият преглед.
+    # deep.html остава стабилно име (краткият преглед линква „За подробен анализ →"
+    # насам). Опреснява се при всеки нов deep. (Production Pages прави същото в CI.)
+    deep_bytes = Path(output_path).read_bytes()
+    (Path(OUTPUT_DIR) / "index.html").write_bytes(deep_bytes)
+    (Path(OUTPUT_DIR) / "deep.html").write_bytes(deep_bytes)
+    print(f"✓ index.html + deep.html ← {Path(output_path).name}")
+
     if not args.no_browser:
         try:
             webbrowser.open(f"file://{Path(output_path).resolve()}")

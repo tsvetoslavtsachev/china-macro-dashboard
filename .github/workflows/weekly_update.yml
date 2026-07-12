@@ -71,27 +71,39 @@ jobs:
       - name: Assemble latest/ AI bundle (context.md + data.json + manifest.json)
         run: python export/build_latest.py
 
-      - name: Update index.html (landing) + deep.html
+      - name: Update index.html (deep) + quick.html (landing) + deep.html
         run: |
-          # ⚠ glob briefing_*.html мачва и briefing_deep_*.html → изключваме deep за index
-          LATEST=$(ls -1t output/briefing_*.html | grep -v 'briefing_deep_' | head -n1)
-          if [ -n "$LATEST" ]; then
-            cp "$LATEST" output/index.html
-            echo "index.html ← $LATEST"
-          fi
+          # ⚠ glob briefing_*.html мачва и briefing_deep_*.html → внимателни globs.
+          LATEST_LANDING=$(ls -1t output/briefing_*.html | grep -v 'briefing_deep_' | head -n1)
           LATEST_DEEP=$(ls -1t output/briefing_deep_*.html 2>/dev/null | head -n1)
+          # М25: входът = DEEP четивото (седмичният разказ), НЕ краткият преглед
+          # (той дублира живата снимка на macro-web).
           if [ -n "$LATEST_DEEP" ]; then
+            cp "$LATEST_DEEP" output/index.html
             cp "$LATEST_DEEP" output/deep.html
-            echo "deep.html ← $LATEST_DEEP"
+            echo "index.html + deep.html ← $LATEST_DEEP"
+          elif [ -n "$LATEST_LANDING" ]; then
+            # fallback ако deep липсва — index = кратък преглед (вместо гол listing)
+            cp "$LATEST_LANDING" output/index.html
+            echo "index.html ← $LATEST_LANDING (deep липсва — fallback)"
+          fi
+          # Краткият преглед вече не е вход; държим го под стабилно quick.html
+          # (deep-ът линква „← Кратък преглед" насам), но никой вход не го показва.
+          if [ -n "$LATEST_LANDING" ]; then
+            cp "$LATEST_LANDING" output/quick.html
+            echo "quick.html ← $LATEST_LANDING"
           fi
 
       - name: Prepare Pages site
         run: |
           mkdir -p _site
+          # М25: входът = deep. Fallback към latest deep (не landing) при липсващ index.
           cp output/index.html _site/index.html 2>/dev/null || \
-            cp $(ls -1t output/briefing_*.html | grep -v 'briefing_deep_' | head -n1) _site/index.html
-          # стабилен deep.html (линкът „За подробен анализ →" от landing-а сочи тук)
+            cp $(ls -1t output/briefing_deep_*.html | head -n1) _site/index.html
+          # стабилен deep.html (линкът „За подробен анализ →" от quick-а сочи тук)
           cp output/deep.html _site/deep.html 2>/dev/null || true
+          # стабилен quick.html (краткият преглед; „← Кратък преглед" от deep-а сочи тук)
+          cp output/quick.html _site/quick.html 2>/dev/null || true
           # archive: include all briefings (вкл. dated deep) + context md-та
           cp output/briefing_*.html _site/ 2>/dev/null || true
           cp output/briefing_context_*.md _site/ 2>/dev/null || true
