@@ -212,8 +212,9 @@ def test_deep_renders_all_native_sections(tmp_path):
     for us_signal in ("Sahm", "ICSA", "T10Y2Y"):
         assert us_signal not in html
 
-    # backlink към краткия landing
-    assert 'href="index.html"' in html
+    # backlink към краткия преглед (М25: краткият landing се мести на
+    # quick.html; index.html става входната страница)
+    assert 'href="quick.html"' in html
 
     # дарк China-family тема + self-contained
     assert "#0d1117" in html
