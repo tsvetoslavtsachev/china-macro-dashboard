@@ -1,6 +1,6 @@
 {
   "region": "CN",
-  "last_updated": "2026-07-07T22:03:25.990538Z",
+  "last_updated": "2026-07-12T14:27:19.508260Z",
   "years_included": 10,
   "series_count": 50,
   "series": {
@@ -22,11 +22,13 @@
         "date": "2024-12-31",
         "value": 4.9773565917572,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 18.0,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -71,11 +73,13 @@
         "date": "2024-12-31",
         "value": 5.31944222768053,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 30.2,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -120,11 +124,13 @@
         "date": "2024-12-31",
         "value": 4.95580452657485,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 6.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -169,11 +175,13 @@
         "date": "2024-12-31",
         "value": 24.8692407436614,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 16.6,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -218,11 +226,13 @@
         "date": "2024-12-31",
         "value": 40.6111616668625,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 41.2,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -267,11 +277,13 @@
         "date": "2024-12-31",
         "value": 0.218128938439177,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 25.7,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -316,11 +328,13 @@
         "date": "2024-12-31",
         "value": -0.707200009795585,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 25.1,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -365,11 +379,13 @@
         "date": "2025-12-31",
         "value": 4.615,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 38.1,
         "regime": "ВЛОШАВАЩ СЕ",
         "stale": false,
-        "periods_behind": 0.52
+        "periods_behind": 0.53
       },
       "chart": {
         "dates": [
@@ -416,11 +432,13 @@
         "date": "2025-12-31",
         "value": 15.795,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 0.4,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.52
+        "periods_behind": 0.53
       },
       "chart": {
         "dates": [
@@ -467,11 +485,13 @@
         "date": "2025-12-31",
         "value": 64.551,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 16.2,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.52
+        "periods_behind": 0.53
       },
       "chart": {
         "dates": [
@@ -518,11 +538,13 @@
         "date": "2024-12-31",
         "value": 194.165996844811,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 7.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -567,11 +589,13 @@
         "date": "2024-12-31",
         "value": 227.497343015378,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 80.8,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -616,11 +640,13 @@
         "date": "2024-12-31",
         "value": 2.2616499482671,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 50.6,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -665,11 +691,13 @@
         "date": "2024-12-31",
         "value": 20.0229166362049,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 46.8,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -714,11 +742,13 @@
         "date": "2024-12-31",
         "value": 0.0989988051182737,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 9.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -763,11 +793,13 @@
         "date": "2024-12-31",
         "value": 39.8697027685165,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 47.9,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.52
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -812,11 +844,13 @@
         "date": "2023-12-31",
         "value": 33.4827446951054,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 42.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 2.52
+        "periods_behind": 2.53
       },
       "chart": {
         "dates": [
@@ -859,11 +893,13 @@
         "date": "2025-07-01",
         "value": 132.573216898753,
         "percentile": 11.6,
+        "percentile_window": "10г",
         "z_score": -1.49,
+        "z_raw": -1.49,
         "score": 18.4,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 12.4
+        "periods_behind": 12.53
       },
       "chart": {
         "dates": [
@@ -1106,11 +1142,13 @@
         "date": "2022-12-01",
         "value": 111.422290480923,
         "percentile": 45.5,
+        "percentile_window": "10г",
         "z_score": -0.13,
+        "z_raw": -0.13,
         "score": 46.9,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 43.83
+        "periods_behind": 43.97
       },
       "chart": {
         "dates": [
@@ -1291,11 +1329,13 @@
         "date": "2025-06-01",
         "value": 1.4,
         "percentile": 0.0,
-        "z_score": -2.16,
+        "percentile_window": "10г",
+        "z_score": 2.16,
+        "z_raw": -2.16,
         "score": 89.6,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 13.4
+        "periods_behind": 13.53
       },
       "chart": {
         "dates": [
@@ -1536,11 +1576,13 @@
         "date": "2025-06-01",
         "value": 4.35,
         "percentile": 0.0,
-        "z_score": -0.67,
+        "percentile_window": "пълна история",
+        "z_score": 0.67,
+        "z_raw": -0.67,
         "score": 66.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 13.4
+        "periods_behind": 13.53
       },
       "chart": {
         "dates": [
@@ -1781,11 +1823,13 @@
         "date": "2025-06-01",
         "value": 1.5,
         "percentile": 0.0,
-        "z_score": -0.67,
+        "percentile_window": "пълна история",
+        "z_score": 0.67,
+        "z_raw": -0.67,
         "score": 66.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 13.4
+        "periods_behind": 13.53
       },
       "chart": {
         "dates": [
@@ -2026,11 +2070,13 @@
         "date": "2025-07-01",
         "value": 7.17282272727273,
         "percentile": 81.8,
+        "percentile_window": "10г",
         "z_score": 0.83,
+        "z_raw": 0.83,
         "score": 69.5,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 12.4
+        "periods_behind": 12.53
       },
       "chart": {
         "dates": [
@@ -2273,11 +2319,13 @@
         "date": "2026-05-01",
         "value": 1.2,
         "percentile": 43.0,
+        "percentile_window": "10г",
         "z_score": -0.22,
+        "z_raw": -0.22,
         "score": 44.4,
         "regime": "ВЛОШАВАЩ СЕ",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 2.4
       },
       "chart": {
         "dates": [
@@ -2540,11 +2588,13 @@
         "date": "2026-05-01",
         "value": 3.9,
         "percentile": 70.2,
+        "percentile_window": "10г",
         "z_score": 1.21,
+        "z_raw": 1.21,
         "score": 77.0,
         "regime": "ЗДРАВ",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 2.4
       },
       "chart": {
         "dates": [
@@ -2807,11 +2857,13 @@
         "date": "2026-05-01",
         "value": 0.5500000000000114,
         "percentile": 18.2,
+        "percentile_window": "10г",
         "z_score": -1.26,
+        "z_raw": -1.26,
         "score": 22.1,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 2.4
       },
       "chart": {
         "dates": [
@@ -3074,11 +3126,13 @@
         "date": "2023-05-01",
         "value": -18.42105263,
         "percentile": 3.4,
+        "percentile_window": "10г",
         "z_score": -3.04,
+        "z_raw": -3.04,
         "score": 4.6,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 38.8
+        "periods_behind": 38.93
       },
       "chart": {
         "dates": [
@@ -3265,11 +3319,13 @@
         "date": "2026-04-01",
         "value": 6245.0,
         "percentile": 2.5,
+        "percentile_window": "10г",
         "z_score": -1.09,
+        "z_raw": -1.09,
         "score": 25.2,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 3.27
+        "periods_behind": 3.4
       },
       "chart": {
         "dates": [
@@ -3530,11 +3586,13 @@
         "date": "2026-05-01",
         "value": 4965.0,
         "percentile": 12.4,
+        "percentile_window": "10г",
         "z_score": -0.99,
+        "z_raw": -0.99,
         "score": 27.0,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 2.4
       },
       "chart": {
         "dates": [
@@ -3797,11 +3855,13 @@
         "date": "2026-05-01",
         "value": 8.6,
         "percentile": 41.3,
+        "percentile_window": "10г",
         "z_score": -0.17,
+        "z_raw": -0.17,
         "score": 45.8,
         "regime": "ВЛОШАВАЩ СЕ",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 2.4
       },
       "chart": {
         "dates": [
@@ -4064,16 +4124,16 @@
         "date": "2026-06-22",
         "value": 3.0,
         "percentile": 0.0,
-        "z_score": -6.0,
+        "percentile_window": "пълна история",
+        "z_score": 6.0,
+        "z_raw": -6.0,
         "score": 99.8,
         "regime": "ЕКСПАНЗИОНЕН",
         "stale": false,
-        "periods_behind": 0.53
+        "periods_behind": 0.67
       },
       "chart": {
         "dates": [
-          "2016-07-08",
-          "2016-07-11",
           "2016-07-12",
           "2016-07-13",
           "2016-07-14",
@@ -5367,8 +5427,6 @@
           4.3,
           4.3,
           4.3,
-          4.3,
-          4.3,
           4.31,
           4.31,
           4.31,
@@ -5815,11 +5873,13 @@
         "date": "2026-06-22",
         "value": 3.5,
         "percentile": 0.0,
-        "z_score": -1.54,
+        "percentile_window": "10г",
+        "z_score": 1.54,
+        "z_raw": -1.54,
         "score": 82.4,
         "regime": "ЕКСПАНЗИОНЕН",
         "stale": false,
-        "periods_behind": 0.53
+        "periods_behind": 0.67
       },
       "chart": {
         "dates": [
@@ -6009,14 +6069,16 @@
         "narrative_hint": "Официален NBS. Tilts към large/SOE компании. >50 = expansion."
       },
       "latest": {
-        "date": "2026-05-01",
-        "value": 50.0,
-        "percentile": 38.8,
-        "z_score": -0.08,
-        "score": 47.9,
-        "regime": "ВЛОШАВАЩ СЕ",
+        "date": "2026-06-01",
+        "value": 50.3,
+        "percentile": 55.4,
+        "percentile_window": "10г",
+        "z_score": 0.08,
+        "z_raw": 0.08,
+        "score": 52.1,
+        "regime": "СМЕСЕН",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 1.37
       },
       "chart": {
         "dates": [
@@ -6137,7 +6199,8 @@
           "2026-02-01",
           "2026-03-01",
           "2026-04-01",
-          "2026-05-01"
+          "2026-05-01",
+          "2026-06-01"
         ],
         "values": [
           50.4,
@@ -6257,7 +6320,8 @@
           49.0,
           50.4,
           50.3,
-          50.0
+          50.0,
+          50.3
         ]
       }
     },
@@ -6276,14 +6340,16 @@
         "narrative_hint": "Services + construction PMI от NBS. Bonus series — идва free със mfg fetch."
       },
       "latest": {
-        "date": "2026-05-01",
-        "value": 50.1,
-        "percentile": 12.4,
-        "z_score": -1.48,
-        "score": 18.5,
+        "date": "2026-06-01",
+        "value": 50.2,
+        "percentile": 15.7,
+        "percentile_window": "10г",
+        "z_score": -1.35,
+        "z_raw": -1.35,
+        "score": 20.6,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 1.37
       },
       "chart": {
         "dates": [
@@ -6404,7 +6470,8 @@
           "2026-02-01",
           "2026-03-01",
           "2026-04-01",
-          "2026-05-01"
+          "2026-05-01",
+          "2026-06-01"
         ],
         "values": [
           53.5,
@@ -6524,7 +6591,8 @@
           49.5,
           50.1,
           49.4,
-          50.1
+          50.1,
+          50.2
         ]
       }
     },
@@ -6546,11 +6614,13 @@
         "date": "2025-08-01",
         "value": 50.5,
         "percentile": 49.1,
+        "percentile_window": "10г",
         "z_score": 0.0,
+        "z_raw": 0.0,
         "score": 50.0,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 11.37
+        "periods_behind": 11.5
       },
       "chart": {
         "dates": [
@@ -6765,11 +6835,13 @@
         "date": "2025-08-01",
         "value": 53.0,
         "percentile": 66.7,
+        "percentile_window": "10г",
         "z_score": 0.49,
+        "z_raw": 0.49,
         "score": 62.0,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 11.37
+        "periods_behind": 11.5
       },
       "chart": {
         "dates": [
@@ -7012,11 +7084,13 @@
         "date": "2025-08-15",
         "value": 5.7,
         "percentile": 43.1,
+        "percentile_window": "10г",
         "z_score": -0.17,
+        "z_raw": -0.17,
         "score": 45.8,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 10.9
+        "periods_behind": 11.03
       },
       "chart": {
         "dates": [
@@ -7243,11 +7317,13 @@
         "date": "2026-05-01",
         "value": -0.6,
         "percentile": 9.9,
+        "percentile_window": "10г",
         "z_score": -1.29,
+        "z_raw": -1.29,
         "score": 21.6,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 2.4
       },
       "chart": {
         "dates": [
@@ -7470,11 +7546,13 @@
         "date": "2026-05-01",
         "value": -17.15,
         "percentile": 10.9,
+        "percentile_window": "10г",
         "z_score": -1.91,
+        "z_raw": -1.91,
         "score": 12.9,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 2.4
       },
       "chart": {
         "dates": [
@@ -7697,11 +7775,13 @@
         "date": "2025-08-07",
         "value": 7.2,
         "percentile": 53.4,
+        "percentile_window": "10г",
         "z_score": 0.03,
+        "z_raw": 0.03,
         "score": 50.8,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 11.17
+        "periods_behind": 11.3
       },
       "chart": {
         "dates": [
@@ -7938,11 +8018,13 @@
         "date": "2025-08-07",
         "value": 4.1,
         "percentile": 62.4,
+        "percentile_window": "10г",
         "z_score": 0.33,
+        "z_raw": 0.33,
         "score": 58.1,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 11.17
+        "periods_behind": 11.3
       },
       "chart": {
         "dates": [
@@ -8178,14 +8260,16 @@
         "narrative_hint": "SAFE publication. Capital flow indicator. <3T USD watch threshold."
       },
       "latest": {
-        "date": "2026-05-01",
-        "value": 3442.238,
-        "percentile": 99.2,
-        "z_score": 3.17,
-        "score": 96.0,
+        "date": "2026-06-01",
+        "value": 3416.262,
+        "percentile": 97.5,
+        "percentile_window": "10г",
+        "z_score": 2.86,
+        "z_raw": 2.86,
+        "score": 94.6,
         "regime": "ЕКСПАНЗИОНЕН",
         "stale": false,
-        "periods_behind": 2.27
+        "periods_behind": 1.37
       },
       "chart": {
         "dates": [
@@ -8306,7 +8390,8 @@
           "2026-02-01",
           "2026-03-01",
           "2026-04-01",
-          "2026-05-01"
+          "2026-05-01",
+          "2026-06-01"
         ],
         "values": [
           3185.167,
@@ -8426,7 +8511,8 @@
           3427.807,
           3342.1230000000005,
           3410.547,
-          3442.238
+          3442.238,
+          3416.262
         ]
       }
     },
@@ -8448,11 +8534,13 @@
         "date": "2025-12-01",
         "value": 5.2,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 36.1,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 7.3
+        "periods_behind": 7.43
       },
       "chart": {
         "dates": [
@@ -8499,11 +8587,13 @@
         "date": "2024-12-31",
         "value": 198.1,
         "percentile": 90.2,
-        "z_score": 0.98,
+        "percentile_window": "10г",
+        "z_score": -0.98,
+        "z_raw": 0.98,
         "score": 27.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 6.09
+        "periods_behind": 6.13
       },
       "chart": {
         "dates": [
@@ -8598,11 +8688,13 @@
         "date": "2025-03-31",
         "value": -7.5194,
         "percentile": 4.9,
+        "percentile_window": "10г",
         "z_score": -1.35,
+        "z_raw": -1.35,
         "score": 20.5,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 5.1
+        "periods_behind": 5.14
       },
       "chart": {
         "dates": [
@@ -8699,11 +8791,13 @@
         "date": "2026-03-31",
         "value": 5.0,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 59.5,
         "regime": "СМЕСЕН",
         "stale": false,
-        "periods_behind": 1.09
+        "periods_behind": 1.13
       },
       "chart": {
         "dates": [
@@ -8766,11 +8860,13 @@
         "date": "2026-03-31",
         "value": -0.06,
         "percentile": null,
+        "percentile_window": "пълна история",
         "z_score": null,
+        "z_raw": null,
         "score": 95.5,
         "regime": "ЕКСПАНЗИОНЕН",
         "stale": false,
-        "periods_behind": 1.09
+        "periods_behind": 1.13
       },
       "chart": {
         "dates": [
@@ -8822,14 +8918,16 @@
         "narrative_hint": "Weighted Mfg+Svcs. Главен composite leading indicator."
       },
       "latest": {
-        "date": "2026-05-01",
-        "value": 54.0,
-        "percentile": 89.2,
-        "z_score": 2.12,
-        "score": 89.3,
-        "regime": "ЕКСПАНЗИОНЕН",
-        "stale": false,
-        "periods_behind": 2.27
+        "date": "2026-04-01",
+        "value": 53.1,
+        "percentile": 88.9,
+        "percentile_window": "10г",
+        "z_score": 1.4,
+        "z_raw": 1.4,
+        "score": 80.2,
+        "regime": "ЗАСТОЯЛ",
+        "stale": true,
+        "periods_behind": 3.4
       },
       "chart": {
         "dates": [
@@ -8868,8 +8966,7 @@
           "2026-01-01",
           "2026-02-01",
           "2026-03-01",
-          "2026-04-01",
-          "2026-05-01"
+          "2026-04-01"
         ],
         "values": [
           55.6,
@@ -8907,8 +9004,7 @@
           51.6,
           55.4,
           51.5,
-          53.1,
-          54.0
+          53.1
         ]
       }
     },
@@ -8927,14 +9023,16 @@
         "narrative_hint": "Offshore CNY. CNH-CNY spread показва onshore intervention pressure."
       },
       "latest": {
-        "date": "2026-06-30",
-        "value": 6.7907,
-        "percentile": 34.7,
-        "z_score": -0.3,
-        "score": 42.4,
-        "regime": "ВЛОШАВАЩ СЕ",
-        "stale": false,
-        "periods_behind": 8.0
+        "date": "2026-05-31",
+        "value": 6.7635,
+        "percentile": 37.2,
+        "percentile_window": "10г",
+        "z_score": -0.31,
+        "z_raw": -0.31,
+        "score": 42.3,
+        "regime": "ЗАСТОЯЛ",
+        "stale": true,
+        "periods_behind": 42.0
       },
       "chart": {
         "dates": [
@@ -9056,130 +9154,128 @@
           "2026-02-28",
           "2026-03-31",
           "2026-04-30",
-          "2026-05-31",
-          "2026-06-30"
+          "2026-05-31"
         ],
         "values": [
-          6.6924,
-          6.6685,
-          6.6801,
-          6.708,
-          6.873,
-          6.8961,
-          6.8498,
-          6.8002,
-          6.8938,
-          6.8839,
-          6.9088,
-          6.8069,
-          6.766,
-          6.712,
-          6.4865,
-          6.6505,
-          6.641,
-          6.6249,
-          6.4972,
-          6.2819,
-          6.3295,
-          6.3122,
-          6.3662,
-          6.3896,
-          6.7033,
-          6.8252,
-          6.8351,
-          6.9208,
-          6.9411,
-          6.8764,
-          6.8547,
-          6.7565,
-          6.7136,
-          6.719,
-          6.9044,
-          6.929,
-          6.8956,
-          7.0859,
-          7.1064,
-          7.0844,
-          6.9712,
-          7.0369,
-          6.8923,
-          6.9891,
-          6.9324,
-          7.0671,
-          7.0922,
-          7.0722,
-          7.0229,
-          6.9695,
-          6.8325,
-          6.7346,
-          6.5915,
-          6.5171,
-          6.4714,
-          6.4217,
-          6.5515,
-          6.5266,
-          6.4425,
-          6.3875,
-          6.4745,
-          6.4786,
-          6.4346,
-          6.4524,
-          6.3884,
-          6.364,
-          6.3829,
-          6.3635,
-          6.3258,
-          6.3632,
-          6.7999,
-          6.6717,
-          6.7612,
-          6.8158,
-          6.973,
-          7.1336,
-          7.2302,
-          6.9619,
-          6.8303,
-          6.8056,
-          6.9684,
-          6.877,
-          6.9589,
-          7.1477,
-          7.1584,
-          7.2012,
-          7.2807,
-          7.3094,
-          7.2871,
-          7.1242,
-          7.2218,
-          7.2152,
-          7.2113,
-          7.259,
-          7.2227,
-          7.2517,
-          7.2857,
-          7.1842,
-          7.1004,
-          7.0738,
-          7.1354,
-          7.2923,
-          7.3469,
-          7.2578,
-          7.2634,
-          7.4257,
-          7.2105,
-          7.2106,
-          7.1818,
-          7.1938,
-          7.1186,
+          6.6307,
+          6.6915,
+          6.677,
+          6.7777,
+          6.9162,
+          6.9761,
+          6.8275,
+          6.8554,
+          6.8715,
+          6.8988,
+          6.7462,
+          6.7807,
+          6.7271,
+          6.5966,
+          6.6468,
+          6.6324,
+          6.6112,
+          6.5143,
+          6.2985,
+          6.3311,
+          6.2635,
+          6.3157,
+          6.4094,
+          6.6357,
+          6.8053,
+          6.8459,
+          6.8761,
+          6.9746,
+          6.95,
+          6.8706,
+          6.7095,
+          6.7034,
+          6.7232,
+          6.737,
+          6.9368,
+          6.8679,
+          6.9099,
+          7.1623,
+          7.1413,
+          7.0465,
+          7.0309,
+          6.9617,
+          6.9984,
+          6.9798,
+          7.0939,
+          7.0817,
+          7.1332,
+          7.0699,
+          6.9892,
+          6.8477,
+          6.7838,
+          6.6964,
+          6.5839,
+          6.5028,
+          6.4522,
+          6.4807,
+          6.5647,
+          6.4735,
+          6.3728,
+          6.4683,
+          6.4633,
+          6.4542,
+          6.4492,
+          6.4049,
+          6.3671,
+          6.357,
+          6.3707,
+          6.314,
+          6.3547,
+          6.6404,
+          6.6787,
+          6.6941,
+          6.7498,
+          6.9069,
+          7.1419,
+          7.3363,
+          7.0457,
+          6.922,
+          6.7568,
+          6.9546,
+          6.8703,
+          6.9272,
+          7.1192,
+          7.2677,
+          7.1461,
+          7.2755,
+          7.2928,
+          7.3416,
           7.1459,
-          7.1266,
-          7.0717,
-          6.9822,
-          6.9012,
-          6.889,
-          6.8181,
-          6.8139,
-          6.7907
+          7.1258,
+          7.1872,
+          7.2078,
+          7.2572,
+          7.2548,
+          7.263,
+          7.2993,
+          7.227,
+          7.09,
+          7.0074,
+          7.1216,
+          7.2491,
+          7.3379,
+          7.322,
+          7.2934,
+          7.2659,
+          7.2698,
+          7.2051,
+          7.1574,
+          7.2091,
+          7.1223,
+          7.1284,
+          7.1225,
+          7.0708,
+          6.9757,
+          6.9584,
+          6.8625,
+          6.8892,
+          6.832,
+          6.7635
         ]
       }
     },
@@ -9198,14 +9294,16 @@
         "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
       },
       "latest": {
-        "date": "2026-06-30",
-        "value": 1.718,
+        "date": "2026-05-31",
+        "value": 1.72,
         "percentile": 5.0,
-        "z_score": -2.2,
-        "score": 10.0,
-        "regime": "РЕЦЕСИОНЕН",
-        "stale": false,
-        "periods_behind": 8.0
+        "percentile_window": "10г",
+        "z_score": -2.3,
+        "z_raw": -2.3,
+        "score": 9.1,
+        "regime": "ЗАСТОЯЛ",
+        "stale": true,
+        "periods_behind": 42.0
       },
       "chart": {
         "dates": [
@@ -9327,130 +9425,128 @@
           "2026-02-28",
           "2026-03-31",
           "2026-04-30",
-          "2026-05-31",
-          "2026-06-30"
+          "2026-05-31"
         ],
         "values": [
-          2.84,
-          2.656,
-          2.801,
-          2.679,
-          2.811,
-          3.108,
-          3.192,
-          3.441,
-          3.341,
-          3.371,
-          3.496,
-          3.565,
-          3.569,
-          3.671,
+          2.8,
+          2.808,
+          2.736,
+          2.744,
+          2.953,
+          3.06,
+          3.365,
+          3.321,
+          3.293,
+          3.473,
+          3.637,
+          3.568,
+          3.626,
+          3.659,
+          3.623,
+          3.894,
+          3.917,
+          3.902,
+          3.922,
+          3.845,
+          3.751,
           3.648,
-          3.682,
-          3.975,
-          3.927,
-          3.918,
-          3.915,
-          3.853,
-          3.71,
-          3.717,
-          3.688,
-          3.494,
-          3.527,
-          3.645,
-          3.619,
-          3.362,
-          3.313,
-          3.081,
-          3.114,
-          3.147,
-          3.281,
-          3.268,
-          3.269,
-          3.186,
-          3.05,
-          3.01,
-          3.186,
-          3.251,
-          3.202,
-          3.104,
-          2.792,
-          2.674,
-          2.525,
-          2.567,
-          2.858,
-          2.957,
-          2.961,
-          3.112,
-          3.201,
-          3.274,
-          3.28,
+          3.638,
+          3.479,
+          3.487,
+          3.595,
+          3.625,
+          3.536,
+          3.38,
+          3.31,
+          3.106,
+          3.178,
+          3.069,
+          3.402,
+          3.295,
+          3.236,
+          3.16,
+          3.061,
+          3.141,
+          3.282,
+          3.175,
+          3.144,
+          3.003,
+          2.733,
+          2.586,
+          2.516,
+          2.693,
+          2.851,
+          2.976,
+          3.024,
           3.148,
-          3.235,
-          3.249,
-          3.159,
-          3.143,
+          3.185,
+          3.273,
           3.146,
-          3.092,
-          2.882,
-          2.86,
-          3.007,
-          2.942,
-          2.876,
-          2.786,
-          2.785,
-          2.84,
-          2.811,
-          2.829,
-          2.799,
+          3.185,
+          3.279,
+          3.188,
+          3.156,
+          3.074,
+          3.093,
+          2.855,
+          2.848,
+          2.877,
+          2.97,
+          2.862,
+          2.779,
+          2.711,
+          2.79,
           2.787,
-          2.748,
-          2.68,
-          2.71,
-          2.665,
+          2.839,
+          2.797,
+          2.816,
+          2.765,
+          2.644,
+          2.75,
+          2.648,
+          2.922,
+          2.839,
           2.902,
-          2.829,
-          2.892,
-          2.897,
-          2.844,
-          2.719,
-          2.623,
-          2.638,
-          2.576,
-          2.634,
-          2.709,
-          2.666,
-          2.636,
-          2.508,
-          2.458,
-          2.328,
-          2.289,
-          2.315,
-          2.311,
-          2.261,
-          2.141,
-          2.073,
-          2.209,
-          2.079,
-          1.728,
-          1.644,
-          1.693,
-          1.851,
-          1.646,
-          1.66,
-          1.692,
-          1.659,
-          1.748,
-          1.776,
-          1.839,
-          1.808,
-          1.852,
-          1.838,
-          1.807,
-          1.82,
-          1.781,
-          1.751,
-          1.718
+          2.915,
+          2.858,
+          2.78,
+          2.708,
+          2.641,
+          2.662,
+          2.581,
+          2.681,
+          2.693,
+          2.686,
+          2.561,
+          2.434,
+          2.353,
+          2.295,
+          2.314,
+          2.319,
+          2.21,
+          2.148,
+          2.178,
+          2.21,
+          2.152,
+          2.033,
+          1.675,
+          1.63,
+          1.778,
+          1.818,
+          1.628,
+          1.706,
+          1.65,
+          1.712,
+          1.786,
+          1.871,
+          1.797,
+          1.832,
+          1.855,
+          1.811,
+          1.809,
+          1.816,
+          1.752,
+          1.72
         ]
       }
     }

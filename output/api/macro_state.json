@@ -1,20 +1,20 @@
 {
   "region": "CN",
-  "as_of_date": "2026-07-08",
-  "generated_at": "2026-07-07T22:03:25.916202Z",
+  "as_of_date": "2026-07-12",
+  "generated_at": "2026-07-12T14:27:19.457029Z",
   "executive_summary": {
-    "composite_score": 40.1,
+    "composite_score": 39.9,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "lenses_backed": "5/5",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 40.1/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 39.9/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 2 flagged аномалии (5 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
   "lenses": {
     "growth": {
-      "score": 44.5,
+      "score": 43.7,
       "direction": "mixed",
       "regime": "ПОД ТАРГЕТ",
       "label_bg": "Растеж и активност",
@@ -43,7 +43,7 @@
       ],
       "narrative": [
         "Продажби на дребно -0.6% YoY — слабо потребление, структурно под пред-COVID нивата.",
-        "NBS Manufacturing PMI 50.0 — на границата 50; крехка активност.",
+        "NBS Manufacturing PMI 50.3 — на границата 50; крехка активност.",
         "БВП растеж 5.0% — около официалния таргет ~5% (policy-pinned, почти не мърда)."
       ]
     },
@@ -79,7 +79,8 @@
         "CPI 1.2% YoY — обратно в долната част на optimal range; потребителската дефлация отслабва.",
         "PPI +3.9% YoY — производствените цени излязоха от дефлация (от ~−3.6% средата на 2025). Край на 3-годишния PPI спад.",
         "БВП дефлатор -0.06% (тримесечно) — още отрицателен, но най-плитък от началото на debt-deflation (2Q2023). Близо до изход."
-      ]
+      ],
+      "comparability_note": "несравнима между региони по дизайн — CN линейна дефлационна леща (абсолютни котви) vs US/EU U-форма около 2%"
     },
     "labor": {
       "score": 18.6,
@@ -196,7 +197,7 @@
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
-      "periods_behind": 0.27,
+      "periods_behind": 0.0,
       "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
     },
     {
@@ -213,33 +214,17 @@
       "is_new_extreme": true,
       "new_extreme_direction": "max",
       "stale": false,
-      "periods_behind": 0.5,
+      "periods_behind": 0.47,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
-    },
-    {
-      "series_id": "CN_CGB_10Y",
-      "name_bg": "10Y China Government Bond yield",
-      "lens": [
-        "credit"
-      ],
-      "peer_group": "rates",
-      "z_score": -2.221,
-      "direction": "down",
-      "current_value": 1.718,
-      "last_date": "2026-06-30",
-      "is_new_extreme": false,
-      "new_extreme_direction": null,
-      "stale": false,
-      "periods_behind": 0.0,
-      "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
     }
   ],
-  "anomalies_stale_excluded": 4,
+  "anomalies_stale_excluded": 5,
   "anomalies_stale_excluded_keys": [
     "CN_CREDIT_PRIVATE",
     "CN_FDI_GDP",
     "CN_POLICY_RATE",
-    "CN_BIS_PROPERTY_YOY"
+    "CN_BIS_PROPERTY_YOY",
+    "CN_CGB_10Y"
   ],
   "cross_lens_divergences": [
     {
@@ -272,7 +257,7 @@
       "interpretation": "Export-dependence — износът носи растежа, докато вътрешното търсене е слабо. Небалансирано възстановяване, уязвимо на тарифи/външни шокове.",
       "slot_a_label": "Външно търсене",
       "slot_b_label": "Вътрешна активност",
-      "breadth_a": 0.833,
+      "breadth_a": 0.667,
       "breadth_b": 0.333
     }
   ],

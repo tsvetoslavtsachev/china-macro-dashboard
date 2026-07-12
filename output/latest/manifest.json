@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-07-08",
-  "generated_at": "2026-07-07T22:03:26Z",
-  "data_generated_at": "2026-07-07T22:03:25.916202Z",
-  "composite_score": 40.1,
+  "as_of_date": "2026-07-12",
+  "generated_at": "2026-07-12T14:27:19Z",
+  "data_generated_at": "2026-07-12T14:27:19.457029Z",
+  "composite_score": 39.9,
   "regime": {
     "key": "deteriorating",
     "label_bg": "ВЛОШАВАЩ СЕ"
@@ -13,7 +13,7 @@
     {
       "key": "growth",
       "label_bg": "Растеж и активност",
-      "score": 44.5,
+      "score": 43.7,
       "direction": "mixed"
     },
     {
@@ -55,18 +55,11 @@
       "lens": "labor",
       "z_score": 2.225,
       "direction": "up"
-    },
-    {
-      "series_id": "CN_CGB_10Y",
-      "name_bg": "10Y China Government Bond yield",
-      "lens": "credit",
-      "z_score": -2.221,
-      "direction": "down"
     }
   ],
   "counts": {
     "lenses": 5,
-    "anomalies": 3,
+    "anomalies": 2,
     "divergences": 3
   },
   "links": {
