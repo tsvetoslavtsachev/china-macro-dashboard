@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-07-12",
-  "generated_at": "2026-07-12T14:27:19Z",
-  "data_generated_at": "2026-07-12T14:27:19.457029Z",
+  "as_of_date": "2026-07-13",
+  "generated_at": "2026-07-13T08:42:40Z",
+  "data_generated_at": "2026-07-13T08:42:40.266952Z",
   "composite_score": 39.9,
   "regime": {
     "key": "deteriorating",
