@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-07-13",
-  "generated_at": "2026-07-13T08:42:40Z",
-  "data_generated_at": "2026-07-13T08:42:40.266952Z",
-  "composite_score": 39.9,
+  "as_of_date": "2026-07-20",
+  "generated_at": "2026-07-20T08:32:59Z",
+  "data_generated_at": "2026-07-20T08:32:59.599410Z",
+  "composite_score": 39.7,
   "regime": {
     "key": "deteriorating",
     "label_bg": "ВЛОШАВАЩ СЕ"
@@ -19,7 +19,7 @@
     {
       "key": "inflation",
       "label_bg": "Инфлация и цени",
-      "score": 48.0,
+      "score": 46.3,
       "direction": "mixed"
     },
     {
@@ -37,7 +37,7 @@
     {
       "key": "property",
       "label_bg": "Имоти и търговия",
-      "score": 23.2,
+      "score": 23.4,
       "direction": "contracting"
     }
   ],
