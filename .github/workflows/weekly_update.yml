@@ -142,9 +142,12 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            # Реална промяна = diff в data/ извън last_fetched щемпелите
-            # (кешът е indent=2 JSON → last_fetched е на собствен ред).
-            if git diff --staged --quiet -I'"last_fetched"' -- data; then
+            # Реална промяна в данните = diff в series_data.json извън
+            # last_updated щемпела (единственият timestamp в целия файл).
+            # Кешовете data/cache_*.json са gitignored (живеят в actions/cache),
+            # а data/state/briefing_*.json е dated нов файл всеки пуск —
+            # затова стабилното данново огледало е series_data.json.
+            if git diff --staged --quiet -I'"last_updated"' -- output/api/series_data.json; then
               MSG="chore: weekly rebuild $(date -u '+%Y-%m-%d') — no data change"
             else
               MSG="chore: weekly macro update $(date -u '+%Y-%m-%d')"
