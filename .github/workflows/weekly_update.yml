@@ -6,6 +6,12 @@ on:
     - cron: '0 6 * * 1'
   workflow_dispatch:
     # Позволява ръчно стартиране от GitHub UI
+    inputs:
+      refresh:
+        description: 'Force-refresh всички серии (игнорира TTL кеша)'
+        required: false
+        default: 'true'
+        type: boolean
 
 jobs:
   update:
@@ -52,8 +58,17 @@ jobs:
           restore-keys: |
             china-macro-cache-
 
-      - name: Smart refresh stale series
-        run: python run.py --refresh-only
+      # Schedule = force refresh (US/EU паритет): каталогът няма weekly серии,
+      # а ~7-дневният actions/cache държи monthly TTL=10 неизтекъл в типичната
+      # седмица → smart refresh е no-op и данните застояват. При провал на
+      # отделна серия fetch() пада назад към кеша — история не се губи.
+      - name: Refresh series (force на schedule; smart иначе)
+        run: |
+          if [ "${{ github.event.inputs.refresh }}" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            python run.py --refresh-only --refresh
+          else
+            python run.py --refresh-only
+          fi
 
       - name: Generate HTML briefing (кратък landing)
         run: python run.py --briefing --no-browser
@@ -127,7 +142,14 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore: weekly macro update $(date -u '+%Y-%m-%d')"
+            # Реална промяна = diff в data/ извън last_fetched щемпелите
+            # (кешът е indent=2 JSON → last_fetched е на собствен ред).
+            if git diff --staged --quiet -I'"last_fetched"' -- data; then
+              MSG="chore: weekly rebuild $(date -u '+%Y-%m-%d') — no data change"
+            else
+              MSG="chore: weekly macro update $(date -u '+%Y-%m-%d')"
+            fi
+            git commit -m "$MSG"
             for attempt in 1 2 3 4 5; do
               if git push; then
                 echo "Push успешен (опит $attempt)."
