@@ -1,0 +1,70 @@
+name: Export API JSON (Weekly)
+
+# Изпълнява се всяка събота в 02:53 UTC (04:53/05:53 Sofia в зависимост от DST).
+# Защо толкова рано: сателитът (macro-satellite daily-collect, Sat 06:13 UTC —
+# .github/workflows/daily-collect.yml) чете output/api/macro_state.json от main —
+# export-ът трябва да е committed ПРЕДИ това, за да влезе седмичната китайска
+# картина в съботния state.json преди съботния ритуал.
+# 02:53 = 12 мин след EU export-а (02:41 в eu-macro-dashboard) и 36 мин след US
+# export-а (02:17 в us-macro-dashboard) — сериализирани по прецедента, без да се
+# застъпват в опашката.
+# Нечетни минути: кръглите часове на GitHub scheduler-а чакат 1.5-3 ч опашка
+# (прецедентът на cot-monitor, схема '23 6 * * 6').
+# Копирано и адаптирано от us-macro-dashboard/.github/workflows/export-api.yml и
+# eu-macro-dashboard/.github/workflows/export-api.yml (2026-08-08) — china нямаше
+# отделен export-api.yml, само weekly_update.yml (понеделник 06:00 UTC), затова
+# седмичните данни не влизаха в съботния сателит.
+# Test-гейтът тук mirror-ва weekly_update.yml: --ignore на трите бавни/network-heavy
+# fetch тестове (full/IMF/World Bank), за да не удължава опашката в съботната сутрин.
+# Може да се стартира и ръчно от GitHub UI: Actions → Export API JSON → Run workflow
+on:
+  schedule:
+    - cron: '53 2 * * 6'
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: 'Force-refresh всички серии (игнорира кеша)'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  export-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests (gate)
+        run: |
+          pip install pytest
+          python -m pytest tests -q -p no:cacheprovider --ignore=tests/test_full_fetch.py --ignore=tests/test_imf_fetch.py --ignore=tests/test_worldbank_fetch.py
+
+      - name: Export API JSON
+        run: |
+          if [ "${{ github.event.inputs.refresh }}" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            python export_api.py --refresh --years 10
+          else
+            python export_api.py --years 10
+          fi
+
+      - name: Commit and push updated API files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add output/api/macro_state.json output/api/series_data.json
+          git diff --cached --quiet || git commit -m "chore: update API JSON $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
