@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-08-10",
-  "generated_at": "2026-08-10T07:08:49Z",
-  "data_generated_at": "2026-08-10T07:08:49.119156Z",
-  "composite_score": 38.4,
+  "as_of_date": "2026-08-17",
+  "generated_at": "2026-08-17T06:52:12Z",
+  "data_generated_at": "2026-08-17T06:52:12.099814Z",
+  "composite_score": 38.0,
   "regime": {
     "key": "deteriorating",
     "label_bg": "ВЛОШАВАЩ СЕ"
@@ -31,7 +31,7 @@
     {
       "key": "credit",
       "label_bg": "Монетарна политика и кредит",
-      "score": 49.3,
+      "score": 47.8,
       "direction": "mixed"
     },
     {

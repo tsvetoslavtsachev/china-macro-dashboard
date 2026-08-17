@@ -1,6 +1,6 @@
 {
   "region": "CN",
-  "last_updated": "2026-08-15T03:30:54.872285Z",
+  "last_updated": "2026-08-17T06:52:12.162695Z",
   "years_included": 10,
   "series_count": 50,
   "series": {
@@ -28,7 +28,7 @@
         "score": 17.2,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -81,7 +81,7 @@
         "score": 26.0,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -134,7 +134,7 @@
         "score": 9.0,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -187,7 +187,7 @@
         "score": 23.2,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -240,7 +240,7 @@
         "score": 40.2,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.62
+        "periods_behind": 1.63
       },
       "chart": {
         "dates": [
@@ -291,7 +291,7 @@
         "score": 24.8,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -344,7 +344,7 @@
         "score": 25.4,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -397,7 +397,7 @@
         "score": 38.1,
         "regime": "ВЛОШАВАЩ СЕ",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -450,7 +450,7 @@
         "score": 0.4,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -503,7 +503,7 @@
         "score": 16.2,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -556,7 +556,7 @@
         "score": 7.2,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.62
+        "periods_behind": 1.63
       },
       "chart": {
         "dates": [
@@ -607,7 +607,7 @@
         "score": 80.9,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.62
+        "periods_behind": 1.63
       },
       "chart": {
         "dates": [
@@ -658,7 +658,7 @@
         "score": 77.7,
         "regime": "ЗДРАВ",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -711,7 +711,7 @@
         "score": 51.7,
         "regime": "СМЕСЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -764,7 +764,7 @@
         "score": 16.4,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 0.62
+        "periods_behind": 0.63
       },
       "chart": {
         "dates": [
@@ -817,7 +817,7 @@
         "score": 47.1,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 1.62
+        "periods_behind": 1.63
       },
       "chart": {
         "dates": [
@@ -868,7 +868,7 @@
         "score": 48.8,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 2.62
+        "periods_behind": 2.63
       },
       "chart": {
         "dates": [
@@ -917,7 +917,7 @@
         "score": 18.4,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 13.67
+        "periods_behind": 13.73
       },
       "chart": {
         "dates": [
@@ -1164,7 +1164,7 @@
         "score": 46.9,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 45.1
+        "periods_behind": 45.17
       },
       "chart": {
         "dates": [
@@ -1349,7 +1349,7 @@
         "score": 89.6,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 14.67
+        "periods_behind": 14.73
       },
       "chart": {
         "dates": [
@@ -1594,7 +1594,7 @@
         "score": 66.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 14.67
+        "periods_behind": 14.73
       },
       "chart": {
         "dates": [
@@ -1839,7 +1839,7 @@
         "score": 66.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 14.67
+        "periods_behind": 14.73
       },
       "chart": {
         "dates": [
@@ -2084,7 +2084,7 @@
         "score": 69.5,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 13.67
+        "periods_behind": 13.73
       },
       "chart": {
         "dates": [
@@ -2331,7 +2331,7 @@
         "score": 33.7,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 1.5
+        "periods_behind": 1.57
       },
       "chart": {
         "dates": [
@@ -2602,7 +2602,7 @@
         "score": 69.9,
         "regime": "ЗДРАВ",
         "stale": false,
-        "periods_behind": 1.5
+        "periods_behind": 1.57
       },
       "chart": {
         "dates": [
@@ -2873,7 +2873,7 @@
         "score": 22.8,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 2.5
+        "periods_behind": 2.57
       },
       "chart": {
         "dates": [
@@ -3142,7 +3142,7 @@
         "score": 4.6,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 40.07
+        "periods_behind": 40.13
       },
       "chart": {
         "dates": [
@@ -3333,7 +3333,7 @@
         "score": 25.2,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 4.53
+        "periods_behind": 4.6
       },
       "chart": {
         "dates": [
@@ -3598,7 +3598,7 @@
         "score": 8.4,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 1.5
+        "periods_behind": 1.57
       },
       "chart": {
         "dates": [
@@ -3869,7 +3869,7 @@
         "score": 27.6,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 1.5
+        "periods_behind": 1.57
       },
       "chart": {
         "dates": [
@@ -4140,12 +4140,10 @@
         "score": 99.8,
         "regime": "ЕКСПАНЗИОНЕН",
         "stale": false,
-        "periods_behind": 0.87
+        "periods_behind": 0.93
       },
       "chart": {
         "dates": [
-          "2016-08-15",
-          "2016-08-16",
           "2016-08-17",
           "2016-08-18",
           "2016-08-19",
@@ -5388,8 +5386,6 @@
           4.3,
           4.3,
           4.3,
-          4.3,
-          4.3,
           4.31,
           4.31,
           4.31,
@@ -5843,7 +5839,7 @@
         "score": 82.4,
         "regime": "ЕКСПАНЗИОНЕН",
         "stale": false,
-        "periods_behind": 0.87
+        "periods_behind": 0.93
       },
       "chart": {
         "dates": [
@@ -6044,7 +6040,7 @@
         "score": 30.1,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 1.5
+        "periods_behind": 1.57
       },
       "chart": {
         "dates": [
@@ -6315,7 +6311,7 @@
         "score": 13.5,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 1.5
+        "periods_behind": 1.57
       },
       "chart": {
         "dates": [
@@ -6586,7 +6582,7 @@
         "score": 50.0,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 12.63
+        "periods_behind": 12.7
       },
       "chart": {
         "dates": [
@@ -6805,7 +6801,7 @@
         "score": 62.0,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 12.63
+        "periods_behind": 12.7
       },
       "chart": {
         "dates": [
@@ -7052,7 +7048,7 @@
         "score": 45.8,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 12.17
+        "periods_behind": 12.23
       },
       "chart": {
         "dates": [
@@ -7281,7 +7277,7 @@
         "score": 29.6,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 2.5
+        "periods_behind": 2.57
       },
       "chart": {
         "dates": [
@@ -7510,7 +7506,7 @@
         "score": 15.8,
         "regime": "РЕЦЕСИОНЕН",
         "stale": false,
-        "periods_behind": 2.5
+        "periods_behind": 2.57
       },
       "chart": {
         "dates": [
@@ -7739,7 +7735,7 @@
         "score": 50.8,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 12.43
+        "periods_behind": 12.5
       },
       "chart": {
         "dates": [
@@ -7978,7 +7974,7 @@
         "score": 58.1,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 12.43
+        "periods_behind": 12.5
       },
       "chart": {
         "dates": [
@@ -8219,7 +8215,7 @@
         "score": 94.7,
         "regime": "ЕКСПАНЗИОНЕН",
         "stale": false,
-        "periods_behind": 1.5
+        "periods_behind": 1.57
       },
       "chart": {
         "dates": [
@@ -8490,7 +8486,7 @@
         "score": 36.1,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 8.57
+        "periods_behind": 8.63
       },
       "chart": {
         "dates": [
@@ -8543,7 +8539,7 @@
         "score": 27.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 6.51
+        "periods_behind": 6.53
       },
       "chart": {
         "dates": [
@@ -8644,7 +8640,7 @@
         "score": 20.5,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 5.52
+        "periods_behind": 5.54
       },
       "chart": {
         "dates": [
@@ -8747,7 +8743,7 @@
         "score": 59.5,
         "regime": "СМЕСЕН",
         "stale": false,
-        "periods_behind": 1.51
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -8816,7 +8812,7 @@
         "score": 95.5,
         "regime": "ЕКСПАНЗИОНЕН",
         "stale": false,
-        "periods_behind": 1.51
+        "periods_behind": 1.53
       },
       "chart": {
         "dates": [
@@ -8877,7 +8873,7 @@
         "score": 80.2,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 4.53
+        "periods_behind": 4.6
       },
       "chart": {
         "dates": [
@@ -8982,7 +8978,7 @@
         "score": 42.3,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 76.0
+        "periods_behind": 78.0
       },
       "chart": {
         "dates": [
@@ -9251,7 +9247,7 @@
         "score": 9.1,
         "regime": "ЗАСТОЯЛ",
         "stale": true,
-        "periods_behind": 76.0
+        "periods_behind": 78.0
       },
       "chart": {
         "dates": [
