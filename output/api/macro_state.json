@@ -1,22 +1,22 @@
 {
   "region": "CN",
-  "as_of_date": "2026-08-17",
-  "generated_at": "2026-08-17T06:52:12.099814Z",
+  "as_of_date": "2026-08-22",
+  "generated_at": "2026-08-22T03:35:54.165472Z",
   "executive_summary": {
-    "composite_score": 38.0,
-    "regime_key": "deteriorating",
-    "regime_label_bg": "ВЛОШАВАЩ СЕ",
+    "composite_score": 33.9,
+    "regime_key": "recessionary",
+    "regime_label_bg": "РЕЦЕСИОНЕН",
     "lenses_backed": "5/5",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 38.0/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 2 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 33.9/100 → режим „РЕЦЕСИОНЕН“ (5/5 лещи). 5 лещи, 3 flagged аномалии (3 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
   "lenses": {
     "growth": {
-      "score": 39.2,
-      "direction": "mixed",
-      "regime": "ПОД ТАРГЕТ",
+      "score": 25.5,
+      "direction": "contracting",
+      "regime": "РЕЦЕСИЯ",
       "label_bg": "Растеж и активност",
       "indicators_count": 11,
       "key_readings": [
@@ -42,7 +42,7 @@
         }
       ],
       "narrative": [
-        "Продажби на дребно +1.0% YoY — слабо потребление, структурно под пред-COVID нивата.",
+        "Продажби на дребно +0.6% YoY — слабо потребление, структурно под пред-COVID нивата.",
         "NBS Manufacturing PMI 49.2 — под 50 (свиване).",
         "БВП растеж 5.0% — около официалния таргет ~5% (policy-pinned, почти не мърда)."
       ]
@@ -146,7 +146,7 @@
       ]
     },
     "property": {
-      "score": 28.4,
+      "score": 28.6,
       "direction": "contracting",
       "regime": "ИМОТНА КРИЗА",
       "label_bg": "Имоти и търговия",
@@ -174,8 +174,8 @@
         }
       ],
       "narrative": [
-        "Цени на жилища (70 града, нови) +0.5% YoY — стабилизация след корекцията.",
-        "⚠️ Инвестиции в дълготрайни активи -15.6% YoY (месечно) — рязко свиване на инвестиционния цикъл.",
+        "Цени на жилища (70 града, нови) +0.3% YoY — стабилизация след корекцията.",
+        "⚠️ Инвестиции в дълготрайни активи -14.2% YoY (месечно) — рязко свиване на инвестиционния цикъл.",
         "BIS жилищни цени -7.5% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.",
         "ПЧИ 0.41% от БВП — исторически минимум. Геополитически de-risking от западни компании.",
         "Текуща сметка +3.8% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU."
@@ -190,10 +190,10 @@
         "credit"
       ],
       "peer_group": "rates",
-      "z_score": -2.552,
+      "z_score": -2.546,
       "direction": "down",
       "current_value": 3.0,
-      "last_date": "2026-07-20",
+      "last_date": "2026-08-20",
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
@@ -214,16 +214,32 @@
       "is_new_extreme": true,
       "new_extreme_direction": "max",
       "stale": false,
-      "periods_behind": 0.55,
+      "periods_behind": 0.64,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
+    },
+    {
+      "series_id": "CN_CGB_10Y",
+      "name_bg": "10Y China Government Bond yield",
+      "lens": [
+        "credit"
+      ],
+      "peer_group": "rates",
+      "z_score": -2.192,
+      "direction": "down",
+      "current_value": 1.715,
+      "last_date": "2026-07-31",
+      "is_new_extreme": false,
+      "new_extreme_direction": null,
+      "stale": false,
+      "periods_behind": 20.0,
+      "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
     }
   ],
-  "anomalies_stale_excluded": 4,
+  "anomalies_stale_excluded": 3,
   "anomalies_stale_excluded_keys": [
     "CN_CREDIT_PRIVATE",
     "CN_POLICY_RATE",
-    "CN_BIS_PROPERTY_YOY",
-    "CN_CGB_10Y"
+    "CN_BIS_PROPERTY_YOY"
   ],
   "cross_lens_divergences": [
     {
@@ -252,12 +268,12 @@
       "pair_id": "external_domestic_balance",
       "name_bg": "Външно търсене × Вътрешна активност",
       "question_bg": "Балансиран ли е растежът, или Китай зависи от износа при слабо вътрешно търсене?",
-      "state": "both_up",
-      "interpretation": "Балансиран растеж — и износ, и вътрешно търсене се разширяват.",
+      "state": "a_up_b_down",
+      "interpretation": "Export-dependence — износът носи растежа, докато вътрешното търсене е слабо. Небалансирано възстановяване, уязвимо на тарифи/външни шокове.",
       "slot_a_label": "Външно търсене",
       "slot_b_label": "Вътрешна активност",
       "breadth_a": 0.833,
-      "breadth_b": 0.667
+      "breadth_b": 0.333
     }
   ],
   "non_consensus_highlights": []
