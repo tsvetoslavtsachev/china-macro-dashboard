@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-08-17",
-  "generated_at": "2026-08-17T06:52:12Z",
-  "data_generated_at": "2026-08-17T06:52:12.099814Z",
-  "composite_score": 38.0,
+  "as_of_date": "2026-08-24",
+  "generated_at": "2026-08-24T06:51:19Z",
+  "data_generated_at": "2026-08-24T06:51:19.761752Z",
+  "composite_score": 37.8,
   "regime": {
     "key": "deteriorating",
     "label_bg": "ВЛОШАВАЩ СЕ"
@@ -13,7 +13,7 @@
     {
       "key": "growth",
       "label_bg": "Растеж и активност",
-      "score": 39.2,
+      "score": 38.6,
       "direction": "mixed"
     },
     {
@@ -37,7 +37,7 @@
     {
       "key": "property",
       "label_bg": "Имоти и търговия",
-      "score": 28.4,
+      "score": 28.6,
       "direction": "contracting"
     }
   ],
@@ -46,7 +46,7 @@
       "series_id": "CN_LPR_1Y",
       "name_bg": "1-годишен Loan Prime Rate (PBoC)",
       "lens": "credit",
-      "z_score": -2.552,
+      "z_score": -2.546,
       "direction": "down"
     },
     {
