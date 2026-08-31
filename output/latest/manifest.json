@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-08-24",
-  "generated_at": "2026-08-24T06:51:19Z",
-  "data_generated_at": "2026-08-24T06:51:19.761752Z",
-  "composite_score": 37.8,
+  "as_of_date": "2026-08-31",
+  "generated_at": "2026-08-31T12:00:11Z",
+  "data_generated_at": "2026-08-31T12:00:11.096012Z",
+  "composite_score": 38.8,
   "regime": {
     "key": "deteriorating",
     "label_bg": "ВЛОШАВАЩ СЕ"
@@ -13,7 +13,7 @@
     {
       "key": "growth",
       "label_bg": "Растеж и активност",
-      "score": 38.6,
+      "score": 41.9,
       "direction": "mixed"
     },
     {
