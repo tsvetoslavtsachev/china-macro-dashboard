@@ -53,10 +53,17 @@ jobs:
       - name: Restore data cache
         uses: actions/cache@v4
         with:
-          path: data/
+          path: data/cache_*.json
           key: ${{ steps.cache-key.outputs.key }}
           restore-keys: |
             china-macro-cache-
+
+      # Кешът НЕ бива да гази комитнати данни. Стари кешове са записани с
+      # path: data/ и restore-keys ги хваща по префикс, тоест могат да върнат
+      # цялата папка върху изтегленото. Точно това стана на 24.08.2026: майският
+      # bloomberg_bridge.json презаписа августовския и рънът го комитна обратно.
+      - name: Комитнатият мост бие кеша
+        run: git checkout -- data/bloomberg_bridge.json
 
       # Schedule = force refresh (US/EU паритет): каталогът няма weekly серии,
       # а ~7-дневният actions/cache държи monthly TTL=10 неизтекъл в типичната
