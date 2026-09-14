@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "region": "CN",
-  "as_of_date": "2026-09-07",
-  "generated_at": "2026-09-07T10:53:02Z",
-  "data_generated_at": "2026-09-07T10:53:01.945192Z",
-  "composite_score": 34.9,
+  "as_of_date": "2026-09-14",
+  "generated_at": "2026-09-14T11:05:27Z",
+  "data_generated_at": "2026-09-14T11:05:27.432797Z",
+  "composite_score": 34.8,
   "regime": {
     "key": "recessionary",
     "label_bg": "РЕЦЕСИОНЕН"
@@ -19,7 +19,7 @@
     {
       "key": "inflation",
       "label_bg": "Инфлация и цени",
-      "score": 44.9,
+      "score": 45.6,
       "direction": "mixed"
     },
     {
@@ -31,7 +31,7 @@
     {
       "key": "credit",
       "label_bg": "Монетарна политика и кредит",
-      "score": 47.8,
+      "score": 46.9,
       "direction": "mixed"
     },
     {
