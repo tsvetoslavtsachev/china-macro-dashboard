@@ -9,7 +9,7 @@ Mirror на US/EU версиите — виж eu-macro-dashboard/sources/bloombe
 Catalog usage:
     "CN_TSF": {
         "source": "bloomberg_bridge",
-        "parquet_path": "../../../vrm-data-archive/parquet/CN_TSF.parquet",
+        "parquet_path": "../../../markets/vrm-data-archive/parquet/CN_TSF.parquet",
         "license_class": "bloomberg_internal_use",
         ...
     }

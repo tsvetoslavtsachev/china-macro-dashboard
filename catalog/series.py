@@ -774,7 +774,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
     "CN_PMI_COMPOSITE_CAIXIN": {
         "source": "bloomberg_bridge",
         "id": "CN_PMI_COMPOSITE_CAIXIN",
-        "parquet_path": "../vrm-data-archive/parquet/CN_PMI_COMPOSITE_CAIXIN.parquet",
+        "parquet_path": "../../markets/vrm-data-archive/parquet/CN_PMI_COMPOSITE_CAIXIN.parquet",
         "license_class": "source_public",
         "region": "CN",
         "name_bg": "Caixin Composite PMI",
@@ -899,7 +899,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
     "CN_CNH": {
         "source": "bloomberg_bridge",
         "id": "CN_CNH",
-        "parquet_path": "../vrm-data-archive/parquet/CN_CNH.parquet",
+        "parquet_path": "../../markets/vrm-data-archive/parquet/CN_CNH.parquet",
         "license_class": "source_public",
         "region": "HK",
         "name_bg": "CNH — offshore CNY (USDCNH)",
@@ -920,7 +920,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
     "CN_CGB_10Y": {
         "source": "bloomberg_bridge",
         "id": "CN_CGB_10Y",
-        "parquet_path": "../vrm-data-archive/parquet/CN_CGB_10Y.parquet",
+        "parquet_path": "../../markets/vrm-data-archive/parquet/CN_CGB_10Y.parquet",
         "license_class": "source_public",
         "region": "CN",
         "name_bg": "10Y China Government Bond yield",
