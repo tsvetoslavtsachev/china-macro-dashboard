@@ -1,7 +1,7 @@
 {
   "region": "CN",
-  "as_of_date": "2026-10-19",
-  "generated_at": "2026-10-19T11:24:28.391025Z",
+  "as_of_date": "2026-10-24",
+  "generated_at": "2026-10-24T07:43:44.948585Z",
   "executive_summary": {
     "composite_score": 38.7,
     "regime_key": "deteriorating",
@@ -190,14 +190,14 @@
         "credit"
       ],
       "peer_group": "rates",
-      "z_score": -2.539,
+      "z_score": -2.533,
       "direction": "down",
       "current_value": 3.0,
-      "last_date": "2026-09-20",
+      "last_date": "2026-10-20",
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
-      "periods_behind": 0.33,
+      "periods_behind": 0.0,
       "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
     },
     {
@@ -214,7 +214,7 @@
       "is_new_extreme": true,
       "new_extreme_direction": "max",
       "stale": false,
-      "periods_behind": 0.75,
+      "periods_behind": 0.8,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
     },
     {
@@ -231,7 +231,7 @@
       "is_new_extreme": false,
       "new_extreme_direction": null,
       "stale": false,
-      "periods_behind": 0.0,
+      "periods_behind": 20.0,
       "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
     }
   ],
