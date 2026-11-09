@@ -1,14 +1,14 @@
 {
   "region": "CN",
-  "as_of_date": "2026-11-02",
-  "generated_at": "2026-11-02T13:59:25.533938Z",
+  "as_of_date": "2026-11-09",
+  "generated_at": "2026-11-09T14:32:20.704180Z",
   "executive_summary": {
-    "composite_score": 37.3,
+    "composite_score": 36.8,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "lenses_backed": "5/5",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 37.3/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 3 flagged аномалии (3 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 36.8/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 3 flagged аномалии (3 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
@@ -48,7 +48,7 @@
       ]
     },
     "inflation": {
-      "score": 41.7,
+      "score": 38.8,
       "direction": "mixed",
       "regime": "ДЕФЛАЦИОНЕН РИСК",
       "label_bg": "Инфлация и цени",
@@ -76,8 +76,8 @@
         }
       ],
       "narrative": [
-        "CPI 0.9% YoY — близо до нула, но рефлира от отрицателните стойности на 2025.",
-        "PPI +5.0% YoY — производствените цени излязоха от дефлация (от ~−3.6% средата на 2025). Край на 3-годишния PPI спад.",
+        "CPI 0.7% YoY — близо до нула, но рефлира от отрицателните стойности на 2025.",
+        "PPI +5.7% YoY — производствените цени излязоха от дефлация (от ~−3.6% средата на 2025). Край на 3-годишния PPI спад.",
         "БВП дефлатор -0.06% (тримесечно) — още отрицателен, но най-плитък от началото на debt-deflation (2Q2023). Близо до изход."
       ],
       "comparability_note": "несравнима между региони по дизайн — CN линейна дефлационна леща (абсолютни котви) vs US/EU U-форма около 2%"
@@ -257,12 +257,12 @@
       "pair_id": "monetary_inflation_trap",
       "name_bg": "Монетарно разхлабване × Инфлация",
       "question_bg": "Води ли разхлабването на PBoC до инфлация, или политиката бута в дефлация (policy trap)?",
-      "state": "transition",
-      "interpretation": "Преход — посоките на политиката и инфлацията не са ясно aligned.",
+      "state": "a_up_b_down",
+      "interpretation": "Policy trap — PBoC разхлабва, но инфлацията пада/е в дефлация. Трансмисията е счупена (Japan-style): по-ниските лихви не вдигат цените при deleveraging.",
       "slot_a_label": "Монетарно разхлабване",
       "slot_b_label": "Инфлация",
       "breadth_a": 1.0,
-      "breadth_b": 0.5
+      "breadth_b": 0.25
     },
     {
       "pair_id": "external_domestic_balance",
@@ -272,7 +272,7 @@
       "interpretation": "Балансиран растеж — и износ, и вътрешно търсене се разширяват.",
       "slot_a_label": "Външно търсене",
       "slot_b_label": "Вътрешна активност",
-      "breadth_a": 0.667,
+      "breadth_a": 0.833,
       "breadth_b": 0.667
     }
   ],
