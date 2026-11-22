@@ -27,7 +27,7 @@ import argparse
 import json
 import math
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -287,7 +287,7 @@ def build_macro_state(snapshot: dict, today: date) -> dict:
     return {
         "region": "CN",
         "as_of_date": str(today),
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat() + "Z",
         "executive_summary": {
             "composite_score": overall,
             "regime_key": regime_key,
@@ -393,7 +393,7 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
 
     return {
         "region": "CN",
-        "last_updated": datetime.utcnow().isoformat() + "Z",
+        "last_updated": datetime.now(timezone.utc).isoformat() + "Z",
         "years_included": years,
         "series_count": len(series_out),
         "series": series_out,
@@ -404,6 +404,41 @@ def _safe_dump(obj: Any, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, indent=2, default=str)
+
+
+def build_lpr(df: Any, today: date, months: int = 36) -> dict:
+    """LPR 1Y/5Y (с дати) от ak.macro_china_lpr() за публикуване в output/api/lpr.json.
+
+    Хвърля ValueError при празен или подменен отговор (нула редове, HTML,
+    липсващи колони), за да не се запише празен файл.
+    """
+    if df is None or not hasattr(df, "columns") or len(df) == 0:
+        raise ValueError("LPR: празен или неразпознаваем отговор от източника")
+    for col in ("TRADE_DATE", "LPR1Y", "LPR5Y"):
+        if col not in df.columns:
+            raise ValueError(f"LPR: липсва колона {col}")
+    dates = pd.to_datetime(df["TRADE_DATE"], errors="coerce")
+    cutoff = pd.Timestamp(today) - pd.DateOffset(months=months)
+    out: dict[str, list] = {}
+    for key, col in (("lpr_1y", "LPR1Y"), ("lpr_5y", "LPR5Y")):
+        vals = pd.to_numeric(df[col], errors="coerce")
+        s = pd.Series(vals.values, index=dates, dtype=float)
+        s = s[s.index.notna()].dropna().sort_index()
+        s = s[s.index >= cutoff]
+        if s.empty:
+            raise ValueError(f"LPR: нула валидни точки за {key} в последните {months} месеца")
+        out[key] = [[d.strftime("%Y-%m-%d"), float(v)] for d, v in s.items()]
+    return {
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "source": "akshare macro_china_lpr",
+        "series": out,
+    }
+
+
+def write_lpr(df: Any, today: date, path: Path) -> dict:
+    data = build_lpr(df, today)  # хвърля преди да пипне файла
+    _safe_dump(data, path)
+    return data
 
 
 def main(args) -> int:
