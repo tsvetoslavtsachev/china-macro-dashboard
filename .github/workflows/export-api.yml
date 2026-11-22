@@ -68,3 +68,10 @@ jobs:
           git add output/api/macro_state.json output/api/series_data.json output/api/lpr.json
           git diff --cached --quiet || git commit -m "chore: update API JSON $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push
+
+      - name: Аларма - LPR не е обновена (след комита)
+        run: |
+          if [ -f output/api/.lpr_failed ]; then
+            echo "::error::LPR падна: $(cat output/api/.lpr_failed)"
+            exit 1
+          fi

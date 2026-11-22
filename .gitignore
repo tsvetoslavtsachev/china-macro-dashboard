@@ -46,3 +46,6 @@ journal/**/*.md
 !journal/HOWTO.md
 # Авто-генерираният индекс има частни заглавия — само локално.
 journal/README.md
+
+# маркер за провал на LPR (чете се от алармата след комита)
+output/api/.lpr_failed

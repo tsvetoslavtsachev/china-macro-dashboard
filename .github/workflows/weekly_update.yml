@@ -15,6 +15,8 @@ on:
 
 jobs:
   update:
+    outputs:
+      lpr_failed: ${{ steps.lprflag.outputs.lpr_failed }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -170,6 +172,21 @@ jobs:
               sleep $((attempt * 5))
             done
           fi
+
+      - name: Флаг - LPR падна ли
+        id: lprflag
+        if: always()
+        run: |
+          if [ -f output/api/.lpr_failed ]; then echo "lpr_failed=true" >> "$GITHUB_OUTPUT"; else echo "lpr_failed=false" >> "$GITHUB_OUTPUT"; fi
+
+  lpr-alarm:
+    needs: update
+    if: needs.update.outputs.lpr_failed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::LPR падна в export_api.py; комитът и деплойът минаха, lpr.json е стар"
+          exit 1
 
   deploy:
     needs: update

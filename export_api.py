@@ -441,6 +441,26 @@ def write_lpr(df: Any, today: date, path: Path) -> dict:
     return data
 
 
+def publish_lpr(fetch, today: date, path: Path, marker: Path) -> bool:
+    """Пише lpr.json; при провал НЕ пипа стария файл, печата шумно и слага маркер.
+
+    Връща True при успех. Маркерът (output/api/.lpr_failed, извън git) се чете
+    от последната стъпка на workflow-а, която чак след комита прави хода червен.
+    """
+    try:
+        write_lpr(fetch(), today, path)
+    except Exception as e:  # noqa: BLE001 - целта е да не спира останалото
+        print("!" * 60)
+        print(f"!!! LPR ПРОВАЛ: {type(e).__name__}: {e}")
+        print("!!! lpr.json НЕ е пипнат (старият остава); маркер .lpr_failed")
+        print("!" * 60)
+        marker.parent.mkdir(parents=True, exist_ok=True)
+        marker.write_text(f"{type(e).__name__}: {e}\n", encoding="utf-8")
+        return False
+    marker.unlink(missing_ok=True)
+    return True
+
+
 def main(args) -> int:
     today = date.today()
     print("\n" + "═" * 60)
@@ -474,6 +494,14 @@ def main(args) -> int:
     print("📈 Генерирам series_data.json...")
     series_data = build_series_data(snapshot, today, years=args.years)
     _safe_dump(series_data, OUTPUT_DIR / "series_data.json")
+
+    print("🏦 Генерирам lpr.json...")
+
+    def _fetch_lpr():
+        import akshare as ak
+        return ak.macro_china_lpr()
+
+    publish_lpr(_fetch_lpr, today, OUTPUT_DIR / "lpr.json", OUTPUT_DIR / ".lpr_failed")
 
     es = macro_state["executive_summary"]
     print(f"\n✅ Done! composite={es['composite_score']} regime={es['regime_key']} "
