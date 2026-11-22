@@ -214,14 +214,12 @@ class AkShareAdapter(BaseAdapter):
 
     def _fetch_lpr_1y(self) -> pd.Series:
         """1Y LPR (TRADE_DATE, LPR1Y cols). Pre-2013 имат NaN — dropна се."""
-        import akshare as ak
-        df = ak.macro_china_lpr()
+        df = lpr_frame()
         return self._to_series_from_iso_date(df, "TRADE_DATE", "LPR1Y")
 
     def _fetch_lpr_5y(self) -> pd.Series:
         """5Y LPR. Series започва Aug 2019."""
-        import akshare as ak
-        df = ak.macro_china_lpr()
+        df = lpr_frame()
         return self._to_series_from_iso_date(df, "TRADE_DATE", "LPR5Y")
 
     def _fetch_pmi_mfg_nbs(self) -> pd.Series:
@@ -323,3 +321,12 @@ class AkShareAdapter(BaseAdapter):
 
         logger.info(f"AkShareAdapter: fetching {len(specs)} series for China")
         return self.fetch_many(specs, force=force)
+
+
+def lpr_frame():
+    """ИЛЮ3 (22.11.2026): akshare 1.20.48 преименува macro_china_lpr на interest_rate_lpr_em
+    (същите колони TRADE_DATE, LPR1Y, LPR5Y); старото име вече го няма. Ново име първо,
+    старото за по-стари версии."""
+    import akshare as ak
+    fn = getattr(ak, "interest_rate_lpr_em", None) or getattr(ak, "macro_china_lpr")
+    return fn()

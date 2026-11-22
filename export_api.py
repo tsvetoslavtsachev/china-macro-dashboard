@@ -430,7 +430,7 @@ def build_lpr(df: Any, today: date, months: int = 36) -> dict:
         out[key] = [[d.strftime("%Y-%m-%d"), float(v)] for d, v in s.items()]
     return {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "source": "akshare macro_china_lpr",
+        "source": "akshare interest_rate_lpr_em (macro_china_lpr до 1.20.48)",
         "series": out,
     }
 
@@ -498,8 +498,8 @@ def main(args) -> int:
     print("🏦 Генерирам lpr.json...")
 
     def _fetch_lpr():
-        import akshare as ak
-        return ak.macro_china_lpr()
+        from sources.akshare_cn import lpr_frame   # ИЛЮ3: новото име в akshare 1.20.48
+        return lpr_frame()
 
     publish_lpr(_fetch_lpr, today, OUTPUT_DIR / "lpr.json", OUTPUT_DIR / ".lpr_failed")
 
