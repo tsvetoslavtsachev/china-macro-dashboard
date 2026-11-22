@@ -430,7 +430,7 @@ def build_lpr(df: Any, today: date, months: int = 36) -> dict:
         out[key] = [[d.strftime("%Y-%m-%d"), float(v)] for d, v in s.items()]
     return {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "source": "akshare interest_rate_lpr_em (macro_china_lpr до 1.20.48)",
+        "source": "akshare {} {}".format(df.attrs.get("akshare_fn", "?"), df.attrs.get("akshare_version", "")).strip(),
         "series": out,
     }
 

@@ -323,10 +323,29 @@ class AkShareAdapter(BaseAdapter):
         return self.fetch_many(specs, force=force)
 
 
+# ИЛЮ3 Е1 (23.11.2026): akshare 1.20.65 връща колоните на LPR на китайски. Двата вида се
+# свеждат до латинските, които четат build_lpr и _to_series_from_iso_date.
+LPR_COLUMNS = {"日期": "TRADE_DATE", "1年期LPR": "LPR1Y", "5年期以上LPR": "LPR5Y"}
+LPR_REQUIRED = ("TRADE_DATE", "LPR1Y", "LPR5Y")
+
+
 def lpr_frame():
-    """ИЛЮ3 (22.11.2026): akshare 1.20.48 преименува macro_china_lpr на interest_rate_lpr_em
-    (същите колони TRADE_DATE, LPR1Y, LPR5Y); старото име вече го няма. Ново име първо,
-    старото за по-стари версии."""
+    """LPR 1Y/5Y като DataFrame с колони TRADE_DATE, LPR1Y, LPR5Y.
+
+    akshare 1.20.48 преименува macro_china_lpr на interest_rate_lpr_em (ИЛЮ3, 22.11.2026), а
+    1.20.65 върна колоните на китайски (ИЛЮ3 Е1, 23.11.2026). Ново име на функцията първо,
+    старото за по-стари версии; китайските колони се преименуват. Непознат вид е ValueError,
+    който назовава видените колони, не тиха празнота."""
     import akshare as ak
     fn = getattr(ak, "interest_rate_lpr_em", None) or getattr(ak, "macro_china_lpr")
-    return fn()
+    df = fn()
+    if df is None or not hasattr(df, "columns"):
+        raise ValueError(f"LPR: неразпознаваем отговор от {fn.__name__}: {type(df).__name__}")
+    df = df.rename(columns=LPR_COLUMNS)
+    missing = [c for c in LPR_REQUIRED if c not in df.columns]
+    if missing:
+        raise ValueError(f"LPR: непознат вид колони от {fn.__name__}: видях {list(df.columns)}; "
+                         f"липсват {missing}")
+    df.attrs["akshare_fn"] = fn.__name__                       # етикетът на източника в lpr.json
+    df.attrs["akshare_version"] = getattr(ak, "__version__", "")
+    return df
