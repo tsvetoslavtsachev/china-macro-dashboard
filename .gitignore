@@ -49,3 +49,4 @@ journal/README.md
 
 # маркер за провал на LPR (чете се от алармата след комита)
 output/api/.lpr_failed
+output/.fetch_failed

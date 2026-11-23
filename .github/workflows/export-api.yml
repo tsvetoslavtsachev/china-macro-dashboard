@@ -75,3 +75,14 @@ jobs:
             echo "::error::LPR падна: $(cat output/api/.lpr_failed)"
             exit 1
           fi
+
+      # ИЛЮ3 Е3: всяка серия, паднала при теглене (изключение или празен отговор), е червено
+      # в края, след комита, с имената на сериите (sources/_base.py пише маркера).
+      - name: Аларма - паднали серии (след комита)
+        if: always()
+        run: |
+          if [ -s output/.fetch_failed ]; then
+            echo "::error::паднали серии при теглене: $(wc -l < output/.fetch_failed)"
+            while read -r line; do echo "::error::$line"; done < output/.fetch_failed
+            exit 1
+          fi

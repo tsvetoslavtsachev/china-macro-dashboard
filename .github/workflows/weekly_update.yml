@@ -17,6 +17,7 @@ jobs:
   update:
     outputs:
       lpr_failed: ${{ steps.lprflag.outputs.lpr_failed }}
+      fetch_failed: ${{ steps.lprflag.outputs.fetch_failed }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -178,6 +179,11 @@ jobs:
         if: always()
         run: |
           if [ -f output/api/.lpr_failed ]; then echo "lpr_failed=true" >> "$GITHUB_OUTPUT"; else echo "lpr_failed=false" >> "$GITHUB_OUTPUT"; fi
+          # ИЛЮ3 Е3: паднали серии при теглене (маркерът от sources/_base.py)
+          if [ -s output/.fetch_failed ]; then
+            echo "fetch_failed=true" >> "$GITHUB_OUTPUT"
+            while read -r line; do echo "::error::$line"; done < output/.fetch_failed
+          else echo "fetch_failed=false" >> "$GITHUB_OUTPUT"; fi
 
   lpr-alarm:
     needs: update
@@ -186,6 +192,16 @@ jobs:
     steps:
       - run: |
           echo "::error::LPR падна в export_api.py; комитът и деплойът минаха, lpr.json е стар"
+          exit 1
+
+  fetch-alarm:
+    # ИЛЮ3 Е3: комитът и деплойът минават, ходът е червен и назовава сериите (в лога на update)
+    needs: update
+    if: needs.update.outputs.fetch_failed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::паднали серии при теглене; имената са в лога на update, стъпката „Флаг - LPR падна ли“"
           exit 1
 
   deploy:

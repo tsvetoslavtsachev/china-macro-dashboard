@@ -236,7 +236,7 @@ class BaseAdapter(ABC):
             series = self._fetch_with_retry(series_key, source_id)
             if series is None or series.empty:
                 warnings.warn(f"{series_key} ({source_id}): empty response from {self.SOURCE_NAME}")
-                self._fetch_failures.append(series_key)
+                self._record_failure(series_key, source_id, "празен отговор")
                 return self._series_from_cache(series_key)
 
             # Гарантираме DatetimeIndex и сортиране
@@ -248,8 +248,26 @@ class BaseAdapter(ABC):
 
         except Exception as e:
             logger.error(f"{series_key} ({source_id}): fetch failed — {e}")
-            self._fetch_failures.append(series_key)
+            self._record_failure(series_key, source_id, f"{type(e).__name__}: {e}")
             return self._series_from_cache(series_key)
+
+    # ИЛЮ3 Е3 (23.11.2026): от 14.11 до 22.11.2026 таблото губеше до 11 серии на ход при зелени
+    # ходове („fetch failed“ беше само ред в лога). Всяка паднала серия (изключение или празен
+    # отговор при теглене) се дописва в FAILED_MARKER; работните потоци червенеят в края, след
+    # комита, и назовават сериите. Серия, която стои при източника (стара дата, без изключение),
+    # не е провал и не се пише тук.
+    FAILED_MARKER = Path("output") / ".fetch_failed"
+
+    def _record_failure(self, series_key: str, source_id: str, reason: str) -> None:
+        self._fetch_failures.append(series_key)
+        try:
+            marker = self.base_dir / self.FAILED_MARKER
+            marker.parent.mkdir(parents=True, exist_ok=True)
+            with open(marker, "a", encoding="utf-8") as f:
+                one_line = str(reason).replace(chr(10), " ")[:200]
+                f.write(f"{self.SOURCE_NAME} {series_key} ({source_id}): {one_line}" + chr(10))
+        except OSError as e:
+            logger.error(f"Маркерът за паднали серии не се записа: {e}")
 
     def fetch_many(
         self,
