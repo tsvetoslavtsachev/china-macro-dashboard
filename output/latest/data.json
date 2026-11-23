@@ -1,14 +1,14 @@
 {
   "region": "CN",
-  "as_of_date": "2026-11-16",
-  "generated_at": "2026-11-16T14:20:29.101558Z",
+  "as_of_date": "2026-11-23",
+  "generated_at": "2026-11-23T16:39:51.785933+00:00Z",
   "executive_summary": {
-    "composite_score": 36.7,
+    "composite_score": 35.9,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "lenses_backed": "5/5",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 36.7/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 3 flagged аномалии (3 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 35.9/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 2 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
@@ -111,7 +111,7 @@
       ]
     },
     "credit": {
-      "score": 45.7,
+      "score": 45.3,
       "direction": "mixed",
       "regime": "НЕУТРАЛНА ПОЛИТИКА",
       "label_bg": "Монетарна политика и кредит",
@@ -141,14 +141,14 @@
       "narrative": [
         "1Y LPR 3.00% — на/близо до исторически дъна; активен easing цикъл.",
         "Кредит към частния нефинансов сектор 198% от БВП (BIS) — debt overhang. Ограничава трансмисията на политиката.",
-        "M2 растеж 7.2% YoY — исторически слаб. Лихвите паднаха, но кредитът не се ускорява (слаба трансмисия).",
+        "M2 растеж 7.1% YoY — исторически слаб. Лихвите паднаха, но кредитът не се ускорява (слаба трансмисия).",
         "CNY/USD 7.1728 — управляван флоат. PBoC контролира дневния band ±2%."
       ]
     },
     "property": {
-      "score": 31.1,
+      "score": 27.4,
       "direction": "contracting",
-      "regime": "ИМОТНА КОРЕКЦИЯ",
+      "regime": "ИМОТНА КРИЗА",
       "label_bg": "Имоти и търговия",
       "indicators_count": 9,
       "key_readings": [
@@ -175,7 +175,7 @@
       ],
       "narrative": [
         "Цени на жилища (70 града, нови) +0.1% YoY — стабилизация след корекцията.",
-        "⚠️ Инвестиции в дълготрайни активи -9.7% YoY (месечно) — рязко свиване на инвестиционния цикъл.",
+        "⚠️ Инвестиции в дълготрайни активи -17.8% YoY (месечно) — рязко свиване на инвестиционния цикъл.",
         "BIS жилищни цени -7.5% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.",
         "ПЧИ 0.41% от БВП — исторически минимум. Геополитически de-risking от западни компании.",
         "Текуща сметка +3.8% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU."
@@ -190,10 +190,10 @@
         "credit"
       ],
       "peer_group": "rates",
-      "z_score": -2.533,
+      "z_score": -2.527,
       "direction": "down",
       "current_value": 3.0,
-      "last_date": "2026-10-20",
+      "last_date": "2026-11-20",
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
@@ -214,44 +214,28 @@
       "is_new_extreme": true,
       "new_extreme_direction": "max",
       "stale": false,
-      "periods_behind": 0.8,
+      "periods_behind": 0.89,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
-    },
-    {
-      "series_id": "CN_CGB_10Y",
-      "name_bg": "10Y China Government Bond yield",
-      "lens": [
-        "credit"
-      ],
-      "peer_group": "rates",
-      "z_score": -2.193,
-      "direction": "down",
-      "current_value": 1.678,
-      "last_date": "2026-09-30",
-      "is_new_extreme": false,
-      "new_extreme_direction": null,
-      "stale": false,
-      "periods_behind": 20.0,
-      "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive."
     }
   ],
-  "anomalies_stale_excluded": 3,
+  "anomalies_stale_excluded": 4,
   "anomalies_stale_excluded_keys": [
     "CN_CREDIT_PRIVATE",
     "CN_POLICY_RATE",
-    "CN_BIS_PROPERTY_YOY"
+    "CN_BIS_PROPERTY_YOY",
+    "CN_CGB_10Y"
   ],
   "cross_lens_divergences": [
     {
       "pair_id": "credit_real_economy",
       "name_bg": "Кредитна експанзия × Реален сектор",
       "question_bg": "Превръща ли се кредитът в реална инвестиция, или ликвидността засяда (debt-deflation)?",
-      "state": "a_down_b_up",
-      "interpretation": "Реален сектор изпреварва кредита — инвестиции растат без нов кредит (вътрешно финансиране / fiscal импулс).",
+      "state": "transition",
+      "interpretation": "Преход — кредит и реален сектор не са ясно aligned; чакай следващ TSF/FAI print.",
       "slot_a_label": "Кредитна експанзия",
       "slot_b_label": "Имоти и инвестиции",
       "breadth_a": 0.333,
-      "breadth_b": 0.7
+      "breadth_b": 0.6
     },
     {
       "pair_id": "monetary_inflation_trap",
