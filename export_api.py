@@ -51,6 +51,7 @@ from catalog.polarity import (
 from core.scorer import score_series
 from analysis.divergence import compute_cross_lens_divergence
 from analysis.anomaly import compute_anomalies, _periods_behind, _is_stale
+from analysis.health import lens_health, ALL_STALE_NOTE
 from run import _build_adapters, _build_snapshot, _auto_refresh_stale
 
 import modules.growth
@@ -85,6 +86,11 @@ _META_MODULES = [
     modules.inflation.SERIES,
     modules.labor.SERIES,
 ]
+_MODULE_SERIES = {
+    "growth": modules.growth.SERIES, "credit": modules.credit.SERIES,
+    "property": modules.property.SERIES, "inflation": modules.inflation.SERIES,
+    "labor": modules.labor.SERIES,
+}
 SERIES_META: dict[str, dict[str, Any]] = {}
 for _series_dict in _META_MODULES:
     for _sid, _meta in _series_dict.items():
@@ -229,6 +235,23 @@ def build_macro_state(snapshot: dict, today: date) -> dict:
         # за да не се сравни наивно „висок инфлационен percentile" между региони.
         if r["module"] in REGION_INCOMPARABLE_LENSES:
             lenses_out[r["module"]]["comparability_note"] = INFLATION_COMPARABILITY_NOTE
+        # PROLETR4: health_z на лещата (като US/EU) — без стари серии (същото
+        # правило като series_data latest.stale) и без празни резултати.
+        _ids = list(_MODULE_SERIES.get(r["module"], {}).keys())
+        _lh = lens_health(
+            _ids, r.get("indicators") or {},
+            {i: SERIES_CATALOG.get(i, {}).get("peer_group") for i in _ids},
+            {i: (snapshot[i].dropna().index[-1] if isinstance(snapshot.get(i), pd.Series)
+                 and not snapshot[i].dropna().empty else None) for i in _ids},
+            {i: SERIES_CATALOG.get(i, {}).get("release_schedule", "monthly") for i in _ids},
+            today,
+        )
+        lenses_out[r["module"]]["health_z"] = (
+            round(_lh["health_z"], 3) if _lh["health_z"] is not None else None)
+        lenses_out[r["module"]]["health_z_n"] = _lh["n_series"]
+        lenses_out[r["module"]]["health_z_excluded_stale"] = _lh["excluded_stale"]
+        if _lh["all_stale"]:
+            lenses_out[r["module"]]["health_z_note"] = ALL_STALE_NOTE
 
     # ── Top anomalies (огледало на US/EU сериализацията) ─────────────────────
     top_anomalies = []
