@@ -45,6 +45,7 @@ def generate_briefing_context(
     import modules.labor as labor_mod
     import modules.credit as credit_mod
     import modules.property as property_mod
+    import modules.external as external_mod
 
     if today is None:
         today = date.today()
@@ -55,6 +56,7 @@ def generate_briefing_context(
         ("labor",     labor_mod),
         ("credit",    credit_mod),
         ("property",  property_mod),
+        ("external",  external_mod),
     ]
 
     results = []

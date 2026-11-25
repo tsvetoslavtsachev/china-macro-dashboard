@@ -64,17 +64,18 @@ from analysis.delta import (
 
 # ─── Labels (China таксономия) ───────────────────────────────────
 
-LENS_ORDER = ["growth", "inflation", "labor", "credit", "property"]
+LENS_ORDER = ["growth", "inflation", "labor", "credit", "property", "external"]
 LENS_LABEL_BG = {
     "growth":    "Растеж и активност",
     "inflation": "Инфлация и цени",
     "labor":     "Пазар на труда",
     "credit":    "Монетарна политика и кредит",
-    "property":  "Имоти и търговия",
+    "property":  "Имоти и инвестиции",
+    "external":  "Външен сектор и курс",
 }
 LENS_ICON = {
     "growth": "📈", "inflation": "🔥", "labor": "👷",
-    "credit": "🏦", "property": "🏗️",
+    "credit": "🏦", "property": "🏗️", "external": "🌐",
 }
 
 # China MACRO_REGIMES BG label → english slug (симетрия с export_api / US/EU)
@@ -791,7 +792,7 @@ def _render_journal(entries: list) -> str:
     }
     TOPIC_LABELS = {
         "growth": "Растеж", "inflation": "Инфлация", "labor": "Трудов пазар",
-        "credit": "Кредит", "property": "Имоти", "analogs": "Аналози",
+        "credit": "Кредит", "property": "Имоти", "external": "Външен сектор", "analogs": "Аналози",
         "regime": "Режими", "methodology": "Методология",
     }
     rows = []
@@ -856,8 +857,8 @@ def _render_footer(as_of, today) -> str:
 
     <h4>Композитен режим</h4>
     <p class="muted">
-      Претеглен composite от 5-те лещи по China-калибрираните тегла (растеж 30% ·
-      кредит 25% · имоти 20% · инфлация 15% · труд 10%). Режимът се определя от
+      Претеглен composite от 6-те лещи по China-калибрираните тегла (растеж 30% ·
+      кредит 25% · имоти 20% · инфлация 15% · труд 10% · външен 10%, нормирани по сбора). Режимът се определя от
       праговете в <code>config.MACRO_REGIMES</code>. Идентичен с
       <code>run.py --modules</code> и AI слоя (<code>manifest.json</code>).
     </p>
@@ -895,7 +896,7 @@ def _render_footer(as_of, today) -> str:
   <p class="muted brief-meta">
     Всички изчисления са детерминистични — няма LLM нарация. Китайските официални
     данни са обект на ревизии и методологични промени; интерпретирайте с внимание.
-    As_of: {html.escape(as_of or '—')} · Генериран: {today.isoformat()} · Серии: {len(SERIES_CATALOG)} · Лещи: 5.
+    As_of: {html.escape(as_of or '—')} · Генериран: {today.isoformat()} · Серии: {len(SERIES_CATALOG)} · Лещи: {len(LENS_ORDER)}.
   </p>
 </footer>
 """
@@ -931,7 +932,7 @@ def generate_deep_briefing(
     if today is None:
         today = date.today()
 
-    # ── Модули (5-те лещи) ──
+    # ── Модули (6-те лещи) ──
     results = []
     for lens in LENS_ORDER:
         try:

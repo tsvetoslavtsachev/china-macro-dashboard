@@ -195,9 +195,9 @@ def test_deep_renders_all_native_sections(tmp_path):
     ]:
         assert section in html, f"липсва секция: {section}"
 
-    # 3 cross-lens двойки, 5 lens блока
+    # 3 cross-lens двойки, 6 lens блока (от 26.11.2026 + външна леща)
     assert html.count('class="pair-card"') == 3
-    assert html.count("data-lens=") == 5
+    assert html.count("data-lens=") == 6
 
     # Phase 4 — analogs имплементиран (НЕ „предстои"); честна рамка
     assert ">Предстои<" not in html and 'class="soon-card"' not in html

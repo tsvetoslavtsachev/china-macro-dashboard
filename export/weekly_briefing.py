@@ -27,17 +27,18 @@ from analysis.anomaly import compute_anomalies
 
 # ─── Labels ──────────────────────────────────────────────────────
 
-LENS_ORDER = ["growth", "inflation", "labor", "credit", "property"]
+LENS_ORDER = ["growth", "inflation", "labor", "credit", "property", "external"]
 LENS_LABEL_BG = {
     "growth":    "Растеж и активност",
     "inflation": "Инфлация и цени",
     "labor":     "Пазар на труда",
     "credit":    "Монетарна политика и кредит",
-    "property":  "Имоти и търговия",
+    "property":  "Имоти и инвестиции",
+    "external":  "Външен сектор и курс",
 }
 LENS_ICON = {
     "growth": "📈", "inflation": "🔥", "labor": "👷",
-    "credit": "🏦", "property": "🏗️",
+    "credit": "🏦", "property": "🏗️", "external": "🌐",
 }
 
 # MODULE_WEIGHTS + MACRO_REGIMES идват от config.py (single source of truth) —
@@ -324,7 +325,7 @@ def _render_composite(results: list[dict]) -> str:
   <div class="composite-info" style="flex:1">
     <h2>Композитен Macro Score</h2>
     <span class="regime-badge" style="background:{regime_color}22;color:{regime_color};border:1px solid {regime_color}44">{regime_label}</span>
-    <div class="description">Претеглен composite от 5 lens-а: растеж (30%), кредит (25%), имоти (20%), инфлация (15%), труд (10%).</div>
+    <div class="description">Претеглен composite от 6 лещи (тегла, нормирани по сбора): растеж 30, кредит 25, имоти 20, инфлация 15, труд 10, външен сектор 10.</div>
   </div>
   <div style="flex:1;padding-left:16px;border-left:1px solid #21262d">
     {bars_html}
@@ -573,6 +574,7 @@ def generate_weekly_briefing(
     import modules.labor as labor_mod
     import modules.credit as credit_mod
     import modules.property as property_mod
+    import modules.external as external_mod
 
     if today is None:
         today = date.today()
@@ -583,6 +585,7 @@ def generate_weekly_briefing(
         ("labor",     labor_mod),
         ("credit",    credit_mod),
         ("property",  property_mod),
+        ("external",  external_mod),
     ]
 
     results = []

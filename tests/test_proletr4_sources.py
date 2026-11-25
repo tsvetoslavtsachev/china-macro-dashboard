@@ -308,17 +308,15 @@ def test_polarity_of_new_series():
         assert polarity_for(k) == +1, k
 
 
-def test_lens_membership_contains_the_new_ids_but_composites_are_untouched():
-    import modules.growth as g, modules.labor as lb, modules.credit as cr, modules.property as pr
+def test_lens_membership_and_composites_after_the_composition_restructuring():
+    # Състав 26.11.2026 (одобрен от собственика): композитите са СЪЗНАТЕЛНО сменени;
+    # пълният състав е пиннат в test_sastav_cn.py, тук само ПРОЛЕТР4 членството.
+    import modules.growth as g, modules.labor as lb, modules.credit as cr, modules.property as pr, modules.external as ex
     assert {"CN_IP_YOY", "CN_PMI_MFG_CAIXIN", "CN_PMI_SVCS_CAIXIN"} <= set(g.SERIES)
     assert {"CN_UNEMP_SURVEYED", "CN_YOUTH_UNEMP_M"} <= set(lb.SERIES)
     assert "CN_TSF_STOCK_YOY" in cr.SERIES
-    assert {"CN_EXPORTS_USD_YOY", "CN_IMPORTS_USD_YOY", "CN_RE_INVEST_YOY", "CN_PROPERTY_SALES_YOY"} <= set(pr.SERIES)
-    # композитите (откъдето идва score) са същите като преди ПРОЛЕТР4
-    assert g.COMPOSITE_SERIES == ["CN_RETAIL_YOY", "CN_PMI_MFG_NBS", "CN_PMI_NON_MFG_NBS", "CN_PMI_COMPOSITE_CAIXIN"]
-    assert lb.COMPOSITE_SERIES == ["CN_UNEMPLOYMENT", "CN_YOUTH_UNEMPLOYMENT", "CN_LABOR_PARTICIPATION"]
-    assert cr.COMPOSITE_SERIES == ["CN_LPR_1Y", "CN_BIS_CREDIT_GDP", "CN_M2_YOY", "CN_TSF_FLOW", "CN_CNY_USD"]
-    assert pr.COMPOSITE_SERIES == ["CN_NEW_HOUSE_PRICE", "CN_BIS_PROPERTY_YOY", "CN_FAI_MOM_YOY", "CN_CURRENT_ACCOUNT"]
+    assert {"CN_RE_INVEST_YOY", "CN_PROPERTY_SALES_YOY"} <= set(pr.SERIES)
+    assert {"CN_EXPORTS_USD_YOY", "CN_IMPORTS_USD_YOY"} <= set(ex.SERIES)
 
 
 def test_workflows_install_from_requirements_so_the_pin_applies():

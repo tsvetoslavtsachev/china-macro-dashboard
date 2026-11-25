@@ -76,7 +76,7 @@ def test_overall_composite_exactly_min_backed_computes():
 
 
 def test_overall_composite_all_five_backed_unchanged():
-    """5/5 backed (пълен композит) — непроменено поведение от преди фикса."""
+    """6/6 backed (пълен композит; от 26.11.2026 лещите са 6) — непроменено поведение от преди фикса."""
     results = [
         {"module": "growth", "composite": 60.0},
         {"module": "credit", "composite": 60.0},
@@ -213,7 +213,7 @@ def _macro_state_with_n_backed(n_backed: int) -> dict:
     from datetime import date
     from catalog.series import SERIES_CATALOG
     from export_api import build_macro_state
-    import modules.growth, modules.credit, modules.property, modules.inflation, modules.labor
+    import modules.growth, modules.credit, modules.property, modules.inflation, modules.labor, modules.external
 
     lens_composite_series = {
         "growth": modules.growth.COMPOSITE_SERIES,
@@ -221,8 +221,9 @@ def _macro_state_with_n_backed(n_backed: int) -> dict:
         "property": modules.property.COMPOSITE_SERIES,
         "inflation": modules.inflation.COMPOSITE_SERIES,
         "labor": modules.labor.COMPOSITE_SERIES,
+        "external": modules.external.COMPOSITE_SERIES,
     }
-    lens_order = ["growth", "credit", "property", "inflation", "labor"]
+    lens_order = ["growth", "credit", "property", "inflation", "labor", "external"]
     to_drop_lenses = lens_order[n_backed:]   # изважда лещите СЛЕД първите n_backed
 
     idx = pd.date_range(end="2026-05-01", periods=60, freq="MS")
@@ -235,29 +236,29 @@ def _macro_state_with_n_backed(n_backed: int) -> dict:
 
 
 def test_lenses_backed_field_two_backed_is_insufficient():
-    """2/5 backed (< MIN_BACKED_LENSES=3) → composite None + regime "insufficient"
-    + lenses_backed="2/5", попълнено ВИНАГИ (не само при проблем)."""
+    """2/6 backed (< MIN_BACKED_LENSES=3) → composite None + regime "insufficient"
+    + lenses_backed="2/6", попълнено ВИНАГИ (не само при проблем)."""
     state = _macro_state_with_n_backed(2)
     es = state["executive_summary"]
     assert es["composite_score"] is None
     assert es["regime_key"] == "insufficient"
-    assert es["lenses_backed"] == "2/5"
+    assert es["lenses_backed"] == "2/6"
 
 
 def test_lenses_backed_field_three_backed_computes():
-    """3/5 backed (== MIN_BACKED_LENSES) → composite смятан нормално,
-    lenses_backed="3/5"."""
+    """3/6 backed (== MIN_BACKED_LENSES) → composite смятан нормално,
+    lenses_backed="3/6"."""
     state = _macro_state_with_n_backed(3)
     es = state["executive_summary"]
     assert es["composite_score"] is not None
     assert es["regime_key"] != "insufficient"
-    assert es["lenses_backed"] == "3/5"
+    assert es["lenses_backed"] == "3/6"
 
 
-def test_lenses_backed_field_five_backed_unchanged():
+def test_lenses_backed_field_six_backed_unchanged():
     """5/5 backed (пълен композит) — непроменено поведение, lenses_backed="5/5"."""
-    state = _macro_state_with_n_backed(5)
+    state = _macro_state_with_n_backed(6)
     es = state["executive_summary"]
     assert es["composite_score"] is not None
     assert es["regime_key"] != "insufficient"
-    assert es["lenses_backed"] == "5/5"
+    assert es["lenses_backed"] == "6/6"

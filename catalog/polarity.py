@@ -37,21 +37,23 @@ INFLATION_COMPARABILITY_NOTE = (
 POLARITY: dict[str, int] = {
     # GROWTH — нагоре = по-здраво
     "CN_GDP_GROWTH": +1, "CN_INDUSTRY_GROWTH": +1, "CN_SERVICES_GROWTH": +1,
-    "CN_CAPEX_GDP": +1, "CN_MANUFACTURING_GDP": +1, "CN_RETAIL_YOY": +1,
+    "CN_MANUFACTURING_GDP": +1, "CN_RETAIL_YOY": +1,
     "CN_PMI_MFG_NBS": +1, "CN_PMI_NON_MFG_NBS": +1, "CN_PMI_COMPOSITE_CAIXIN": +1,
-    "CN_GDP_GROWTH_Q": +1, "CN_IP_YOY_NBS": +1,
+    "CN_GDP_GROWTH_Q": +1,
     # ПРОЛЕТР4: IP растеж и частните PMI — нагоре = по-здраво
     "CN_IP_YOY": +1, "CN_PMI_MFG_CAIXIN": +1, "CN_PMI_SVCS_CAIXIN": +1,
 
     # CREDIT — лихви/LPR/дълг-overhang: нагоре = по-зле (-1); ликвидност/поток/курс: +1
-    "CN_POLICY_RATE": -1, "CN_LENDING_RATE": -1, "CN_DEPOSIT_RATE": -1,
-    "CN_CREDIT_PRIVATE": -1, "CN_LPR_1Y": -1, "CN_LPR_5Y": -1, "CN_BIS_CREDIT_GDP": -1,
-    "CN_M2_GDP": +1, "CN_CNY_USD": +1, "CN_M2_YOY": +1, "CN_TSF_FLOW": +1,
+    "CN_LPR_1Y": -1, "CN_LPR_5Y": -1, "CN_BIS_CREDIT_GDP": -1,
+    "CN_CNY_USD": +1, "CN_M2_YOY": +1, "CN_TSF_FLOW": +1,
     # ПРОЛЕТР4: по-бърз растеж на запаса на TSF = по-силен кредитен импулс
     "CN_TSF_STOCK_YOY": +1,
+    # ПРОЛЕТР4 (състав 26.11): нови кредитни серии и лихви. Новите заеми +1 (поток, като TSF);
+    # доходността на 10г ДЦК и 3М междубанковият процент са лихви: нагоре = по-зле (-1), като LPR.
+    "CN_NEW_LOANS_MOM": +1, "CN_CGB_10Y": -1, "CN_INTERBANK_3M": -1,
 
     # INFLATION — линейно (+1); финалният score идва от абсолютни котви в модула (виж горе)
-    "CN_CPI_YOY": +1, "CN_GDP_DEFLATOR": +1, "CN_CPI_INDEX": +1, "CN_PPI_INDEX": +1,
+    "CN_CPI_YOY": +1, "CN_GDP_DEFLATOR": +1,
     "CN_CPI_YOY_AK": +1, "CN_PPI_YOY": +1, "CN_GDP_DEFLATOR_Q": +1,
 
     # LABOR — безработица -1, участие +1
@@ -61,11 +63,15 @@ POLARITY: dict[str, int] = {
 
     # PROPERTY & TRADE — нагоре = по-здраво
     "CN_CURRENT_ACCOUNT": +1, "CN_EXPORTS_GDP": +1, "CN_FDI_GDP": +1,
-    "CN_FIXED_CAPITAL": +1, "CN_PRIVATE_CAPEX": +1, "CN_NEW_HOUSE_PRICE": +1,
-    "CN_FDI_ACTUAL": +1, "CN_BIS_PROPERTY_YOY": +1, "CN_FAI_MOM_YOY": +1,
+    "CN_NEW_HOUSE_PRICE": +1,
+    "CN_BIS_PROPERTY_YOY": +1, "CN_FAI_MOM_YOY": +1,
     # ПРОЛЕТР4: износ/внос (YoY) и имотни инвестиции/продажби (YTD YoY): нагоре = по-здраво
     "CN_EXPORTS_USD_YOY": +1, "CN_IMPORTS_USD_YOY": +1,
     "CN_RE_INVEST_YOY": +1, "CN_PROPERTY_SALES_YOY": +1,
+
+    # EXTERNAL (нова 6-а леща). REER нагоре = по-скъп юан = по-слаба конкурентност → -1
+    # (като EA_REER в EU каталога); резервите +1; износ/внос/текуща сметка +1 (вече горе).
+    "CN_REER": -1, "CN_FX_RESERVES": +1,
 }
 
 

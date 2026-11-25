@@ -50,16 +50,40 @@ def _build_adapters() -> dict:
     from sources.nbs_manual import NbsManualAdapter
     from sources.dbnomics import DBnomicsAdapter
     from sources.chinadata_live import ChinaDataLiveAdapter
+    from sources.fred_csv import FredCsvAdapter
     return {
         "worldbank":  WorldBankAdapter(),
         "imf_ifs":    ImfIfsAdapter(),
         "akshare":    AkShareAdapter(),
         "dbnomics":   DBnomicsAdapter(),   # генеричен provider/dataset/series (BIS, NBS, …)
         "nbs_manual": NbsManualAdapter(),  # ръчни НБС тримесечни CSV (GDP/deflator) — няма API
+        "fred_csv":   FredCsvAdapter(),    # FRED публичен CSV: курс, BIS кредит/имоти, REER, междубанков
         "chinadata_live": ChinaDataLiveAdapter(),  # ПРОЛЕТР4: втори източник + кръстосани проверки
         # NOTE: bloomberg_bridge е специален — чете parquet, не има fetch_many
         # interface. Snapshot building го handler-ва отделно в _build_snapshot.
     }
+
+
+def apply_bridge_fallbacks(snapshot: dict, catalog: dict, bridge=None) -> list[str]:
+    """Серии с `bridge_fallback_parquet` в каталога: ако основният източник не е дал
+    данни (липсва/празна серия) → чете се от Bloomberg моста. Връща ключовете, попълнени от моста."""
+    used: list[str] = []
+    for key, meta in catalog.items():
+        path = meta.get("bridge_fallback_parquet")
+        if not path:
+            continue
+        cur = snapshot.get(key)
+        if cur is not None and hasattr(cur, "empty") and not cur.empty:
+            continue
+        if bridge is None:
+            from sources.bloomberg_bridge_adapter import BloombergBridgeAdapter
+            bridge = BloombergBridgeAdapter()
+        s = bridge.fetch(key, path)
+        if s is not None and not s.empty:
+            snapshot[key] = s
+            used.append(key)
+            logging.warning(f"{key}: основният източник е празен → резерва от Bloomberg моста")
+    return used
 
 
 def _build_snapshot(adapters: dict, force: bool = False) -> dict:
@@ -87,6 +111,13 @@ def _build_snapshot(adapters: dict, force: bool = False) -> dict:
     except Exception as e:
         import logging
         logging.warning(f"Bloomberg bridge snapshot failed: {e}")
+
+    # ПРОЛЕТР4 (състав): основният източник на CGB 10Y е akshare/ChinaBond; мостът е само резерва
+    try:
+        apply_bridge_fallbacks(snapshot, SERIES_CATALOG)
+    except Exception as e:  # noqa: BLE001
+        import logging
+        logging.warning(f"bridge fallback step failed: {type(e).__name__}: {e}")
 
     # ПРОЛЕТР4: сплит на опашката на TSF + кръстосани проверки (никога не срива износа)
     try:
@@ -169,6 +200,7 @@ def cmd_modules(args) -> int:
     import modules.labor as labor_mod
     import modules.credit as credit_mod
     import modules.property as property_mod
+    import modules.external as external_mod
 
     adapters = _build_adapters()
 
@@ -200,6 +232,7 @@ def cmd_modules(args) -> int:
         ("labor",     labor_mod),
         ("credit",    credit_mod),
         ("property",  property_mod),
+        ("external",  external_mod),
     ]
 
     results: list[dict] = []
