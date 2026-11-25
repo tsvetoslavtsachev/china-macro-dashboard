@@ -16,7 +16,7 @@ AkShare е Python библиотека за китайски финансови 
   macro_china_money_supply       — M0/M1/M2 (220 obs)
   macro_china_lpr                — Loan Prime Rate 1Y/5Y (1572 rows, mostly NaN pre-2013)
   macro_china_pmi                — NBS Mfg + Non-Mfg PMI (221 obs)
-  macro_china_industrial_production_yoy — IP YoY (413 obs от 1990)
+  macro_china_industrial_value_added — IP YoY (ПРОЛЕТР4: замества jin10 функцията)
   macro_china_consumer_goods_retail — Retail Sales (205 obs)
   macro_china_gdzctz             — FAI (201 obs)
   macro_china_exports_yoy        — Exports USD YoY (542 obs от 1982)
@@ -42,6 +42,43 @@ import pandas as pd
 from sources._base import BaseAdapter
 
 logger = logging.getLogger(__name__)
+
+UNEMP_SURVEYED_ITEM = "全国城镇调查失业率"
+# Eastmoney/jin10-базираните функции понякога режат отговора (ChunkedEncodingError) или
+# ограничават честотата; кратък вътрешен retry с нарастваща пауза, над който BaseAdapter
+# прави своя външен retry.
+_AK_CALL_BACKOFF = (2, 5, 10)
+
+
+def _retry_call(fn, **kwargs):
+    """fn(**kwargs) с retry и нарастваща пауза; празен/невалиден отговор също е грешка."""
+    import time
+    last: Exception | None = None
+    for wait in (0,) + _AK_CALL_BACKOFF:
+        if wait:
+            time.sleep(wait)
+        try:
+            df = fn(**kwargs)
+            if df is None or not hasattr(df, "columns") or len(df) == 0:
+                raise ValueError(f"akshare.{getattr(fn, '__name__', fn)}: празен отговор")
+            return df
+        except Exception as e:  # noqa: BLE001
+            last = e
+    assert last is not None
+    raise last
+
+
+def _ak_call(name, **kwargs):
+    """Вика akshare.<name>() с retry+backoff; връща DataFrame или хвърля последната грешка.
+
+    `name` може да е кортеж от имена: взема се първото, което съществува в инсталираната
+    версия (новото име първо, старото за по-стари версии)."""
+    import akshare as ak
+    names = (name,) if isinstance(name, str) else tuple(name)
+    fn = next((getattr(ak, n) for n in names if hasattr(ak, n)), None)
+    if fn is None:
+        raise AttributeError(f"akshare {getattr(ak, '__version__', '?')}: няма нито една от {names}")
+    return _retry_call(fn, **kwargs)
 
 
 class AkShareAdapter(BaseAdapter):
@@ -80,6 +117,8 @@ class AkShareAdapter(BaseAdapter):
             "fx_reserves":         self._fetch_fx_reserves,
             "pmi_mfg_caixin":      self._fetch_pmi_mfg_caixin,
             "pmi_svcs_caixin":     self._fetch_pmi_svcs_caixin,
+            # ПРОЛЕТР4 (25.11.2026): нови
+            "unemp_surveyed":      self._fetch_unemp_surveyed,
         }
 
         fetcher = fetchers.get(source_id)
@@ -197,7 +236,7 @@ class AkShareAdapter(BaseAdapter):
         Различни сигнали но same family — flow leads stock-cycle.
         """
         import akshare as ak
-        df = ak.macro_china_shrzgm()
+        df = _ak_call(("macro_china_social_financing", "macro_china_shrzgm"))
         return self._to_series_from_chinese_month(df, "月份", "社会融资规模增量")
 
     def _fetch_new_loans(self) -> pd.Series:
@@ -209,7 +248,7 @@ class AkShareAdapter(BaseAdapter):
     def _fetch_m2_yoy(self) -> pd.Series:
         """M2 YoY %."""
         import akshare as ak
-        df = ak.macro_china_money_supply()
+        df = _ak_call(("macro_china_money_supply_em", "macro_china_money_supply"))
         return self._to_series_from_chinese_month(df, "月份", "货币和准货币(M2)-同比增长")
 
     def _fetch_lpr_1y(self) -> pd.Series:
@@ -235,10 +274,13 @@ class AkShareAdapter(BaseAdapter):
         return self._to_series_from_chinese_month(df, "月份", "非制造业-指数")
 
     def _fetch_ip_yoy(self) -> pd.Series:
-        """Industrial Production YoY % (规模以上工业增加值, monthly)."""
-        import akshare as ak
-        df = ak.macro_china_industrial_production_yoy()
-        return self._to_series_from_iso_date(df, "日期", "今值")
+        """Industrial Production YoY % (规模以上工业增加值, monthly).
+
+        ПРОЛЕТР4 (25.11.2026): macro_china_industrial_production_yoy (jin10) е махната в
+        akshare 1.20.41+; заменена с macro_china_industrial_value_added (колона 同比增长).
+        """
+        df = _ak_call("macro_china_industrial_value_added")
+        return self._to_series_from_chinese_month(df, "月份", "同比增长")
 
     def _fetch_retail_yoy(self) -> pd.Series:
         """Retail sales single-month YoY %."""
@@ -255,20 +297,22 @@ class AkShareAdapter(BaseAdapter):
         YoY е по-чист сигнал за регимна детекция.
         """
         import akshare as ak
-        df = ak.macro_china_gdzctz()
+        df = _ak_call(("macro_china_fixed_asset_investment", "macro_china_gdzctz"))
         return self._to_series_from_chinese_month(df, "月份", "同比增长")
 
     def _fetch_exports_yoy(self) -> pd.Series:
-        """Exports USD YoY % (中国以美元计算出口年率)."""
-        import akshare as ak
-        df = ak.macro_china_exports_yoy()
-        return self._to_series_from_iso_date(df, "日期", "今值")
+        """Exports USD YoY % (митница, 当月出口额-同比增长).
+
+        ПРОЛЕТР4: macro_china_exports_yoy (jin10) е махната; macro_china_customs_trade
+        връща най-новото първо (сортира се в помощника).
+        """
+        df = _ak_call("macro_china_customs_trade")
+        return self._to_series_from_chinese_month(df, "月份", "当月出口额-同比增长")
 
     def _fetch_imports_yoy(self) -> pd.Series:
-        """Imports USD YoY %."""
-        import akshare as ak
-        df = ak.macro_china_imports_yoy()
-        return self._to_series_from_iso_date(df, "日期", "今值")
+        """Imports USD YoY % (митница, 当月进口额-同比增长)."""
+        df = _ak_call("macro_china_customs_trade")
+        return self._to_series_from_chinese_month(df, "月份", "当月进口额-同比增长")
 
     def _fetch_fx_reserves(self) -> pd.Series:
         """FX reserves (USD billions).
@@ -277,27 +321,40 @@ class AkShareAdapter(BaseAdapter):
         Bloomberg конвенцията (USD billions ≈ 3,500 за China днес).
         """
         import akshare as ak
-        df = ak.macro_china_foreign_exchange_gold()
+        df = _ak_call(("macro_china_fx_gold_sina", "macro_china_foreign_exchange_gold"))
         s = self._to_series_from_chinese_month(df, "统计时间", "国家外汇储备")
         return s / 10.0
 
-    def _fetch_pmi_mfg_caixin(self) -> pd.Series:
-        """Caixin Manufacturing PMI (财新制造业PMI终值)."""
-        import akshare as ak
-        df = ak.macro_china_cx_pmi_yearly()
-        # 日期 е release date; снап към first-of-month за consistency с други PMI
-        s = self._to_series_from_iso_date(df, "日期", "今值")
-        # Snap release date → reporting month (release е обикн. 1st bus day of next month)
-        s.index = s.index.to_period("M").to_timestamp() - pd.offsets.MonthBegin(1)
+    @staticmethod
+    def _month_end_to_month_start(s: pd.Series) -> pd.Series:
+        """Датите на *_cx са месечни краища (2026-10-31) → първо число на отчетния месец."""
+        s = s.copy()
+        s.index = s.index.to_period("M").to_timestamp()
         return s.groupby(s.index).last().sort_index()
 
+    def _fetch_pmi_mfg_caixin(self) -> pd.Series:
+        """Caixin (по-късно RatingDog) Manufacturing PMI.
+
+        ПРОЛЕТР4: macro_china_cx_pmi_yearly (jin10) е махната; macro_china_pmi_manufacturing_cx.
+        """
+        df = _ak_call("macro_china_pmi_manufacturing_cx")
+        return self._month_end_to_month_start(self._to_series_from_iso_date(df, "日期", "制造业PMI"))
+
     def _fetch_pmi_svcs_caixin(self) -> pd.Series:
-        """Caixin Services PMI."""
-        import akshare as ak
-        df = ak.macro_china_cx_services_pmi_yearly()
-        s = self._to_series_from_iso_date(df, "日期", "今值")
-        s.index = s.index.to_period("M").to_timestamp() - pd.offsets.MonthBegin(1)
-        return s.groupby(s.index).last().sort_index()
+        """Caixin (по-късно RatingDog) Services PMI (macro_china_pmi_services_cx)."""
+        df = _ak_call("macro_china_pmi_services_cx")
+        return self._month_end_to_month_start(self._to_series_from_iso_date(df, "日期", "服务业PMI"))
+
+    def _fetch_unemp_surveyed(self) -> pd.Series:
+        """Национален градски анкетен процент безработица (全国城镇调查失业率, НБС).
+
+        macro_china_urban_unemployment: дълъг формат date=YYYYMM, item, value.
+        """
+        df = _ak_call("macro_china_urban_unemployment")
+        df = df[df["item"].astype(str).str.strip() == UNEMP_SURVEYED_ITEM]   # колоната носи краен интервал
+        if df.empty:
+            raise ValueError(f"urban_unemployment: няма ред '{UNEMP_SURVEYED_ITEM}'")
+        return self._to_series_from_chinese_month(df, "date", "value")
 
     # ════════════════════════════════════════════════════════
     # BATCH HELPER
@@ -338,7 +395,10 @@ def lpr_frame():
     който назовава видените колони, не тиха празнота."""
     import akshare as ak
     fn = getattr(ak, "interest_rate_lpr_em", None) or getattr(ak, "macro_china_lpr")
-    df = fn()
+    try:
+        df = _retry_call(fn)    # ПРОЛЕТР4: Eastmoney реже отговора (ChunkedEncodingError) и ограничава честотата
+    except ValueError:
+        df = None               # празен отговор -> обработва се по-долу като неразпознаваем
     if df is None or not hasattr(df, "columns"):
         raise ValueError(f"LPR: неразпознаваем отговор от {fn.__name__}: {type(df).__name__}")
     df = df.rename(columns=LPR_COLUMNS)

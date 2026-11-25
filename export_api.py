@@ -398,6 +398,9 @@ def build_series_data(snapshot: dict, today: date, years: int = 7) -> dict:
                 "is_rate": is_rate,
                 "release_schedule": release_sched,
                 "narrative_hint": meta.get("narrative_hint", ""),
+                # ПРОЛЕТР4: кръстосана проверка срещу chinadata.live / сплит на опашка
+                **({"crosscheck": dict(raw_series.attrs["crosscheck"])} if raw_series.attrs.get("crosscheck") else {}),
+                **({"splice": dict(raw_series.attrs["splice"])} if raw_series.attrs.get("splice") else {}),
             },
             "latest": {
                 "date": str(filtered.index[-1].date()),

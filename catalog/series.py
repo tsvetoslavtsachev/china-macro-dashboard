@@ -11,6 +11,7 @@ catalog/series.py
   worldbank  — World Bank Indicators API (годишни данни, надежден)
   imf_ifs    — IMF International Financial Statistics via DBnomics (месечни)
   akshare    — AkShare Python library (месечни, китайски източници)
+  chinadata_live — chinadata.live (месечни, независим препубликатор; втори източник + кръстосани проверки)
   external   — ръчно добавяни / Bloomberg backfill
   pending    — планирани серии, все още не имплементирани
 """
@@ -21,7 +22,7 @@ from typing import Any
 # ALLOWED VALUES (за validation)
 # ============================================================
 
-ALLOWED_SOURCES = {"worldbank", "imf_ifs", "akshare", "external", "pending", "bloomberg_bridge", "nbs_manual", "dbnomics"}
+ALLOWED_SOURCES = {"worldbank", "imf_ifs", "akshare", "external", "pending", "bloomberg_bridge", "nbs_manual", "dbnomics", "chinadata_live"}
 ALLOWED_REGIONS = {"CN", "HK", "GLOBAL"}
 ALLOWED_LENSES = {"labor", "growth", "inflation", "credit", "property"}
 ALLOWED_TRANSFORMS = {"level", "yoy_pct", "mom_pct", "qoq_pct", "z_score", "first_diff"}
@@ -631,7 +632,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "release_schedule": "monthly",
         "typical_release": "10-15_of_month",
         "revision_prone": False,
-        "narrative_hint": "Monthly TSF поток (社会融资规模增量) от PBoC. Leads credit cycle. NOTE: akshare дава flow; за stock YoY ползвай Bloomberg manual fetch.",
+        "narrative_hint": "Monthly TSF поток (社会融资规模增量) от PBoC. Leads credit cycle. NOTE: akshare дава flow; запасът YoY е отделната серия CN_TSF_STOCK_YOY. Източникът в akshare стои на 2026-04; опашката от 2026-05 се дописва от chinadata.live china-tsf-flow само докато двата реда съвпадат в припокриването в рамките на 1% (виж series_data meta.splice).",
     },
     "CN_NEW_LOANS_MOM": {
         "source": "akshare",
@@ -748,11 +749,11 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "tags": [],
         "transform": "level",
         "is_rate": False,
-        "historical_start": "2012-01-01",
+        "historical_start": "2014-04-01",
         "release_schedule": "monthly",
         "typical_release": "first_business_day",
         "revision_prone": True,
-        "narrative_hint": "Caixin/Markit — tilts към SME/private. Divergence vs NBS = SOE/SME split.",
+        "narrative_hint": "Caixin/Markit — tilts към SME/private. Divergence vs NBS = SOE/SME split. От 2026-11 данните идват от macro_china_pmi_manufacturing_cx (akshare 1.20.70); частният PMI на S&P Global за Китай е сменял името на спонсора (Caixin -> RatingDog) - непроверено, затова името в каталога остава.",
     },
     "CN_PMI_SVCS_CAIXIN": {
         "source": "akshare",
@@ -765,7 +766,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "tags": [],
         "transform": "level",
         "is_rate": False,
-        "historical_start": "2012-04-01",
+        "historical_start": "2014-04-01",
         "release_schedule": "monthly",
         "typical_release": "third_business_day",
         "revision_prone": True,
@@ -788,7 +789,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "release_schedule": "monthly",
         "typical_release": "third_business_day",
         "revision_prone": True,
-        "narrative_hint": "Weighted Mfg+Svcs. Главен composite leading indicator.",
+        "narrative_hint": "Частен Services PMI (Caixin/S&P Global). От 2026-11 данните идват от macro_china_pmi_services_cx (akshare 1.20.70); смяната на спонсора на PMI (Caixin -> RatingDog) е непроверена, затова името остава.",
     },
 
     # ─── activity — akshare (NBS monthly)
@@ -807,7 +808,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "release_schedule": "monthly",
         "typical_release": "15-20_of_month",
         "revision_prone": False,
-        "narrative_hint": "NBS publication. Главна monthly activity мярка. Eliminates Jan/Feb (Chinese New Year).",
+        "narrative_hint": "NBS publication. Главна monthly activity мярка. От 2026-11 идва от macro_china_industrial_value_added (akshare 1.20.70), датиран по отчетния месец (старата jin10 серия беше по месеца на публикуване, с един месец по-късно). Кръстосана проверка с chinadata.live china-industrial-output (допуск 0.15).",
     },
     "CN_RETAIL_YOY": {
         "source": "akshare",
@@ -860,7 +861,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "release_schedule": "monthly",
         "typical_release": "first_half_of_month",
         "revision_prone": False,
-        "narrative_hint": "China customs data (GAC). Monthly cadence, USD-denominated. Главен external demand pulse.",
+        "narrative_hint": "China customs data (GAC). Monthly cadence, USD-denominated. Главен external demand pulse. От 2026-11 идва от macro_china_customs_trade (akshare 1.20.70), по отчетния месец. Кръстосана проверка с темп, изведен от нивата в chinadata.live china-trade-monthly (допуск 1.0 пр.п.).",
     },
     "CN_IMPORTS_USD_YOY": {
         "source": "akshare",
@@ -877,7 +878,7 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "release_schedule": "monthly",
         "typical_release": "first_half_of_month",
         "revision_prone": False,
-        "narrative_hint": "Domestic demand pulse. Commodities-heavy → leading commodity prices.",
+        "narrative_hint": "Domestic demand pulse. Commodities-heavy → leading commodity prices. От 2026-11 идва от macro_china_customs_trade (akshare 1.20.70), по отчетния месец. БЕЗ кръстосана проверка: нивата на вноса в chinadata.live не съвпадат с akshare и не се смесват.",
     },
     "CN_FX_RESERVES": {
         "source": "akshare",
@@ -937,6 +938,93 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "narrative_hint": "Sovereign benchmark. CGB-UST 10Y spread = capital flow incentive.",
     },
 
+
+    # ─── ПРОЛЕТР4 (25.11.2026): месечен труд, кредит и имоти, живи данни ───
+    "CN_UNEMP_SURVEYED": {
+        "source": "akshare",
+        "id": "unemp_surveyed",
+        "region": "CN",
+        "name_bg": "Безработица — градска анкетна, национална (месечно, %)",
+        "name_en": "Urban Surveyed Unemployment Rate, national (monthly, %)",
+        "lens": ["labor"],
+        "peer_group": "unemployment",
+        "tags": [],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2018-01-01",
+        "release_schedule": "monthly",
+        "typical_release": "15-20_of_month",
+        "revision_prone": False,
+        "narrative_hint": "НБС, национален градски анкетен процент (全国城镇调查失业率) чрез akshare; кръстосана проверка с chinadata.live china-unemployment (допуск 0.1 пр.п.). Тясна лента около 5%, затова малки движения носят голям z; анкетата е смятана за подценена.",
+    },
+    "CN_YOUTH_UNEMP_M": {
+        "source": "chinadata_live",
+        "id": "china-youth-unemployment",
+        "region": "CN",
+        "name_bg": "Младежка безработица 16-24 г. без студенти (месечно, %)",
+        "name_en": "Youth Surveyed Unemployment 16-24 excl. students (monthly, %)",
+        "lens": ["labor"],
+        "peer_group": "unemployment",
+        "tags": ["structural", "non_consensus"],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2024-01-01",
+        "release_schedule": "monthly",
+        "typical_release": "17-20_of_month",
+        "revision_prone": False,
+        "narrative_hint": "НБС (чрез chinadata.live, независим препубликатор; единственият източник тук, без втора проверка). Нова методология от декември 2023 (без студенти), история от 2024-01; сезонно висока през лятото (юли-август).",
+    },
+    "CN_TSF_STOCK_YOY": {
+        "source": "chinadata_live",
+        "id": "china-tsf-stock-yoy",
+        "region": "CN",
+        "name_bg": "TSF — запас, годишен темп (месечно, %)",
+        "name_en": "Total Social Financing stock YoY (monthly, %)",
+        "lens": ["credit"],
+        "peer_group": "credit_depth",
+        "tags": [],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2025-09-01",
+        "release_schedule": "monthly",
+        "typical_release": "10-15_of_month",
+        "revision_prone": False,
+        "narrative_hint": "НБК (чрез chinadata.live). Растеж на запаса на общото социално финансиране; история само от 2025-09, затова percentile/z са на къс прозорец и носят малко тежест. Допълва потока CN_TSF_FLOW.",
+    },
+    "CN_RE_INVEST_YOY": {
+        "source": "chinadata_live",
+        "id": "china-real-estate-investment-yoy",
+        "region": "CN",
+        "name_bg": "Инвестиции в имоти — натрупани от началото на годината (YoY %)",
+        "name_en": "Real Estate Development Investment YoY (cumulative YTD, %)",
+        "lens": ["property"],
+        "peer_group": "investment",
+        "tags": [],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2007-02-01",
+        "release_schedule": "monthly",
+        "typical_release": "15-20_of_month",
+        "revision_prone": False,
+        "narrative_hint": "НБС (чрез chinadata.live). ВНИМАНИЕ: това е темп от началото на годината (YTD), не месечен; през годината се изглажда и се нулира всеки януари/февруари. Дълбок и устойчив спад.",
+    },
+    "CN_PROPERTY_SALES_YOY": {
+        "source": "chinadata_live",
+        "id": "china-property-sales-area@cum_yoy",
+        "region": "CN",
+        "name_bg": "Продажби на жилища (площ) — YTD спрямо година по-рано (%)",
+        "name_en": "New Commercial Property Sales Area YTD vs same period last year (%)",
+        "lens": ["property"],
+        "peer_group": "housing",
+        "tags": [],
+        "transform": "level",
+        "is_rate": True,
+        "historical_start": "2019-02-01",
+        "release_schedule": "monthly",
+        "typical_release": "15-20_of_month",
+        "revision_prone": False,
+        "narrative_hint": "ИЗЧИСЛЕНО от кумулативните YTD нива на НБС в chinadata.live (няма официален готов темп там): стойност за месеца делено на същия месец година по-рано. Основата не е ревизирана, затова може да се различава от официалния сравним темп на НБС. YTD, не месечен.",
+    },
 }
 
 

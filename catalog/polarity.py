@@ -40,11 +40,15 @@ POLARITY: dict[str, int] = {
     "CN_CAPEX_GDP": +1, "CN_MANUFACTURING_GDP": +1, "CN_RETAIL_YOY": +1,
     "CN_PMI_MFG_NBS": +1, "CN_PMI_NON_MFG_NBS": +1, "CN_PMI_COMPOSITE_CAIXIN": +1,
     "CN_GDP_GROWTH_Q": +1, "CN_IP_YOY_NBS": +1,
+    # ПРОЛЕТР4: IP растеж и частните PMI — нагоре = по-здраво
+    "CN_IP_YOY": +1, "CN_PMI_MFG_CAIXIN": +1, "CN_PMI_SVCS_CAIXIN": +1,
 
     # CREDIT — лихви/LPR/дълг-overhang: нагоре = по-зле (-1); ликвидност/поток/курс: +1
     "CN_POLICY_RATE": -1, "CN_LENDING_RATE": -1, "CN_DEPOSIT_RATE": -1,
     "CN_CREDIT_PRIVATE": -1, "CN_LPR_1Y": -1, "CN_LPR_5Y": -1, "CN_BIS_CREDIT_GDP": -1,
     "CN_M2_GDP": +1, "CN_CNY_USD": +1, "CN_M2_YOY": +1, "CN_TSF_FLOW": +1,
+    # ПРОЛЕТР4: по-бърз растеж на запаса на TSF = по-силен кредитен импулс
+    "CN_TSF_STOCK_YOY": +1,
 
     # INFLATION — линейно (+1); финалният score идва от абсолютни котви в модула (виж горе)
     "CN_CPI_YOY": +1, "CN_GDP_DEFLATOR": +1, "CN_CPI_INDEX": +1, "CN_PPI_INDEX": +1,
@@ -52,11 +56,16 @@ POLARITY: dict[str, int] = {
 
     # LABOR — безработица -1, участие +1
     "CN_UNEMPLOYMENT": -1, "CN_YOUTH_UNEMPLOYMENT": -1, "CN_LABOR_PARTICIPATION": +1,
+    # ПРОЛЕТР4: месечни серии; безработица нагоре = по-зле
+    "CN_UNEMP_SURVEYED": -1, "CN_YOUTH_UNEMP_M": -1,
 
     # PROPERTY & TRADE — нагоре = по-здраво
     "CN_CURRENT_ACCOUNT": +1, "CN_EXPORTS_GDP": +1, "CN_FDI_GDP": +1,
     "CN_FIXED_CAPITAL": +1, "CN_PRIVATE_CAPEX": +1, "CN_NEW_HOUSE_PRICE": +1,
     "CN_FDI_ACTUAL": +1, "CN_BIS_PROPERTY_YOY": +1, "CN_FAI_MOM_YOY": +1,
+    # ПРОЛЕТР4: износ/внос (YoY) и имотни инвестиции/продажби (YTD YoY): нагоре = по-здраво
+    "CN_EXPORTS_USD_YOY": +1, "CN_IMPORTS_USD_YOY": +1,
+    "CN_RE_INVEST_YOY": +1, "CN_PROPERTY_SALES_YOY": +1,
 }
 
 

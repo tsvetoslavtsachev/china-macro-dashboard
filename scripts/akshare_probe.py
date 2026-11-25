@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ИЛЮ3 Е2 (23.11.2026): пробата преди вдигане на akshare.
 
-Пуска на живо всичките извиквания на akshare в таблото (19 серии на AkShareAdapter и
+Пуска на живо всичките извиквания на akshare в таблото (20 серии на AkShareAdapter и
 lpr_frame за lpr.json) под инсталираната версия и печата таблица: серия, минава ли,
 последна дата. Изход 0 само при всички минали; иначе 1. Версията в requirements.txt се
 вдига само след 20 от 20 под новата версия (в отделна среда).
@@ -22,7 +22,7 @@ from sources.akshare_cn import AkShareAdapter, lpr_frame  # noqa: E402
 
 IDS = ["cpi_yoy", "ppi_yoy", "fdi_actual", "new_house_price", "tsf_flow", "new_loans", "m2_yoy",
        "lpr_1y", "lpr_5y", "pmi_mfg_nbs", "pmi_non_mfg_nbs", "ip_yoy", "retail_yoy", "fai_mom_yoy",
-       "exports_usd_yoy", "imports_usd_yoy", "fx_reserves", "pmi_mfg_caixin", "pmi_svcs_caixin"]
+       "exports_usd_yoy", "imports_usd_yoy", "fx_reserves", "pmi_mfg_caixin", "pmi_svcs_caixin", "unemp_surveyed"]
 
 
 def _try(fn, tries=3):

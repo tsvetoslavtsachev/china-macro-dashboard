@@ -74,7 +74,18 @@ EXPECTED = {'credit.CN_BIS_CREDIT_GDP': {'invert': True, 'transform': 'level'},
  'property.CN_FDI_GDP': {'invert': False, 'transform': 'level'},
  'property.CN_FIXED_CAPITAL': {'invert': False, 'transform': 'level'},
  'property.CN_NEW_HOUSE_PRICE': {'invert': False, 'transform': 'level'},
- 'property.CN_PRIVATE_CAPEX': {'invert': False, 'transform': 'level'}}
+ 'property.CN_PRIVATE_CAPEX': {'invert': False, 'transform': 'level'},
+ # ПРОЛЕТР4 (25.11.2026): нови членове на лещите; полярност: безработица -1 (invert), останалото +1
+ 'credit.CN_TSF_STOCK_YOY': {'invert': False, 'transform': 'level'},
+ 'growth.CN_IP_YOY': {'invert': False, 'transform': 'level'},
+ 'growth.CN_PMI_MFG_CAIXIN': {'invert': False, 'transform': 'level'},
+ 'growth.CN_PMI_SVCS_CAIXIN': {'invert': False, 'transform': 'level'},
+ 'labor.CN_UNEMP_SURVEYED': {'invert': True, 'transform': 'level'},
+ 'labor.CN_YOUTH_UNEMP_M': {'invert': True, 'transform': 'level'},
+ 'property.CN_EXPORTS_USD_YOY': {'invert': False, 'transform': 'level'},
+ 'property.CN_IMPORTS_USD_YOY': {'invert': False, 'transform': 'level'},
+ 'property.CN_RE_INVEST_YOY': {'invert': False, 'transform': 'level'},
+ 'property.CN_PROPERTY_SALES_YOY': {'invert': False, 'transform': 'level'}}
 
 
 def _actual() -> dict:

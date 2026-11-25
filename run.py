@@ -49,12 +49,14 @@ def _build_adapters() -> dict:
     from sources.akshare_cn import AkShareAdapter
     from sources.nbs_manual import NbsManualAdapter
     from sources.dbnomics import DBnomicsAdapter
+    from sources.chinadata_live import ChinaDataLiveAdapter
     return {
         "worldbank":  WorldBankAdapter(),
         "imf_ifs":    ImfIfsAdapter(),
         "akshare":    AkShareAdapter(),
         "dbnomics":   DBnomicsAdapter(),   # генеричен provider/dataset/series (BIS, NBS, …)
         "nbs_manual": NbsManualAdapter(),  # ръчни НБС тримесечни CSV (GDP/deflator) — няма API
+        "chinadata_live": ChinaDataLiveAdapter(),  # ПРОЛЕТР4: втори източник + кръстосани проверки
         # NOTE: bloomberg_bridge е специален — чете parquet, не има fetch_many
         # interface. Snapshot building го handler-ва отделно в _build_snapshot.
     }
@@ -85,6 +87,15 @@ def _build_snapshot(adapters: dict, force: bool = False) -> dict:
     except Exception as e:
         import logging
         logging.warning(f"Bloomberg bridge snapshot failed: {e}")
+
+    # ПРОЛЕТР4: сплит на опашката на TSF + кръстосани проверки (никога не срива износа)
+    try:
+        from analysis.crosscheck import annotate_snapshot
+        cd = adapters.get("chinadata_live")
+        annotate_snapshot(snapshot, cd.fetch_reference if cd is not None else None)
+    except Exception as e:  # noqa: BLE001
+        import logging
+        logging.warning(f"crosscheck/splice step failed: {type(e).__name__}: {e}")
 
     return snapshot
 

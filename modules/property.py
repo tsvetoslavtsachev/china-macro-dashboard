@@ -91,6 +91,31 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
+    # ПРОЛЕТР4: членове на лещата (health_z), НЕ в композита
+    "CN_EXPORTS_USD_YOY": {
+        "label": "Износ USD (месечно YoY %)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_IMPORTS_USD_YOY": {
+        "label": "Внос USD (месечно YoY %)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_RE_INVEST_YOY": {
+        "label": "Инвестиции в имоти — YTD YoY %",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_PROPERTY_SALES_YOY": {
+        "label": "Продажби на жилища (площ) — YTD YoY %",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
 # Композитът: 70-градски къщи (akshare, месечно) + BIS имотни цени (тримесечно, по-широко
