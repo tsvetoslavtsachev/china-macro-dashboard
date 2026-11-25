@@ -64,3 +64,13 @@ def test_stale_rule_same_as_series_data():
         for last in (FRESH, OLD, pd.Timestamp("2026-03-31")):
             pb = _periods_behind(last, pd.Timestamp(TODAY), sched)
             assert series_is_stale(last, TODAY, sched) == _is_stale(pb, sched)
+
+
+def test_series_z_capped_at_six_before_aggregation():
+    # Ц., 25.11.2026: „Да, с таван“. LPR 1г дава z 87,7 (10 години на 4,3%); в лещата влиза като 6.
+    ids = ["lpr1", "lpr5", "m2"]
+    r = _call(ids, {"lpr1": _ind(87.684), "lpr5": _ind(1.542), "m2": _ind(-1.542)},
+              {"lpr1": "rates", "lpr5": "rates", "m2": "credit_depth"}, {i: FRESH for i in ids})
+    assert r["health_z"] == pytest.approx(((6.0 + 1.542) / 2 - 1.542) / 2)
+    r = _call(["x"], {"x": _ind(-40.0)}, {"x": "g"}, {"x": FRESH})
+    assert r["health_z"] == pytest.approx(-6.0)

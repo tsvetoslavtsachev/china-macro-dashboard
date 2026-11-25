@@ -12,6 +12,7 @@
   НЕ е z=0, а липсващ.
 Тежестите: каталогът на Китай няма PEER_GROUP_WEIGHT; използваме EU дефолта
 (1.0 за всяка peer група; EU има само monetary_aggregates=0.5, а такава група у нас няма).
+Z на серия се реже до ±SERIES_Z_CAP преди сбора.
 """
 from __future__ import annotations
 
@@ -25,6 +26,11 @@ from analysis.anomaly import _periods_behind, _is_stale
 PEER_GROUP_WEIGHT: dict[str, float] = {}   # празно = 1.0 за всички (EU дефолт)
 
 ALL_STALE_NOTE = "всички серии в лещата са стари"
+
+# Таванът на серия преди сбора (Ц., 25.11.2026, ПРОЛЕТР4: „Да, с таван“). Конвенцията ±6σ,
+# която scorer-ите слагат само при scale_fallback; тук важи за всяка серия в лещата, защото
+# ставка на стъпала (едногодишният LPR, 10 години на 4,3%) има MAD около 0,01 и z около 88.
+SERIES_Z_CAP = 6.0
 
 
 def peer_group_weight(pg: str) -> float:
@@ -40,7 +46,7 @@ def _usable_z(ind: Optional[dict]) -> Optional[float]:
     z = ind.get("health_z")
     if z is None or (isinstance(z, float) and math.isnan(z)):
         return None
-    return float(z)
+    return max(-SERIES_Z_CAP, min(SERIES_Z_CAP, float(z)))
 
 
 def series_is_stale(last_date: Any, today: Any, release_schedule: Optional[str]) -> bool:
