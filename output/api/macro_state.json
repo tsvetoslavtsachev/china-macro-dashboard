@@ -1,14 +1,14 @@
 {
   "region": "CN",
-  "as_of_date": "2026-11-23",
-  "generated_at": "2026-11-23T21:12:44.581368+00:00Z",
+  "as_of_date": "2026-11-25",
+  "generated_at": "2026-11-25T20:32:34.348429+00:00Z",
   "executive_summary": {
-    "composite_score": 35.9,
+    "composite_score": 36.6,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
     "lenses_backed": "5/5",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 35.9/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 2 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 36.6/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 3 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
@@ -44,11 +44,17 @@
       "narrative": [
         "Продажби на дребно +0.4% YoY — слабо потребление, структурно под пред-COVID нивата.",
         "NBS Manufacturing PMI 49.3 — под 50 (свиване).",
-        "БВП растеж 5.0% — около официалния таргет ~5% (policy-pinned, почти не мърда)."
+        "БВП растеж 4.5% — около официалния таргет ~5% (policy-pinned, почти не мърда)."
+      ],
+      "health_z": -0.826,
+      "health_z_n": 9,
+      "health_z_excluded_stale": [
+        "CN_CAPEX_GDP",
+        "CN_IP_YOY_NBS"
       ]
     },
     "inflation": {
-      "score": 38.8,
+      "score": 43.6,
       "direction": "mixed",
       "regime": "ДЕФЛАЦИОНЕН РИСК",
       "label_bg": "Инфлация и цени",
@@ -78,9 +84,15 @@
       "narrative": [
         "CPI 0.7% YoY — близо до нула, но рефлира от отрицателните стойности на 2025.",
         "PPI +5.7% YoY — производствените цени излязоха от дефлация (от ~−3.6% средата на 2025). Край на 3-годишния PPI спад.",
-        "БВП дефлатор -0.06% (тримесечно) — още отрицателен, но най-плитък от началото на debt-deflation (2Q2023). Близо до изход."
+        "БВП дефлатор +1.50% — обратно положителен; край на debt-deflation."
       ],
-      "comparability_note": "несравнима между региони по дизайн — CN линейна дефлационна леща (абсолютни котви) vs US/EU U-форма около 2%"
+      "comparability_note": "несравнима между региони по дизайн — CN линейна дефлационна леща (абсолютни котви) vs US/EU U-форма около 2%",
+      "health_z": 2.127,
+      "health_z_n": 5,
+      "health_z_excluded_stale": [
+        "CN_CPI_INDEX",
+        "CN_PPI_INDEX"
+      ]
     },
     "labor": {
       "score": 18.6,
@@ -108,7 +120,10 @@
       "narrative": [
         "Младежка безработица 15.8% — повишена. Образователната система произвежда повече дипломирани, отколкото пазарът абсорбира.",
         "Официална безработица 4.6% — подценена. Не включва ~300 млн. мигрантски работници."
-      ]
+      ],
+      "health_z": -2.532,
+      "health_z_n": 3,
+      "health_z_excluded_stale": []
     },
     "credit": {
       "score": 45.3,
@@ -143,6 +158,18 @@
         "Кредит към частния нефинансов сектор 198% от БВП (BIS) — debt overhang. Ограничава трансмисията на политиката.",
         "M2 растеж 7.1% YoY — исторически слаб. Лихвите паднаха, но кредитът не се ускорява (слаба трансмисия).",
         "CNY/USD 7.1728 — управляван флоат. PBoC контролира дневния band ±2%."
+      ],
+      "health_z": 1.115,
+      "health_z_n": 3,
+      "health_z_excluded_stale": [
+        "CN_BIS_CREDIT_GDP",
+        "CN_CNY_USD",
+        "CN_CREDIT_PRIVATE",
+        "CN_DEPOSIT_RATE",
+        "CN_LENDING_RATE",
+        "CN_M2_GDP",
+        "CN_POLICY_RATE",
+        "CN_TSF_FLOW"
       ]
     },
     "property": {
@@ -179,6 +206,14 @@
         "BIS жилищни цени -7.5% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.",
         "ПЧИ 0.41% от БВП — исторически минимум. Геополитически de-risking от западни компании.",
         "Текуща сметка +3.8% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU."
+      ],
+      "health_z": -0.794,
+      "health_z_n": 5,
+      "health_z_excluded_stale": [
+        "CN_BIS_PROPERTY_YOY",
+        "CN_FDI_ACTUAL",
+        "CN_FIXED_CAPITAL",
+        "CN_PRIVATE_CAPEX"
       ]
     }
   },
@@ -216,6 +251,23 @@
       "stale": false,
       "periods_behind": 0.89,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
+    },
+    {
+      "series_id": "CN_GDP_DEFLATOR_Q",
+      "name_bg": "БВП дефлатор (тримесечен, YoY %)",
+      "lens": [
+        "inflation"
+      ],
+      "peer_group": "deflator_quarterly",
+      "z_score": 2.154,
+      "direction": "up",
+      "current_value": 1.5,
+      "last_date": "2026-09-30",
+      "is_new_extreme": false,
+      "new_extreme_direction": null,
+      "stale": false,
+      "periods_behind": 0.56,
+      "narrative_hint": "Имплицитен дефлатор = номинален YoY − реален YoY (от НБС тримесечни данни). Отрицателен 12 поредни тримесечия (2Q2023–1Q2026) → debt-deflation. Ключов falsifier сигнал за recessionary режима."
     }
   ],
   "anomalies_stale_excluded": 4,
