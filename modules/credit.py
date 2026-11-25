@@ -107,6 +107,13 @@ SERIES = {
         "transform": "level",
         "is_rate": False,
     },
+    # ПРОЛЕТР4: член на лещата (health_z), НЕ в композита
+    "CN_TSF_STOCK_YOY": {
+        "label": "TSF — запас, годишен темп (месечно, %)",
+        "invert": False,   # по-бърз растеж на запаса = по-силен кредитен импулс
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
 # Композитът: LPR (текуща policy stance) + BIS кредит/БВП (debt overhang, тримесечно) +

@@ -51,6 +51,19 @@ SERIES = {
         "transform": "level",
         "is_rate": False,
     },
+    # ПРОЛЕТР4: месечни серии, членове на лещата (health_z), НЕ в композита
+    "CN_UNEMP_SURVEYED": {
+        "label": "Безработица — градска анкетна, национална (месечно, %)",
+        "invert": True,   # по-ниска = по-добре
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_YOUTH_UNEMP_M": {
+        "label": "Младежка безработица 16-24 г. без студенти (месечно, %)",
+        "invert": True,   # по-ниска = по-добре
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
 COMPOSITE_SERIES  = ["CN_UNEMPLOYMENT", "CN_YOUTH_UNEMPLOYMENT", "CN_LABOR_PARTICIPATION"]

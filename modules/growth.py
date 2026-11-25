@@ -108,6 +108,25 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
+    # ПРОЛЕТР4: членове на лещата (health_z), НЕ в композита
+    "CN_IP_YOY": {
+        "label": "Индустриално производство (месечен YoY %, akshare)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_PMI_MFG_CAIXIN": {
+        "label": "Частен производствен PMI (Caixin/S&P Global)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": False,
+    },
+    "CN_PMI_SVCS_CAIXIN": {
+        "label": "Частен PMI за услуги (Caixin/S&P Global)",
+        "invert": False,
+        "transform": "level",
+        "is_rate": False,
+    },
 }
 
 # Композитът стъпва на свежи месечни (2026), И-с-дълга-история серии (валиден percentile).
