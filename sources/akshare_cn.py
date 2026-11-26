@@ -121,6 +121,12 @@ class AkShareAdapter(BaseAdapter):
             "unemp_surveyed":      self._fetch_unemp_surveyed,
             # Подобрение на състава (26.11.2026): дневна доходност на 10г ДЦК (ChinaBond)
             "cgb_10y":             self._fetch_cgb_10y,
+            # ПРОЛЕТР4, втората вълна (26.11.2026, КТ-1/КТ-2)
+            "core_cpi_yoy":           self._fetch_core_cpi_yoy,
+            "consumer_confidence":    self._fetch_consumer_confidence,
+            "disp_income_cum_yoy":    self._fetch_disp_income_cum_yoy,
+            "aaa_spread_3y":          self._fetch_aaa_spread_3y,
+            "fiscal_revenue_cum_yoy": self._fetch_fiscal_revenue_cum_yoy,
         }
 
         fetcher = fetchers.get(source_id)
@@ -373,11 +379,32 @@ class AkShareAdapter(BaseAdapter):
         d = df[df["曲线名称"] == AkShareAdapter.CGB_CURVE]
         return AkShareAdapter._to_series_from_iso_date(d, "日期", "10年")
 
-    def _fetch_cgb_10y(self) -> pd.Series:
+    # ПРОЛЕТР4 (КТ-1): кредитният спред е 3-годишните AAA краткосрочни бележки минус ДЦК,
+    # от същите рамки на ChinaBond. Рамките се теглят веднъж на ход и се ползват от двете серии.
+    SPREAD_CURVE = "中债中短期票据收益率曲线(AAA)"
+    SPREAD_TENOR = "3年"
+
+    @staticmethod
+    def _parse_spread_frame(df) -> pd.Series:
+        """bond_china_yield DataFrame → дневен спред в базисни точки (AAA бележки минус ДЦК, 3 г.)."""
+        a = AkShareAdapter
+        mtn = a._to_series_from_iso_date(df[df["曲线名称"] == a.SPREAD_CURVE], "日期", a.SPREAD_TENOR)
+        cgb = a._to_series_from_iso_date(df[df["曲线名称"] == a.CGB_CURVE], "日期", a.SPREAD_TENOR)
+        mtn = mtn[~mtn.index.duplicated(keep="last")]
+        cgb = cgb[~cgb.index.duplicated(keep="last")]
+        both = pd.concat([mtn.rename("mtn"), cgb.rename("cgb")], axis=1, sort=True).dropna()
+        return ((both["mtn"] - both["cgb"]) * 100.0).round(2)
+
+    def _chinabond_frames(self) -> list:
+        """Суровите рамки на bond_china_yield на парчета под година, назад до CGB_HISTORY_FLOOR.
+        Пазят се в инстанцията, за да не се тегли два пъти за 10г ДЦК и за спреда."""
+        cached = getattr(self, "_cb_frames", None)
+        if cached is not None:
+            return cached
         from datetime import date, timedelta
         end = date.today()
         floor = date.fromisoformat(self.CGB_HISTORY_FLOOR)
-        parts: list[pd.Series] = []
+        frames: list = []
         empty_run = 0
         while end > floor and empty_run < 2:
             start = max(end - timedelta(days=364), floor)
@@ -385,19 +412,102 @@ class AkShareAdapter(BaseAdapter):
                 df = _ak_call("bond_china_yield",
                               start_date=start.strftime("%Y%m%d"),
                               end_date=end.strftime("%Y%m%d"))
-                part = self._parse_cgb_frame(df)
             except ValueError:   # празен отговор за прозореца
-                part = pd.Series(dtype=float)
-            if part.empty:
+                df = None
+            if df is None or len(df) == 0:
                 empty_run += 1
             else:
                 empty_run = 0
-                parts.append(part)
+                frames.append(df)
             end = start - timedelta(days=1)
+        self._cb_frames = frames
+        return frames
+
+    def _from_chinabond(self, parser, what: str) -> pd.Series:
+        parts = [p for p in (parser(df) for df in self._chinabond_frames()) if not p.empty]
         if not parts:
-            raise RuntimeError("bond_china_yield: няма данни за кривата на ДЦК")
+            raise RuntimeError(f"bond_china_yield: няма данни за {what}")
         s = pd.concat(parts).sort_index()
         return s[~s.index.duplicated(keep="last")]
+
+    def _fetch_cgb_10y(self) -> pd.Series:
+        return self._from_chinabond(self._parse_cgb_frame, "кривата на ДЦК")
+
+    def _fetch_aaa_spread_3y(self) -> pd.Series:
+        return self._from_chinabond(self._parse_spread_frame, "спреда AAA минус ДЦК")
+
+    # ── ПРОЛЕТР4, втората вълна: базисна инфлация, доверие, бюджет ──
+    # NBS държи базисния ИПЦ в таблицата на кошницата; всяка кошница е отделен възел с
+    # отделен период. Пътят трябва да съвпада точно (с интервала преди скобата).
+    CORE_CPI_NODE = "价格指数>居民消费价格分类指数 (上年同月=100) >全国居民消费价格分类指数 (上年同月=100) "
+    CORE_CPI_PARTS = (("(2026-)", "2026-"), ("(2021-2025)", "2021-2025"))
+    CORE_CPI_ROW = "不包括食品和能源"
+
+    @staticmethod
+    def _parse_nbs_core_row(df) -> pd.Series:
+        """Таблица на NBS (редове = показатели, колони = '2026年10月') → базисният ИПЦ, г/г в %."""
+        rows = [r for r in df.index if AkShareAdapter.CORE_CPI_ROW in str(r)]
+        if not rows:
+            raise ValueError(f"NBS: няма ред '{AkShareAdapter.CORE_CPI_ROW}'")
+        row = df.loc[rows[0]]
+        dates = [AkShareAdapter._parse_chinese_month(c) for c in row.index]
+        vals = pd.to_numeric(row.values, errors="coerce")
+        s = pd.Series(vals, index=dates, dtype=float)
+        s = s[s.index.notna()].dropna().sort_index()
+        return s - 100.0   # индексът е „същия месец година по-рано = 100“
+
+    def _fetch_core_cpi_yoy(self) -> pd.Series:
+        parts = []
+        for suffix, period in self.CORE_CPI_PARTS:   # най-новата кошница първа
+            df = _ak_call("macro_china_nbs_nation", kind="月度数据",
+                          path=self.CORE_CPI_NODE + suffix, period=period)
+            parts.append(self._parse_nbs_core_row(df))
+        s = pd.concat(parts)
+        s = s[~s.index.duplicated(keep="first")]   # при застъпване печели новата кошница
+        return s.sort_index().round(2)
+
+    # Доходите: официалният натрупан ръст на NBS (сравним, спрямо ревизирана основа). Сметнат от
+    # натрупаните нива на chinadata.live, ръстът за 3 тр. 2026 излиза 5,3% срещу 4,4% на NBS.
+    INCOME_NODE = "人民生活>全国居民人均收入情况"
+    INCOME_ROW = "居民人均可支配收入累计增长"
+
+    @staticmethod
+    def _parse_chinese_quarter(c) -> Optional[pd.Timestamp]:
+        """'2026年第三季度' → краят на тримесечието (2026-09-30)."""
+        q = {"一": 1, "二": 2, "三": 3, "四": 4}
+        s = str(c).strip()
+        if "年第" not in s or "季度" not in s:
+            return None
+        year, rest = s.split("年第", 1)
+        n = q.get(rest.replace("季度", "").strip())
+        if n is None or not year.isdigit():
+            return None
+        return pd.Period(f"{year}Q{n}", freq="Q").end_time.normalize()
+
+    @staticmethod
+    def _parse_nbs_income_row(df) -> pd.Series:
+        rows = [r for r in df.index if AkShareAdapter.INCOME_ROW in str(r)]
+        if not rows:
+            raise ValueError(f"NBS: няма ред '{AkShareAdapter.INCOME_ROW}'")
+        row = df.loc[rows[0]]
+        dates = [AkShareAdapter._parse_chinese_quarter(c) for c in row.index]
+        s = pd.Series(pd.to_numeric(row.values, errors="coerce"), index=dates, dtype=float)
+        return s[s.index.notna()].dropna().sort_index()
+
+    def _fetch_disp_income_cum_yoy(self) -> pd.Series:
+        df = _ak_call("macro_china_nbs_nation", kind="季度数据", path=self.INCOME_NODE, period="2013-")
+        return self._parse_nbs_income_row(df)
+
+    def _fetch_consumer_confidence(self) -> pd.Series:
+        """Индексът на доверието на потребителите на NBS (eastmoney). Източникът понякога прекъсва
+        връзката (ChunkedEncodingError); повторните опити са в _ak_call."""
+        df = _ak_call("macro_china_consumer_confidence")
+        return self._to_series_from_chinese_month(df, "月份", "消费者信心指数-指数值")
+
+    def _fetch_fiscal_revenue_cum_yoy(self) -> pd.Series:
+        """Приходите на общия бюджет (МФ, eastmoney): натрупан ръст от началото на годината, %."""
+        df = _ak_call("macro_china_fiscal_revenue")
+        return self._to_series_from_chinese_month(df, "月份", "累计-同比增长")
 
     def fetch_all_china_series(
         self,

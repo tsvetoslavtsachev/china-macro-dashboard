@@ -90,6 +90,12 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
+    "CN_CORP_SPREAD_3Y": {
+        "label": "Кредитен спред AAA минус ДЦК, 3 г. (б.т.)",
+        "invert": True,   # ПРОЛЕТР4 КТ-1: по-широк спред = по-зле
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
 # Композитът: LPR (текуща policy stance) + BIS кредит/БВП (debt overhang, тримесечно) +
