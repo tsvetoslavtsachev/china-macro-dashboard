@@ -1,44 +1,44 @@
 {
   "region": "CN",
-  "as_of_date": "2026-11-25",
-  "generated_at": "2026-11-25T21:55:10.748565+00:00Z",
+  "as_of_date": "2026-11-26",
+  "generated_at": "2026-11-26T05:53:53.269776+00:00Z",
   "executive_summary": {
-    "composite_score": 37.0,
+    "composite_score": 42.4,
     "regime_key": "deteriorating",
     "regime_label_bg": "ВЛОШАВАЩ СЕ",
-    "lenses_backed": "5/5",
+    "lenses_backed": "6/6",
     "css_class": null,
-    "narrative": "Претеглен композитен macro score 37.0/100 → режим „ВЛОШАВАЩ СЕ“ (5/5 лещи). 5 лещи, 4 flagged аномалии (4 застояли изключени), 3 cross-lens двойки.",
+    "narrative": "Претеглен композитен macro score 42.4/100 → режим „ВЛОШАВАЩ СЕ“ (6/6 лещи). 6 лещи, 4 flagged аномалии, 3 cross-lens двойки.",
     "supporting_signals": [],
     "primary_driver": null
   },
   "lenses": {
     "growth": {
-      "score": 37.9,
-      "direction": "mixed",
-      "regime": "ПОД ТАРГЕТ",
+      "score": 31.8,
+      "direction": "contracting",
+      "regime": "РЕЦЕСИЯ",
       "label_bg": "Растеж и активност",
-      "indicators_count": 14,
+      "indicators_count": 8,
       "key_readings": [
         {
-          "label": "БВП — реален растеж (YoY %)",
-          "value": 4.9599,
-          "percentile": null
+          "label": "Продажби на дребно (месечен YoY %)",
+          "value": 0.4,
+          "percentile": 12.9
         },
         {
-          "label": "Индустрия — реален растеж (YoY %)",
-          "value": 4.4989,
-          "percentile": null
+          "label": "NBS Manufacturing PMI",
+          "value": 49.3,
+          "percentile": 17.4
         },
         {
-          "label": "Услуги — реален растеж (YoY %)",
-          "value": 5.3863,
-          "percentile": null
+          "label": "NBS Non-Manufacturing PMI",
+          "value": 49.7,
+          "percentile": 11.6
         },
         {
-          "label": "Брутно капиталообразуване (% от БВП)",
-          "value": 40.4815,
-          "percentile": null
+          "label": "Caixin Composite PMI (независим частен survey)",
+          "value": 52.4,
+          "percentile": 63.4
         }
       ],
       "narrative": [
@@ -46,39 +46,31 @@
         "NBS Manufacturing PMI 49.3 — под 50 (свиване).",
         "БВП растеж 4.5% — около официалния таргет ~5% (policy-pinned, почти не мърда)."
       ],
-      "health_z": -0.738,
-      "health_z_n": 12,
-      "health_z_excluded_stale": [
-        "CN_CAPEX_GDP",
-        "CN_IP_YOY_NBS"
-      ]
+      "health_z": -0.473,
+      "health_z_n": 8,
+      "health_z_excluded_stale": []
     },
     "inflation": {
-      "score": 43.6,
+      "score": 46.6,
       "direction": "mixed",
-      "regime": "ДЕФЛАЦИОНЕН РИСК",
+      "regime": "ЦЕНОВА СТАБИЛНОСТ",
       "label_bg": "Инфлация и цени",
-      "indicators_count": 7,
+      "indicators_count": 3,
       "key_readings": [
         {
-          "label": "ИПЦ — инфлация (YoY %)",
-          "value": 0.0596,
+          "label": "ИПЦ — инфлация (месечен YoY %)",
+          "value": 0.7,
+          "percentile": 31.4
+        },
+        {
+          "label": "ИПП — производствени цени (месечен YoY %)",
+          "value": 5.7,
+          "percentile": 80.2
+        },
+        {
+          "label": "БВП дефлатор (тримесечен YoY %)",
+          "value": 1.5,
           "percentile": null
-        },
-        {
-          "label": "БВП дефлатор (YoY %)",
-          "value": -0.9223,
-          "percentile": null
-        },
-        {
-          "label": "ИПЦ — индекс (месечен, YoY %)",
-          "value": 0.0178,
-          "percentile": 11.6
-        },
-        {
-          "label": "ИПП — индекс (месечен, YoY %)",
-          "value": -0.7156,
-          "percentile": 45.5
         }
       ],
       "narrative": [
@@ -87,137 +79,152 @@
         "БВП дефлатор +1.50% — обратно положителен; край на debt-deflation."
       ],
       "comparability_note": "несравнима между региони по дизайн — CN линейна дефлационна леща (абсолютни котви) vs US/EU U-форма около 2%",
-      "health_z": 2.127,
-      "health_z_n": 5,
-      "health_z_excluded_stale": [
-        "CN_CPI_INDEX",
-        "CN_PPI_INDEX"
-      ]
+      "health_z": 2.27,
+      "health_z_n": 3,
+      "health_z_excluded_stale": []
     },
     "labor": {
-      "score": 18.6,
-      "direction": "contracting",
-      "regime": "КРИЗА НА ТРУДА",
+      "score": 51.6,
+      "direction": "mixed",
+      "regime": "СТРУКТУРНИ ПРОБЛЕМИ",
       "label_bg": "Пазар на труда",
-      "indicators_count": 5,
+      "indicators_count": 2,
       "key_readings": [
-        {
-          "label": "Безработица — официална (ILO, %)",
-          "value": 4.615,
-          "percentile": null
-        },
-        {
-          "label": "Младежка безработица (16-24 г., %)",
-          "value": 15.795,
-          "percentile": null
-        },
-        {
-          "label": "Коефициент на участие в работната сила (%)",
-          "value": 64.551,
-          "percentile": null
-        },
         {
           "label": "Безработица — градска анкетна, национална (месечно, %)",
           "value": 5.1,
           "percentile": 26.4
+        },
+        {
+          "label": "Младежка безработица 16-24 г. без студенти (месечно, %)",
+          "value": 17.2,
+          "percentile": null
         }
       ],
       "narrative": [
-        "Младежка безработица 15.8% — повишена. Образователната система произвежда повече дипломирани, отколкото пазарът абсорбира.",
-        "Официална безработица 4.6% — подценена. Не включва ~300 млн. мигрантски работници."
+        "Младежка безработица (16-24 г. без студенти) 17.2% — повишена. Образователната система произвежда повече дипломирани, отколкото пазарът абсорбира.",
+        "Градска анкетна безработица 5.1% — подценява реалната картина: не включва ~300 млн. мигрантски работници."
       ],
-      "health_z": -1.492,
-      "health_z_n": 5,
+      "health_z": 0.067,
+      "health_z_n": 2,
       "health_z_excluded_stale": []
     },
     "credit": {
-      "score": 47.0,
+      "score": 48.3,
       "direction": "mixed",
       "regime": "НЕУТРАЛНА ПОЛИТИКА",
       "label_bg": "Монетарна политика и кредит",
-      "indicators_count": 12,
+      "indicators_count": 7,
       "key_readings": [
         {
-          "label": "Политическа лихва — PBoC 7-day repo (%)",
-          "value": 1.4,
+          "label": "1-годишен Loan Prime Rate (%)",
+          "value": 3.0,
           "percentile": 0.0
         },
         {
-          "label": "Кредитна лихва (%)",
-          "value": 4.35,
+          "label": "5-годишен Loan Prime Rate — mortgage benchmark (%)",
+          "value": 3.5,
           "percentile": 0.0
         },
         {
-          "label": "Депозитна лихва (%)",
-          "value": 1.5,
-          "percentile": 0.0
+          "label": "M2 паричен агрегат (месечен YoY %)",
+          "value": 7.1,
+          "percentile": 6.6
         },
         {
-          "label": "Кредит към частния сектор (% от БВП)",
-          "value": 194.3125,
-          "percentile": null
+          "label": "Total Social Financing — поток (месечен)",
+          "value": 11500.0,
+          "percentile": 16.5
         }
       ],
       "narrative": [
         "1Y LPR 3.00% — на/близо до исторически дъна; активен easing цикъл.",
-        "Кредит към частния нефинансов сектор 198% от БВП (BIS) — debt overhang. Ограничава трансмисията на политиката.",
         "M2 растеж 7.1% YoY — исторически слаб. Лихвите паднаха, но кредитът не се ускорява (слаба трансмисия).",
-        "CNY/USD 7.1728 — управляван флоат. PBoC контролира дневния band ±2%."
+        "Доходност на 10г ДЦК 1.59% — пазарната цена на дълга; ниска доходност при слаб кредит чете дефлационни очаквания."
       ],
-      "health_z": 1.353,
-      "health_z_n": 5,
+      "health_z": 0.894,
+      "health_z_n": 7,
       "health_z_excluded_stale": [
         "CN_BIS_CREDIT_GDP",
-        "CN_CNY_USD",
-        "CN_CREDIT_PRIVATE",
-        "CN_DEPOSIT_RATE",
-        "CN_LENDING_RATE",
-        "CN_M2_GDP",
-        "CN_POLICY_RATE"
+        "CN_INTERBANK_3M"
       ]
     },
     "property": {
-      "score": 27.4,
+      "score": 17.5,
       "direction": "contracting",
       "regime": "ИМОТНА КРИЗА",
-      "label_bg": "Имоти и търговия",
-      "indicators_count": 13,
+      "label_bg": "Имоти и инвестиции",
+      "indicators_count": 4,
       "key_readings": [
         {
-          "label": "Текуща сметка — баланс (% от БВП)",
-          "value": 3.7697,
-          "percentile": null
+          "label": "Цени на нови жилища — 70 града (YoY %)",
+          "value": 0.05,
+          "percentile": 14.9
         },
         {
-          "label": "Износ — дял от БВП (%)",
-          "value": 21.0712,
-          "percentile": null
+          "label": "Инвестиции в дълготрайни активи (месечен YoY %)",
+          "value": -17.84,
+          "percentile": 8.9
         },
         {
-          "label": "ПЧИ — входящи (% от БВП)",
-          "value": 0.4102,
-          "percentile": null
+          "label": "Инвестиции в имоти — YTD YoY %",
+          "value": -21.6,
+          "percentile": 0.0
         },
         {
-          "label": "Брутно фиксирано капиталообразуване (% от БВП)",
-          "value": 39.6519,
-          "percentile": null
+          "label": "Продажби на жилища (площ) — YTD YoY %",
+          "value": -14.7594,
+          "percentile": 31.4
         }
       ],
       "narrative": [
         "Цени на жилища (70 града, нови) +0.1% YoY — стабилизация след корекцията.",
         "⚠️ Инвестиции в дълготрайни активи -17.8% YoY (месечно) — рязко свиване на инвестиционния цикъл.",
-        "BIS жилищни цени -7.5% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.",
-        "ПЧИ 0.41% от БВП — исторически минимум. Геополитически de-risking от западни компании.",
-        "Текуща сметка +3.8% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU."
+        "Инвестиции в имоти -21.6% YoY (от началото на годината) — свиването на строителния цикъл продължава."
       ],
-      "health_z": -0.304,
-      "health_z_n": 9,
+      "health_z": -1.29,
+      "health_z_n": 4,
       "health_z_excluded_stale": [
-        "CN_BIS_PROPERTY_YOY",
-        "CN_FDI_ACTUAL",
-        "CN_FIXED_CAPITAL",
-        "CN_PRIVATE_CAPEX"
+        "CN_BIS_PROPERTY_YOY"
+      ]
+    },
+    "external": {
+      "score": 94.0,
+      "direction": "expanding",
+      "regime": "СИЛНА ВЪНШНА ПОЗИЦИЯ",
+      "label_bg": "Външен сектор и курс",
+      "indicators_count": 4,
+      "key_readings": [
+        {
+          "label": "Износ USD (месечно YoY %)",
+          "value": 35.2,
+          "percentile": 95.9
+        },
+        {
+          "label": "Внос USD (месечно YoY %)",
+          "value": 41.6,
+          "percentile": 97.5
+        },
+        {
+          "label": "Валутни резерви",
+          "value": 3405.178,
+          "percentile": 94.2
+        },
+        {
+          "label": "Текуща сметка - баланс (годишно, % от БВП)",
+          "value": 3.7697,
+          "percentile": null
+        }
+      ],
+      "narrative": [
+        "Износ +35.2% YoY (USD) — външното търсене подкрепя растежа.",
+        "Текуща сметка +3.8% от БВП — голям излишък; износът компенсира слабото вътрешно търсене и носи търговско напрежение."
+      ],
+      "health_z": 2.316,
+      "health_z_n": 4,
+      "health_z_excluded_stale": [
+        "CN_CNY_USD",
+        "CN_REER"
       ]
     }
   },
@@ -236,7 +243,7 @@
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
-      "periods_behind": 0.0,
+      "periods_behind": 0.17,
       "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
     },
     {
@@ -253,7 +260,7 @@
       "is_new_extreme": true,
       "new_extreme_direction": "max",
       "stale": false,
-      "periods_behind": 0.89,
+      "periods_behind": 0.9,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
     },
     {
@@ -270,7 +277,7 @@
       "is_new_extreme": false,
       "new_extreme_direction": null,
       "stale": false,
-      "periods_behind": 0.56,
+      "periods_behind": 0.62,
       "narrative_hint": "Имплицитен дефлатор = номинален YoY − реален YoY (от НБС тримесечни данни). Отрицателен 12 поредни тримесечия (2Q2023–1Q2026) → debt-deflation. Ключов falsifier сигнал за recessionary режима."
     },
     {
@@ -287,17 +294,12 @@
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
-      "periods_behind": 1.67,
+      "periods_behind": 1.83,
       "narrative_hint": "НБС (чрез chinadata.live). ВНИМАНИЕ: това е темп от началото на годината (YTD), не месечен; през годината се изглажда и се нулира всеки януари/февруари. Дълбок и устойчив спад."
     }
   ],
-  "anomalies_stale_excluded": 4,
-  "anomalies_stale_excluded_keys": [
-    "CN_CREDIT_PRIVATE",
-    "CN_POLICY_RATE",
-    "CN_BIS_PROPERTY_YOY",
-    "CN_CGB_10Y"
-  ],
+  "anomalies_stale_excluded": 0,
+  "anomalies_stale_excluded_keys": [],
   "cross_lens_divergences": [
     {
       "pair_id": "credit_real_economy",
@@ -307,7 +309,7 @@
       "interpretation": "Преход — кредит и реален сектор не са ясно aligned; чакай следващ TSF/FAI print.",
       "slot_a_label": "Кредитна експанзия",
       "slot_b_label": "Имоти и инвестиции",
-      "breadth_a": 0.429,
+      "breadth_a": 0.25,
       "breadth_b": 0.417
     },
     {
@@ -318,19 +320,19 @@
       "interpretation": "Policy trap — PBoC разхлабва, но инфлацията пада/е в дефлация. Трансмисията е счупена (Japan-style): по-ниските лихви не вдигат цените при deleveraging.",
       "slot_a_label": "Монетарно разхлабване",
       "slot_b_label": "Инфлация",
-      "breadth_a": 1.0,
-      "breadth_b": 0.25
+      "breadth_a": 0.667,
+      "breadth_b": 0.0
     },
     {
       "pair_id": "external_domestic_balance",
       "name_bg": "Външно търсене × Вътрешна активност",
       "question_bg": "Балансиран ли е растежът, или Китай зависи от износа при слабо вътрешно търсене?",
-      "state": "a_up_b_down",
-      "interpretation": "Export-dependence — износът носи растежа, докато вътрешното търсене е слабо. Небалансирано възстановяване, уязвимо на тарифи/външни шокове.",
+      "state": "insufficient_data",
+      "interpretation": "Insufficient data в една от двете групи.",
       "slot_a_label": "Външно търсене",
       "slot_b_label": "Вътрешна активност",
-      "breadth_a": 0.667,
-      "breadth_b": 0.333
+      "breadth_a": null,
+      "breadth_b": 0.0
     }
   ],
   "non_consensus_highlights": []
