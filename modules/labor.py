@@ -44,6 +44,18 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
+    "CN_PMI_EMPLOYMENT": {
+        "label": "PMI на индустрията: заетост (индекс)",
+        "invert": False,   # ПРОЛЕТР4 КТ-1: над 50 = наемане
+        "transform": "level",
+        "is_rate": False,
+    },
+    "CN_DISP_INCOME_YOY": {
+        "label": "Разполагаем доход на човек (натрупан YoY %, тримесечно)",
+        "invert": False,   # ПРОЛЕТР4 КТ-1: по-бърз ръст на доходите = по-здраво
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
 COMPOSITE_SERIES  = ["CN_UNEMP_SURVEYED", "CN_YOUTH_UNEMP_M"]

@@ -83,6 +83,12 @@ SERIES = {
         "transform": "level",
         "is_rate": False,
     },
+    "CN_CONS_CONF": {
+        "label": "Доверие на потребителите (индекс, NBS)",
+        "invert": False,   # ПРОЛЕТР4 КТ-1: по-високо доверие = по-здраво
+        "transform": "level",
+        "is_rate": False,
+    },
 }
 
 # Композитът стъпва на свежи месечни (2026), И-с-дълга-история серии (валиден percentile).

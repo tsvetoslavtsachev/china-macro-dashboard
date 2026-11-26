@@ -36,7 +36,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
-from catalog.series import SERIES_CATALOG, ALLOWED_LENSES
+from catalog.series import SERIES_CATALOG, ALLOWED_LENSES, SCORED_LENSES
 from core.primitives import z_score, new_extreme
 
 
@@ -164,6 +164,8 @@ def compute_anomalies(
         meta = SERIES_CATALOG.get(key)
         if meta is None:
             continue  # серия не е в каталога; skip за safety
+        if not any(l in SCORED_LENSES for l in meta.get("lens", [])):
+            continue  # ПРОЛЕТР4 КТ-2: серия само за показване (бюджетът) не е аномалия на оценката
         if series is None or series.dropna().empty:
             continue
 

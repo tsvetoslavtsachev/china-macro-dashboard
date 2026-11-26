@@ -52,6 +52,12 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
+    "CN_CORE_CPI_YOY": {
+        "label": "Базисна инфлация без храни и енергия (месечен YoY %)",
+        "invert": False,   # ПРОЛЕТР4 КТ-1: ниска = дефлационен натиск = нисък score
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
 # Композитът: свеж месечен CPI (akshare NBS, замества застоялия IMF CN_CPI_INDEX 2025-07) +

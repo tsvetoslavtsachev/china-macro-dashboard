@@ -39,6 +39,11 @@ MODULES = ['growth', 'credit', 'property', 'inflation', 'labor', 'external']
 EXPECTED = {
  'credit.CN_BIS_CREDIT_GDP': {'invert': True, 'transform': 'level'},
  'credit.CN_CGB_10Y': {'invert': True, 'transform': 'level'},
+ 'credit.CN_CORP_SPREAD_3Y': {'invert': True, 'transform': 'level'},
+ 'growth.CN_CONS_CONF': {'invert': False, 'transform': 'level'},
+ 'inflation.CN_CORE_CPI_YOY': {'invert': False, 'transform': 'level'},
+ 'labor.CN_DISP_INCOME_YOY': {'invert': False, 'transform': 'level'},
+ 'labor.CN_PMI_EMPLOYMENT': {'invert': False, 'transform': 'level'},
  'credit.CN_INTERBANK_3M': {'invert': True, 'transform': 'level'},
  'credit.CN_LPR_1Y': {'invert': True, 'transform': 'level'},
  'credit.CN_LPR_5Y': {'invert': True, 'transform': 'level'},
