@@ -155,3 +155,12 @@ def test_chinadata_quarterly_dates_to_quarter_end_and_cum_yoy():
     y = cumulative_yoy(s)
     assert list(y.index) == [pd.Timestamp("2026-09-30")]
     assert round(float(y.iloc[0]), 2) == round((34230 / 32509 - 1) * 100, 2)
+
+
+def test_nbs_income_row_quarters_to_quarter_end():
+    df = pd.DataFrame({"2026年第三季度": [34230, 4.4], "2026年第二季度": [22981, 4.2], "2013年第一季度": [5006, None]},
+                      index=["居民人均可支配收入(元)", "居民人均可支配收入累计增长(%)"])
+    s = AkShareAdapter._parse_nbs_income_row(df)
+    assert list(s.index) == [pd.Timestamp("2026-06-30"), pd.Timestamp("2026-09-30")]
+    assert list(s.values) == [4.2, 4.4]
+    assert SERIES_CATALOG["CN_DISP_INCOME_YOY"]["id"] == "disp_income_cum_yoy"

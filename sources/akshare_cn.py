@@ -124,6 +124,7 @@ class AkShareAdapter(BaseAdapter):
             # ПРОЛЕТР4, втората вълна (26.11.2026, КТ-1/КТ-2)
             "core_cpi_yoy":           self._fetch_core_cpi_yoy,
             "consumer_confidence":    self._fetch_consumer_confidence,
+            "disp_income_cum_yoy":    self._fetch_disp_income_cum_yoy,
             "aaa_spread_3y":          self._fetch_aaa_spread_3y,
             "fiscal_revenue_cum_yoy": self._fetch_fiscal_revenue_cum_yoy,
         }
@@ -464,6 +465,38 @@ class AkShareAdapter(BaseAdapter):
         s = pd.concat(parts)
         s = s[~s.index.duplicated(keep="first")]   # при застъпване печели новата кошница
         return s.sort_index().round(2)
+
+    # Доходите: официалният натрупан ръст на NBS (сравним, спрямо ревизирана основа). Сметнат от
+    # натрупаните нива на chinadata.live, ръстът за 3 тр. 2026 излиза 5,3% срещу 4,4% на NBS.
+    INCOME_NODE = "人民生活>全国居民人均收入情况"
+    INCOME_ROW = "居民人均可支配收入累计增长"
+
+    @staticmethod
+    def _parse_chinese_quarter(c) -> Optional[pd.Timestamp]:
+        """'2026年第三季度' → краят на тримесечието (2026-09-30)."""
+        q = {"一": 1, "二": 2, "三": 3, "四": 4}
+        s = str(c).strip()
+        if "年第" not in s or "季度" not in s:
+            return None
+        year, rest = s.split("年第", 1)
+        n = q.get(rest.replace("季度", "").strip())
+        if n is None or not year.isdigit():
+            return None
+        return pd.Period(f"{year}Q{n}", freq="Q").end_time.normalize()
+
+    @staticmethod
+    def _parse_nbs_income_row(df) -> pd.Series:
+        rows = [r for r in df.index if AkShareAdapter.INCOME_ROW in str(r)]
+        if not rows:
+            raise ValueError(f"NBS: няма ред '{AkShareAdapter.INCOME_ROW}'")
+        row = df.loc[rows[0]]
+        dates = [AkShareAdapter._parse_chinese_quarter(c) for c in row.index]
+        s = pd.Series(pd.to_numeric(row.values, errors="coerce"), index=dates, dtype=float)
+        return s[s.index.notna()].dropna().sort_index()
+
+    def _fetch_disp_income_cum_yoy(self) -> pd.Series:
+        df = _ak_call("macro_china_nbs_nation", kind="季度数据", path=self.INCOME_NODE, period="2013-")
+        return self._parse_nbs_income_row(df)
 
     def _fetch_consumer_confidence(self) -> pd.Series:
         """Индексът на доверието на потребителите на NBS (eastmoney). Източникът понякога прекъсва

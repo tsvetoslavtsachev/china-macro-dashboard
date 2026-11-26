@@ -895,8 +895,8 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "narrative_hint": "Подиндексът за заетостта в PMI на NBS. Над 50 фабриките наемат, под 50 съкращават. Месечна мярка за заетост Китай не публикува.",
     },
     "CN_DISP_INCOME_YOY": {
-        "source": "chinadata_live",
-        "id": "china-disposable-personal-income@cum_yoy",
+        "source": "akshare",
+        "id": "disp_income_cum_yoy",
         "region": "CN",
         "name_bg": "Разполагаем доход на човек (натрупан от началото на годината, г/г, %)",
         "name_en": "China Per-Capita Disposable Income (YTD YoY %)",
@@ -907,9 +907,9 @@ SERIES_CATALOG: dict[str, dict[str, Any]] = {
         "is_rate": True,
         "historical_start": "2013-01-01",
         "release_schedule": "quarterly",
-        "typical_release": "тримесечно, с БВП (NBS, през chinadata.live)",
+        "typical_release": "тримесечно, с БВП (NBS, през akshare macro_china_nbs_nation)",
         "revision_prone": False,
-        "narrative_hint": "Ръстът на доходите на домакинствата, номинален, смятан от натрупаните нива. Месечни заплати Китай не дава; заплатната част е в същата таблица на NBS.",
+        "narrative_hint": "Официалният натрупан ръст на доходите на домакинствата (NBS). Месечни заплати Китай не дава; заплатната част е в същата таблица на NBS.",
     },
     "CN_CORP_SPREAD_3Y": {
         "source": "akshare",
