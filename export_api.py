@@ -7,8 +7,8 @@ export_api.py  (China)
                                   cross-lens divergences, top anomalies)
   output/api/series_data.json   — времеви редове за графиките (последните N години)
 
-China-native: ползва СЪЩИЯ pipeline като weekly_briefing.py — 5-те модула
-(growth/inflation/labor/credit/property) + analysis/ слоя (B2). Без нови
+China-native: ползва СЪЩИЯ pipeline като weekly_briefing.py — 6-те модула
+(growth/inflation/labor/credit/property/external) + analysis/ слоя (B2). Без нови
 изчисления, само сериализира вече изчислените резултати в JSON.
 
 Схемата на macro_state.json е ХАРМОНИЗИРАНА с US/EU (region, as_of_date,
@@ -59,18 +59,20 @@ import modules.credit
 import modules.property
 import modules.inflation
 import modules.labor
+import modules.external
 
 # ── константи ───────────────────────────────────────────────────────────────
 OUTPUT_DIR = BASE_DIR / "output" / "api"
 HISTORY_START = "1999-01-01"
 
-# Ред на лещите за извеждане (core 4 + China extension "имоти")
+# Ред на лещите за извеждане (core 4 + China extension "имоти" + външна леща)
 MODULES_ORDER = [
     ("growth", "modules.growth"),
     ("inflation", "modules.inflation"),
     ("labor", "modules.labor"),
     ("credit", "modules.credit"),
     ("property", "modules.property"),
+    ("external", "modules.external"),
 ]
 
 # REVIEW-03 т.0.2 (P3-fix-A): агрегатен invert/transform lookup от петте
@@ -85,11 +87,12 @@ _META_MODULES = [
     modules.property.SERIES,
     modules.inflation.SERIES,
     modules.labor.SERIES,
+    modules.external.SERIES,
 ]
 _MODULE_SERIES = {
     "growth": modules.growth.SERIES, "credit": modules.credit.SERIES,
     "property": modules.property.SERIES, "inflation": modules.inflation.SERIES,
-    "labor": modules.labor.SERIES,
+    "labor": modules.labor.SERIES, "external": modules.external.SERIES,
 }
 SERIES_META: dict[str, dict[str, Any]] = {}
 for _series_dict in _META_MODULES:
@@ -198,7 +201,7 @@ def _series_regime(score) -> str | None:
 
 # ── macro_state.json builder ─────────────────────────────────────────────────
 def build_macro_state(snapshot: dict, today: date) -> dict:
-    print("  🧮 Изпълнявам 5-те модула...")
+    print("  🧮 Изпълнявам 6-те модула...")
     results = _run_modules(snapshot)
 
     overall = _overall_composite(results)

@@ -11,11 +11,9 @@ Inflation lens за China macro dashboard.
     НО: висока инфлация също е лоша → U-shape scoring
     За простота: score-ваме спрямо optimal range 1-3%
 
-Composite weights:
-  CPI YoY (WB)       0.35 — headline, годишен
-  GDP deflator       0.25 — по-широка мярка, отрицателна
-  CPI Index (IMF)    0.25 — месечен, по-актуален
-  PPI Index (IMF)    0.15 — leading indicator за CPI
+Състав (подобрение 26.11.2026): месечен CPI YoY (akshare) 0.40 · месечен PPI YoY 0.30 ·
+тримесечен БВП дефлатор 0.30 (абсолютна котва). Годишните WB серии (CPI, дефлатор) са само
+фон в series_data.
 
 Convention: score близо до 50 = инфлация в optimal range (1-3%).
   Дефлация (< 0%) → нисък score.
@@ -35,30 +33,6 @@ from catalog.polarity import polarity_for
 
 
 SERIES = {
-    "CN_CPI_YOY": {
-        "label": "ИПЦ — инфлация (YoY %)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": True,
-    },
-    "CN_GDP_DEFLATOR": {
-        "label": "БВП дефлатор (YoY %)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": True,
-    },
-    "CN_CPI_INDEX": {
-        "label": "ИПЦ — индекс (месечен, YoY %)",
-        "invert": False,
-        "transform": "yoy_pct",
-        "is_rate": True,
-    },
-    "CN_PPI_INDEX": {
-        "label": "ИПП — индекс (месечен, YoY %)",
-        "invert": False,
-        "transform": "yoy_pct",
-        "is_rate": True,
-    },
     # ── Свежи драйвери (re-base 2026-06) ──
     "CN_CPI_YOY_AK": {
         "label": "ИПЦ — инфлация (месечен YoY %)",
@@ -83,8 +57,8 @@ SERIES = {
 # Композитът: свеж месечен CPI (akshare NBS, замества застоялия IMF CN_CPI_INDEX 2025-07) +
 # свеж месечен PPI (замества мъртвия IMF CN_PPI_INDEX 2022-12) + тримесечен дефлатор (absolute
 # anchor, виж _deflator_anchor) + годишен CPI (дълга история, фон).
-COMPOSITE_SERIES  = ["CN_CPI_YOY_AK", "CN_PPI_YOY", "CN_GDP_DEFLATOR_Q", "CN_CPI_YOY"]
-COMPOSITE_WEIGHTS = [0.30,            0.25,         0.25,                0.20]
+COMPOSITE_SERIES  = ["CN_CPI_YOY_AK", "CN_PPI_YOY", "CN_GDP_DEFLATOR_Q"]
+COMPOSITE_WEIGHTS = [0.40,            0.30,         0.30]
 
 REGIMES = [
     (75, "ИНФЛАЦИОНЕН НАТИСК", "#ff6d00"),

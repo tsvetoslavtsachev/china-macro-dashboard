@@ -57,7 +57,11 @@ class TestPolarityCatalog:
         """SPOT: заковани критични знаци (регресия за S7 CN-1 LPR инцидента)."""
         assert polarity_for("CN_LPR_1Y") == -1
         assert polarity_for("CN_LPR_5Y") == -1        # ипотечен бенчмарк — easing = по-добре
-        assert polarity_for("CN_POLICY_RATE") == -1
+        assert polarity_for("CN_INTERBANK_3M") == -1   # лихва: нагоре = по-зле
+        assert polarity_for("CN_CGB_10Y") == -1
+        assert polarity_for("CN_REER") == -1           # по-скъп юан = по-слаба конкурентност (като EA_REER)
+        assert polarity_for("CN_UNEMP_SURVEYED") == -1
+        assert polarity_for("CN_YOUTH_UNEMP_M") == -1
         assert polarity_for("CN_UNEMPLOYMENT") == -1
         assert polarity_for("CN_YOUTH_UNEMPLOYMENT") == -1
         assert polarity_for("CN_GDP_GROWTH") == +1

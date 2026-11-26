@@ -11,17 +11,10 @@ Credit & Monetary Policy lens за China macro dashboard.
   - M2 е 227% от GDP — най-висок в света сред G20
   - CNY/USD е управляван флоат — PBoC контролира дневния band
 
-Composite weights:
-  Policy rate      0.25 — PBoC stance (намаляване = easing)
-  Lending rate     0.20 — реален cost of credit
-  Credit/GDP       0.25 — кредитна дълбочина и debt overhang
-  M2/GDP           0.20 — монетарна маса
-  CNY/USD          0.10 — валутен курс (слабо CNY = конкурентност)
-
-Convention:
-  - Ниски лихви = easing = по-добре за растеж → invert=True за rate серии
-  - Висок кредит/GDP = debt overhang = по-лошо → invert=True
-  - Слабо CNY (висок CNY/USD) = по-добре за exports → invert=False
+Състав (подобрение 26.11.2026): 1Y LPR 0.25 · BIS кредит/БВП 0.20 · M2 YoY 0.30 · TSF поток 0.25.
+Членове на лещата, но не на композита: 5Y LPR, TSF запас YoY, нови кредити, 3М междубанков,
+доходност 10г ДЦК. Лихвите и дългът са с полярност -1 (нагоре = по-зле). Валутният курс
+е във външната леща (modules/external.py).
 """
 from __future__ import annotations
 from typing import Any
@@ -36,42 +29,6 @@ from catalog.polarity import polarity_for
 
 
 SERIES = {
-    "CN_POLICY_RATE": {
-        "label": "Политическа лихва — PBoC 7-day repo (%)",
-        "invert": True,   # по-ниска = easing = по-добре
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_LENDING_RATE": {
-        "label": "Кредитна лихва (%)",
-        "invert": True,   # по-ниска = по-евтин кредит = по-добре
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_DEPOSIT_RATE": {
-        "label": "Депозитна лихва (%)",
-        "invert": True,
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_CREDIT_PRIVATE": {
-        "label": "Кредит към частния сектор (% от БВП)",
-        "invert": True,   # висок кредит/GDP = debt overhang = по-лошо
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_M2_GDP": {
-        "label": "М2 — дял от БВП (%)",
-        "invert": False,  # по-висок M2 = повече ликвидност = неутрален
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_CNY_USD": {
-        "label": "Валутен курс CNY/USD",
-        "invert": False,
-        "transform": "level",
-        "is_rate": False,
-    },
     # ── Свежи драйвери (re-base 2026-06) — годишните CREDIT_PRIVATE/M2_GDP остават като readings ──
     "CN_LPR_1Y": {
         "label": "1-годишен Loan Prime Rate (%)",
@@ -114,12 +71,31 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
+    # Подобрение на състава (26.11.2026): членове на лещата (health_z), НЕ в композита
+    "CN_NEW_LOANS_MOM": {
+        "label": "Нови юанови кредити (месечен поток)",
+        "invert": False,   # по-голям поток = по-силен кредитен импулс
+        "transform": "level",
+        "is_rate": False,
+    },
+    "CN_INTERBANK_3M": {
+        "label": "3-месечен междубанков лихвен процент (%)",
+        "invert": True,    # по-нисък = по-евтина ликвидност = по-добре
+        "transform": "level",
+        "is_rate": True,
+    },
+    "CN_CGB_10Y": {
+        "label": "Доходност на 10-годишни държавни облигации (%)",
+        "invert": True,    # по-ниска = по-евтин дълг (като лихвите) = по-добре
+        "transform": "level",
+        "is_rate": True,
+    },
 }
 
 # Композитът: LPR (текуща policy stance) + BIS кредит/БВП (debt overhang, тримесечно) +
 # M2 YoY РАСТЕЖ (реални текущи парични условия, вместо подвеждащото M2/БВП ниво) + TSF импулс.
-COMPOSITE_SERIES  = ["CN_LPR_1Y", "CN_BIS_CREDIT_GDP", "CN_M2_YOY", "CN_TSF_FLOW", "CN_CNY_USD"]
-COMPOSITE_WEIGHTS = [0.20,        0.20,                0.25,         0.20,          0.15]
+COMPOSITE_SERIES  = ["CN_LPR_1Y", "CN_BIS_CREDIT_GDP", "CN_M2_YOY", "CN_TSF_FLOW"]
+COMPOSITE_WEIGHTS = [0.25,        0.20,                0.30,         0.25]   # валутата вече е във външната леща
 
 REGIMES = [
     (75, "СИЛНО МОНЕТАРНО СТИМУЛИРАНЕ", "#00c853"),
@@ -221,14 +197,9 @@ def _build_narrative(indicators: dict) -> list[str]:
     hints = []
 
     lpr = indicators.get("CN_LPR_1Y")
-    policy = indicators.get("CN_POLICY_RATE")
     if lpr:
         val = lpr.get("current_value", 0)
         hints.append(f"1Y LPR {val:.2f}% — на/близо до исторически дъна; активен easing цикъл.")
-    elif policy:
-        val = policy.get("current_value", 0)
-        hints.append("PBoC policy rate {:.2f}% — {}".format(
-            val, "активен easing цикъл." if val < 2.0 else "умерено ниво."))
 
     bis = indicators.get("CN_BIS_CREDIT_GDP")
     if bis:
@@ -244,9 +215,12 @@ def _build_narrative(indicators: dict) -> list[str]:
         else:
             hints.append(f"M2 растеж {val:.1f}% YoY.")
 
-    cny = indicators.get("CN_CNY_USD")
-    if cny:
-        val = cny.get("current_value", 0)
-        hints.append(f"CNY/USD {val:.4f} — управляван флоат. PBoC контролира дневния band ±2%.")
+    ib = indicators.get("CN_INTERBANK_3M")
+    if ib:
+        hints.append(f"3-месечен междубанков процент {ib.get('current_value', 0):.2f}% — цената на краткосрочната ликвидност.")
+
+    cgb = indicators.get("CN_CGB_10Y")
+    if cgb:
+        hints.append(f"Доходност на 10г ДЦК {cgb.get('current_value', 0):.2f}% — пазарната цена на дълга; ниска доходност при слаб кредит чете дефлационни очаквания.")
 
     return hints

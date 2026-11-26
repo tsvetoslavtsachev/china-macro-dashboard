@@ -1,7 +1,7 @@
 """
 modules/property.py
 ===================
-Property & Trade lens за China macro dashboard.
+Property & Investment lens за China macro dashboard.
 
 Специфики за Китай:
   - Имотният сектор е ~25-30% от GDP (директно + индиректно)
@@ -10,18 +10,10 @@ Property & Trade lens за China macro dashboard.
   - Търговският баланс е рекорден 2024 — геополитически фактор
   - FDI срина се до исторически минимум (0.1% GDP 2024) — de-risking
 
-Composite weights:
-  Current account   0.20 — търговски баланс (излишък = добре)
-  Exports % GDP     0.15 — export-led growth
-  FDI inflows       0.15 — чуждестранен инвестиционен апетит
-  Fixed capital     0.20 — инвестиционен цикъл
-  Private capex     0.15 — частни инвестиции (proxy за имоти)
-  House prices      0.15 — 70-city индекс (директен имотен сигнал)
-
-Convention:
-  - Висок current account = добре → invert=False
-  - Висок FDI = добре → invert=False
-  - Ниски house prices (YoY) = лошо → invert=False (score от percentile)
+Състав (подобрение 26.11.2026, равни тегла 0.25): цени на нови жилища (70 града) ·
+инвестиции в имоти YTD YoY · FAI · BIS жилищни цени YoY. Членове на лещата, но не на
+композита: продажби на жилища. Износът, текущата сметка и курсът са във външната леща
+(modules/external.py); годишните WB серии са само фон в series_data.
 """
 from __future__ import annotations
 from typing import Any
@@ -36,46 +28,10 @@ from catalog.polarity import polarity_for
 
 
 SERIES = {
-    "CN_CURRENT_ACCOUNT": {
-        "label": "Текуща сметка — баланс (% от БВП)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_EXPORTS_GDP": {
-        "label": "Износ — дял от БВП (%)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_FDI_GDP": {
-        "label": "ПЧИ — входящи (% от БВП)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_FIXED_CAPITAL": {
-        "label": "Брутно фиксирано капиталообразуване (% от БВП)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_PRIVATE_CAPEX": {
-        "label": "Частно фиксирано капиталообразуване (% от БВП)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": False,
-    },
     "CN_NEW_HOUSE_PRICE": {
         "label": "Цени на нови жилища — 70 града (YoY %)",
         "invert": False,
         "transform": "level",  # AkShare вече дава YoY % (индекс - 100)
-        "is_rate": True,
-    },
-    "CN_FDI_ACTUAL": {
-        "label": "ПЧИ — реално използвани (YoY %)",
-        "invert": False,
-        "transform": "level",
         "is_rate": True,
     },
     # ── Свежи драйвери (re-base 2026-06) — годишните WB серии остават като readings/фон ──
@@ -88,19 +44,6 @@ SERIES = {
     "CN_FAI_MOM_YOY": {
         "label": "Инвестиции в дълготрайни активи (месечен YoY %)",
         "invert": False,   # свиване на инвестициите = по-лошо
-        "transform": "level",
-        "is_rate": True,
-    },
-    # ПРОЛЕТР4: членове на лещата (health_z), НЕ в композита
-    "CN_EXPORTS_USD_YOY": {
-        "label": "Износ USD (месечно YoY %)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": True,
-    },
-    "CN_IMPORTS_USD_YOY": {
-        "label": "Внос USD (месечно YoY %)",
-        "invert": False,
         "transform": "level",
         "is_rate": True,
     },
@@ -120,8 +63,8 @@ SERIES = {
 
 # Композитът: 70-градски къщи (akshare, месечно) + BIS имотни цени (тримесечно, по-широко
 # покритие) + FAI (инвестиционен импулс, месечно) + текуща сметка (годишен external anchor).
-COMPOSITE_SERIES  = ["CN_NEW_HOUSE_PRICE", "CN_BIS_PROPERTY_YOY", "CN_FAI_MOM_YOY", "CN_CURRENT_ACCOUNT"]
-COMPOSITE_WEIGHTS = [0.30,                 0.25,                  0.30,             0.15]
+COMPOSITE_SERIES  = ["CN_NEW_HOUSE_PRICE", "CN_RE_INVEST_YOY", "CN_FAI_MOM_YOY", "CN_BIS_PROPERTY_YOY"]
+COMPOSITE_WEIGHTS = [0.25,                 0.25,               0.25,             0.25]
 
 REGIMES = [
     (75, "СИЛЕН ИНВЕСТИЦИОНЕН ЦИКЪЛ", "#00c853"),
@@ -177,7 +120,7 @@ def run(snapshot: dict[str, pd.Series]) -> dict[str, Any]:
 
     return {
         "module": "property",
-        "label": "Имоти и търговия",
+        "label": "Имоти и инвестиции",
         "icon": "🏗️",
         "scores": {
             "investment": {"score": composite, "label": "Инвестиционен цикъл"},
@@ -244,16 +187,10 @@ def _build_narrative(indicators: dict) -> list[str]:
         if val < 0:
             hints.append(f"BIS жилищни цени {val:.1f}% YoY — по-широкото покритие (вкл. вторичен пазар) още дълбоко отрицателно, въпреки стабилизацията на новия 70-градски пазар.")
 
-    fdi = indicators.get("CN_FDI_GDP")
-    if fdi:
-        val = fdi.get("current_value", 0)
-        if val < 0.5:
-            hints.append(f"ПЧИ {val:.2f}% от БВП — исторически минимум. Геополитически de-risking от западни компании.")
-
-    ca = indicators.get("CN_CURRENT_ACCOUNT")
-    if ca:
-        val = ca.get("current_value", 0)
-        if val > 2:
-            hints.append(f"Текуща сметка +{val:.1f}% от БВП — рекорден излишък. Exports boom компенсира слабото вътрешно търсене. Търговски напрежения с US/EU.")
+    re_inv = indicators.get("CN_RE_INVEST_YOY")
+    if re_inv:
+        val = re_inv.get("current_value", 0)
+        if val < 0:
+            hints.append(f"Инвестиции в имоти {val:.1f}% YoY (от началото на годината) — свиването на строителния цикъл продължава.")
 
     return hints

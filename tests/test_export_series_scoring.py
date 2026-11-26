@@ -46,7 +46,7 @@ def test_invert_series_at_historical_peak_scores_low():
 
 # ── (б) transform=yoy_pct → score съответства на YoY, не на нивото ──────────
 
-def test_transform_yoy_pct_scores_on_transformed_series():
+def test_transform_yoy_pct_scores_on_transformed_series(monkeypatch):
     """CN_CPI_INDEX (transform=yoy_pct в modules/inflation.py): индексна серия
     расте монотонно (нивото винаги е нов връх → score~100 ако не се
     трансформира). YoY растежът обаче е КОНСТАНТЕН (~2%/год за всяка точка от
@@ -57,10 +57,13 @@ def test_transform_yoy_pct_scores_on_transformed_series():
     # Индекс расте с фиксиран месечен темп → YoY % е ПОСТОЯНЕН през целия прозорец.
     monthly_growth = (1.02) ** (1 / 12)
     index_values = 100.0 * (monthly_growth ** np.arange(180))
-    snapshot = {"CN_CPI_INDEX": pd.Series(index_values, index=idx)}
+    # От 26.11.2026 нито една модулна серия не е yoy_pct (CN_CPI_INDEX е махната) — механизмът се
+    # проверява с временен запис в SERIES_META.
+    monkeypatch.setitem(SERIES_META, "CN_TEST_YOY_INDEX", {"invert": False, "transform": "yoy_pct"})
+    snapshot = {"CN_TEST_YOY_INDEX": pd.Series(index_values, index=idx)}
 
     out = build_series_data(snapshot, today=pd.Timestamp("2026-06-01").date(), years=15)
-    latest = out["series"]["CN_CPI_INDEX"]["latest"]
+    latest = out["series"]["CN_TEST_YOY_INDEX"]["latest"]
 
     # Директно смятане на очакваната YoY стойност в последната точка, за
     # сравнение с current_value отразено в score_data (verify чрез самия score
@@ -68,7 +71,7 @@ def test_transform_yoy_pct_scores_on_transformed_series():
     # ако score-ва суровия индекс ниво, което е винаги нов максимум).
     assert latest["score"] is not None
     assert 40 <= latest["score"] <= 60, (
-        f"CN_CPI_INDEX с transform=yoy_pct: YoY е константен през прозореца → "
+        f"CN_TEST_YOY_INDEX с transform=yoy_pct: YoY е константен през прозореца → "
         f"score трябва да е near-неутрален (40-60), а не {latest['score']} "
         f"— ако score-ва суровото ниво (винаги нов връх), score ще е ~100."
     )
@@ -77,7 +80,7 @@ def test_transform_yoy_pct_scores_on_transformed_series():
     # максимум); YoY-темпът е константен → percentile НЕ е екстремен.
     pct = latest["percentile"]
     assert pct is None or pct < 90, (
-        f"CN_CPI_INDEX percentile={pct} — ако беше върху суровото ниво щеше да е ~100."
+        f"CN_TEST_YOY_INDEX percentile={pct} — ако беше върху суровото ниво щеше да е ~100."
     )
     assert "percentile_window" in latest
 
@@ -105,8 +108,8 @@ def test_unknown_series_key_falls_back_without_exception():
 def test_series_meta_contains_known_invert_and_transform_entries():
     """SERIES_META трябва да е агрегиран от петте модула и да отразява
     ТОЧНО техните invert/transform стойности (не hardcode-нати копия)."""
-    assert SERIES_META["CN_YOUTH_UNEMPLOYMENT"]["invert"] is True
-    assert SERIES_META["CN_YOUTH_UNEMPLOYMENT"]["transform"] == "level"
-    assert SERIES_META["CN_CPI_INDEX"]["invert"] is False
-    assert SERIES_META["CN_CPI_INDEX"]["transform"] == "yoy_pct"
-    assert SERIES_META["CN_UNEMPLOYMENT"]["invert"] is True
+    assert SERIES_META["CN_YOUTH_UNEMP_M"]["invert"] is True
+    assert SERIES_META["CN_YOUTH_UNEMP_M"]["transform"] == "level"
+    assert SERIES_META["CN_REER"]["invert"] is True
+    assert SERIES_META["CN_CPI_YOY_AK"]["invert"] is False
+    assert SERIES_META["CN_UNEMP_SURVEYED"]["invert"] is True

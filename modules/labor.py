@@ -11,14 +11,11 @@ Labor lens за China macro dashboard.
     → НБС спря публикуването за 6 месеца (юли-декември 2023)
   - Демографски натиск: стареещо население намалява работната сила
 
-Composite weights:
-  Unemployment rate   0.40 — headline (подценена, но тренд е информативен)
-  Youth unemployment  0.40 — структурен проблем, политически чувствителен
-  Labor participation 0.20 — демографски proxy
+Състав (подобрение 26.11.2026): две месечни серии с равни тегла 0.50 - градска анкетна
+безработица и младежка безработица (16-24 г. без студенти). Годишните WB серии са само
+фон в series_data.
 
-Convention: ниска безработица = висок score (добре).
-  Инверсия за unemployment: True (по-ниска = по-добре).
-  Инверсия за participation: False (по-висока = по-добре).
+Convention: ниска безработица = висок score (инверсия -1 в catalog/polarity.py).
 """
 from __future__ import annotations
 from typing import Any
@@ -33,25 +30,8 @@ from catalog.polarity import polarity_for
 
 
 SERIES = {
-    "CN_UNEMPLOYMENT": {
-        "label": "Безработица — официална (ILO, %)",
-        "invert": True,   # по-ниска = по-добре
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_YOUTH_UNEMPLOYMENT": {
-        "label": "Младежка безработица (16-24 г., %)",
-        "invert": True,   # по-ниска = по-добре
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_LABOR_PARTICIPATION": {
-        "label": "Коефициент на участие в работната сила (%)",
-        "invert": False,  # по-висока = по-добре
-        "transform": "level",
-        "is_rate": False,
-    },
     # ПРОЛЕТР4: месечни серии, членове на лещата (health_z), НЕ в композита
+    # Месечни серии: и двете са членове на композита (годишните WB серии са само фон в series_data)
     "CN_UNEMP_SURVEYED": {
         "label": "Безработица — градска анкетна, национална (месечно, %)",
         "invert": True,   # по-ниска = по-добре
@@ -66,8 +46,8 @@ SERIES = {
     },
 }
 
-COMPOSITE_SERIES  = ["CN_UNEMPLOYMENT", "CN_YOUTH_UNEMPLOYMENT", "CN_LABOR_PARTICIPATION"]
-COMPOSITE_WEIGHTS = [0.40,               0.40,                    0.20]
+COMPOSITE_SERIES  = ["CN_UNEMP_SURVEYED", "CN_YOUTH_UNEMP_M"]
+COMPOSITE_WEIGHTS = [0.50,                0.50]
 
 REGIMES = [
     (75, "ЗДРАВ ПАЗАР НА ТРУДА", "#00c853"),
@@ -166,19 +146,19 @@ def _key_readings(indicators: dict) -> list[dict]:
 def _build_narrative(indicators: dict) -> list[str]:
     hints = []
 
-    youth = indicators.get("CN_YOUTH_UNEMPLOYMENT")
+    youth = indicators.get("CN_YOUTH_UNEMP_M")
     if youth:
         val = youth.get("current_value", 0)
         if val > 20:
-            hints.append(f"⚠️ Младежка безработица {val:.1f}% — над 20%. Структурен проблем. НБС спря публикуването 2023.")
+            hints.append(f"⚠️ Младежка безработица (16-24 г. без студенти) {val:.1f}% — над 20%. Структурен проблем.")
         elif val > 15:
-            hints.append(f"Младежка безработица {val:.1f}% — повишена. Образователната система произвежда повече дипломирани, отколкото пазарът абсорбира.")
+            hints.append(f"Младежка безработица (16-24 г. без студенти) {val:.1f}% — повишена. Образователната система произвежда повече дипломирани, отколкото пазарът абсорбира.")
         else:
-            hints.append(f"Младежка безработица {val:.1f}% — под историческия пик (21.3% юни 2023).")
+            hints.append(f"Младежка безработица (16-24 г. без студенти) {val:.1f}% — под 15%.")
 
-    unemp = indicators.get("CN_UNEMPLOYMENT")
+    unemp = indicators.get("CN_UNEMP_SURVEYED")
     if unemp:
         val = unemp.get("current_value", 0)
-        hints.append(f"Официална безработица {val:.1f}% — подценена. Не включва ~300 млн. мигрантски работници.")
+        hints.append(f"Градска анкетна безработица {val:.1f}% — подценява реалната картина: не включва ~300 млн. мигрантски работници.")
 
     return hints

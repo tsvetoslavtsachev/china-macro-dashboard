@@ -45,6 +45,7 @@ if os.path.exists(_DOTENV):
 # ─── Кеш (адаптивен TTL по release schedule) ─────────────────────────────────
 CACHE_TTL_HOURS_DEFAULT = 12
 CACHE_TTL_DAYS_BY_SCHEDULE = {
+    "daily":      1,
     "weekly":     3,
     "monthly":   10,
     "quarterly": 30,
@@ -71,6 +72,9 @@ MODULE_WEIGHTS = {
     "property": 0.20,
     "inflation": 0.15,
     "labor":    0.10,
+    # Подобрение на състава (26.11.2026): 6-а леща. overall_composite() нормира по сбора на
+    # backed лещите, така че сборът над 1.0 е безобиден.
+    "external": 0.10,
 }
 
 

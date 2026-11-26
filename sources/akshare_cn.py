@@ -119,6 +119,8 @@ class AkShareAdapter(BaseAdapter):
             "pmi_svcs_caixin":     self._fetch_pmi_svcs_caixin,
             # ПРОЛЕТР4 (25.11.2026): нови
             "unemp_surveyed":      self._fetch_unemp_surveyed,
+            # Подобрение на състава (26.11.2026): дневна доходност на 10г ДЦК (ChinaBond)
+            "cgb_10y":             self._fetch_cgb_10y,
         }
 
         fetcher = fetchers.get(source_id)
@@ -359,6 +361,43 @@ class AkShareAdapter(BaseAdapter):
     # ════════════════════════════════════════════════════════
     # BATCH HELPER
     # ════════════════════════════════════════════════════════
+
+    # ChinaBond крива на държавните облигации; сървърът връща празно за прозорец над ~1 година,
+    # затова теглим на парчета до 365 дни, назад до началото на историята.
+    CGB_CURVE = "中债国债收益率曲线"
+    CGB_HISTORY_FLOOR = "2016-01-01"  # 10г прозорец + 10г графика; по-назад не трябва
+
+    @staticmethod
+    def _parse_cgb_frame(df) -> pd.Series:
+        """bond_china_yield DataFrame → дневна Series на 10г доходност (само кривата на ДЦК)."""
+        d = df[df["曲线名称"] == AkShareAdapter.CGB_CURVE]
+        return AkShareAdapter._to_series_from_iso_date(d, "日期", "10年")
+
+    def _fetch_cgb_10y(self) -> pd.Series:
+        from datetime import date, timedelta
+        end = date.today()
+        floor = date.fromisoformat(self.CGB_HISTORY_FLOOR)
+        parts: list[pd.Series] = []
+        empty_run = 0
+        while end > floor and empty_run < 2:
+            start = max(end - timedelta(days=364), floor)
+            try:
+                df = _ak_call("bond_china_yield",
+                              start_date=start.strftime("%Y%m%d"),
+                              end_date=end.strftime("%Y%m%d"))
+                part = self._parse_cgb_frame(df)
+            except ValueError:   # празен отговор за прозореца
+                part = pd.Series(dtype=float)
+            if part.empty:
+                empty_run += 1
+            else:
+                empty_run = 0
+                parts.append(part)
+            end = start - timedelta(days=1)
+        if not parts:
+            raise RuntimeError("bond_china_yield: няма данни за кривата на ДЦК")
+        s = pd.concat(parts).sort_index()
+        return s[~s.index.duplicated(keep="last")]
 
     def fetch_all_china_series(
         self,

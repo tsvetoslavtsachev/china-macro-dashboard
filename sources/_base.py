@@ -43,6 +43,7 @@ logger = logging.getLogger(__name__)
 # ============================================================
 
 CACHE_TTL_DAYS = {
+    "daily":      1,
     "weekly":     3,
     "monthly":   10,
     "quarterly": 30,

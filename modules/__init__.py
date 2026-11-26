@@ -4,6 +4,7 @@ from modules.inflation import run as run_inflation
 from modules.labor import run as run_labor
 from modules.credit import run as run_credit
 from modules.property import run as run_property
+from modules.external import run as run_external
 
 __all__ = [
     "run_growth",
@@ -11,4 +12,5 @@ __all__ = [
     "run_labor",
     "run_credit",
     "run_property",
+    "run_external",
 ]

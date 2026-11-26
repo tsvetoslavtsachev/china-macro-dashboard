@@ -9,18 +9,10 @@ Growth lens за China macro dashboard.
   - GDP deflator отрицателен → реалният растеж е надценен спрямо номиналния
   - Капиталообразуването (~40% GDP) е investment-driven growth модел
 
-Composite (re-base 2026-06 + S7 CN-2 независимост) — реалните драйвери, НЕ годишните:
-  Retail sales YoY      0.30 — потребление (месечен, свеж)
-  NBS Manufacturing PMI 0.25 — официален производствен PMI
-  NBS Non-Mfg PMI       0.20 — официален услугов/строителен PMI
-  Caixin Composite PMI  0.25 — НЕЗАВИСИМ частен survey (S&P/Markit, ~650 фирми),
-                               cross-check на официалните NBS PMI-та (bloomberg-bridge)
-Годишните WB серии (GDP/Industry/Services/Capital) остават като фон/readings, НЕ драйвери.
-
-S7 CN-2 забележка: Caixin mfg/svcs (CN_PMI_*_CAIXIN akshare) + внос (CN_IMPORTS_USD_YOY)
-са ЗАМРАЗЕНИ при akshare източника от 2025-08 (~340 дни) → съзнателно НЕ влизат в
-композита (биха внесли 11-мес. стар отпечатък, срещу staleness дисциплината). Само
-bloomberg-bridge Caixin composite е свеж (2026-05). Чака source refresh за останалите.
+Композит (подобрение 26.11.2026, равни тегла 0.20): БВП тримесечен YoY · индустриално
+производство YoY · продажби на дребно YoY · NBS Mfg PMI · NBS Non-Mfg PMI.
+Членове на лещата, но не на композита: Caixin PMI (композитен, производствен, услуги).
+Годишните WB серии (БВП, индустрия, услуги) са само фон в series_data.
 
 Convention: висок YoY % растеж / PMI > 50 = висок score = здрав растеж.
 """
@@ -38,36 +30,6 @@ from catalog.polarity import polarity_for
 
 # ─── Серии в lens-а ──────────────────────────────────────────────
 SERIES = {
-    "CN_GDP_GROWTH": {
-        "label": "БВП — реален растеж (YoY %)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": True,
-    },
-    "CN_INDUSTRY_GROWTH": {
-        "label": "Индустрия — реален растеж (YoY %)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": True,
-    },
-    "CN_SERVICES_GROWTH": {
-        "label": "Услуги — реален растеж (YoY %)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": True,
-    },
-    "CN_CAPEX_GDP": {
-        "label": "Брутно капиталообразуване (% от БВП)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": False,
-    },
-    "CN_MANUFACTURING_GDP": {
-        "label": "Производство — дял от БВП (%)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": False,
-    },
     # ── Свежи месечни драйвери (re-base 2026-06) — годишните горе остават като фон/readings ──
     "CN_RETAIL_YOY": {
         "label": "Продажби на дребно (месечен YoY %)",
@@ -102,12 +64,6 @@ SERIES = {
         "transform": "level",
         "is_rate": True,
     },
-    "CN_IP_YOY_NBS": {
-        "label": "Индустрия — добавена стойност (месечен YoY %, NBS)",
-        "invert": False,
-        "transform": "level",
-        "is_rate": True,
-    },
     # ПРОЛЕТР4: членове на лещата (health_z), НЕ в композита
     "CN_IP_YOY": {
         "label": "Индустриално производство (месечен YoY %, akshare)",
@@ -132,8 +88,10 @@ SERIES = {
 # Композитът стъпва на свежи месечни (2026), И-с-дълга-история серии (валиден percentile).
 # Годишните WB серии остават като контекст/readings (фон), не драйвери — виж HANDOFF re-base.
 # S7 CN-2: + Caixin composite (независим) за да не стъпва композитът само на NBS.
-COMPOSITE_SERIES  = ["CN_RETAIL_YOY", "CN_PMI_MFG_NBS", "CN_PMI_NON_MFG_NBS", "CN_PMI_COMPOSITE_CAIXIN"]
-COMPOSITE_WEIGHTS = [0.30,            0.25,             0.20,                 0.25]
+# Подобрение на състава (26.11.2026): равни тегла върху 5 свежи драйвера; Caixin са членове на лещата
+# (health_z), не на композита; годишните WB серии остават само фон в series_data.
+COMPOSITE_SERIES  = ["CN_GDP_GROWTH_Q", "CN_IP_YOY", "CN_RETAIL_YOY", "CN_PMI_MFG_NBS", "CN_PMI_NON_MFG_NBS"]
+COMPOSITE_WEIGHTS = [0.20,              0.20,       0.20,            0.20,             0.20]
 
 REGIMES = [
     (80, "СИЛНА ЕКСПАНЗИЯ",  "#00c853"),
@@ -256,7 +214,7 @@ def _build_narrative(indicators: dict) -> list[str]:
         else:
             hints.append(f"NBS Manufacturing PMI {val:.1f} — над 50 (експанзия).")
 
-    gdp = indicators.get("CN_GDP_GROWTH_Q") or indicators.get("CN_GDP_GROWTH")
+    gdp = indicators.get("CN_GDP_GROWTH_Q")
     if gdp:
         val = gdp.get("current_value", 0)
         hints.append(f"БВП растеж {val:.1f}% — около официалния таргет ~5% (policy-pinned, почти не мърда).")
