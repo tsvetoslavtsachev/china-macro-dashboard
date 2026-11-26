@@ -28,6 +28,7 @@ from __future__ import annotations
 import csv
 import io
 import logging
+import re
 import time
 from pathlib import Path
 from typing import Any, Optional
@@ -70,6 +71,9 @@ def _records_from_csv(text: str) -> list[dict]:
     return list(csv.DictReader(io.StringIO(text)))
 
 
+_QUARTER_RE = re.compile(r"^\d{4}-?Q[1-4]$")
+
+
 def parse_records(records: list[dict], field: str = "value") -> pd.Series:
     """[{date:'YYYY-MM', <field>:'низ'}] -> float Series с индекс първо число на месеца.
 
@@ -77,7 +81,12 @@ def parse_records(records: list[dict], field: str = "value") -> pd.Series:
     dates, vals = [], []
     for r in records:
         raw = str(r.get("date", "")).strip()
-        d = pd.to_datetime(raw + "-01" if len(raw) == 7 else raw, errors="coerce")
+        if _QUARTER_RE.match(raw):
+            # ПРОЛЕТР4 (КТ-1): тримесечни набори ('2013-Q1') -> краят на тримесечието, както
+            # CN_GDP_GROWTH_Q и @qend при FRED; иначе '2013-Q1-01' става NaT и редът изпада.
+            d = pd.Period(raw.replace("-", ""), freq="Q").end_time.normalize()
+        else:
+            d = pd.to_datetime(raw + "-01" if len(raw) == 7 else raw, errors="coerce")
         v = pd.to_numeric(str(r.get(field, "")).strip().replace(",", ""), errors="coerce")
         if pd.isna(d) or pd.isna(v):
             continue

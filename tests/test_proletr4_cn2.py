@@ -145,3 +145,13 @@ def test_oriented_z_capped_at_6_with_tiny_nonzero_mad():
     r = score_series(s, polarity=-1, name="LPR", is_rate=True)
     assert r["z_score"] == 6.0 and r["health_z"] == 6.0
     assert r["z_raw"] is not None and abs(r["z_raw"]) > 6   # суровото остава
+
+
+def test_chinadata_quarterly_dates_to_quarter_end_and_cum_yoy():
+    from sources.chinadata_live import parse_records, cumulative_yoy
+    s = parse_records([{"date": "2025-Q3", "value": "32509"}, {"date": "2026-Q3", "value": "34230"},
+                       {"date": "2026-08", "value": "1"}])
+    assert pd.Timestamp("2026-09-30") in s.index and pd.Timestamp("2026-08-01") in s.index
+    y = cumulative_yoy(s)
+    assert list(y.index) == [pd.Timestamp("2026-09-30")]
+    assert round(float(y.iloc[0]), 2) == round((34230 / 32509 - 1) * 100, 2)
