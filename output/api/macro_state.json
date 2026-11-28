@@ -1,7 +1,7 @@
 {
   "region": "CN",
-  "as_of_date": "2026-11-26",
-  "generated_at": "2026-11-26T05:53:53.269776+00:00Z",
+  "as_of_date": "2026-11-28",
+  "generated_at": "2026-11-28T11:16:55.588494+00:00Z",
   "executive_summary": {
     "composite_score": 42.4,
     "regime_key": "deteriorating",
@@ -18,7 +18,7 @@
       "direction": "contracting",
       "regime": "РЕЦЕСИЯ",
       "label_bg": "Растеж и активност",
-      "indicators_count": 8,
+      "indicators_count": 9,
       "key_readings": [
         {
           "label": "Продажби на дребно (месечен YoY %)",
@@ -46,8 +46,8 @@
         "NBS Manufacturing PMI 49.3 — под 50 (свиване).",
         "БВП растеж 4.5% — около официалния таргет ~5% (policy-pinned, почти не мърда)."
       ],
-      "health_z": -0.473,
-      "health_z_n": 8,
+      "health_z": -0.662,
+      "health_z_n": 9,
       "health_z_excluded_stale": []
     },
     "inflation": {
@@ -55,7 +55,7 @@
       "direction": "mixed",
       "regime": "ЦЕНОВА СТАБИЛНОСТ",
       "label_bg": "Инфлация и цени",
-      "indicators_count": 3,
+      "indicators_count": 4,
       "key_readings": [
         {
           "label": "ИПЦ — инфлация (месечен YoY %)",
@@ -71,6 +71,11 @@
           "label": "БВП дефлатор (тримесечен YoY %)",
           "value": 1.5,
           "percentile": null
+        },
+        {
+          "label": "Базисна инфлация без храни и енергия (месечен YoY %)",
+          "value": 0.8,
+          "percentile": 47.1
         }
       ],
       "narrative": [
@@ -79,8 +84,8 @@
         "БВП дефлатор +1.50% — обратно положителен; край на debt-deflation."
       ],
       "comparability_note": "несравнима между региони по дизайн — CN линейна дефлационна леща (абсолютни котви) vs US/EU U-форма около 2%",
-      "health_z": 2.27,
-      "health_z_n": 3,
+      "health_z": 2.345,
+      "health_z_n": 4,
       "health_z_excluded_stale": []
     },
     "labor": {
@@ -88,7 +93,7 @@
       "direction": "mixed",
       "regime": "СТРУКТУРНИ ПРОБЛЕМИ",
       "label_bg": "Пазар на труда",
-      "indicators_count": 2,
+      "indicators_count": 4,
       "key_readings": [
         {
           "label": "Безработица — градска анкетна, национална (месечно, %)",
@@ -99,14 +104,24 @@
           "label": "Младежка безработица 16-24 г. без студенти (месечно, %)",
           "value": 17.2,
           "percentile": null
+        },
+        {
+          "label": "PMI на индустрията: заетост (индекс)",
+          "value": 48.4,
+          "percentile": 46.3
+        },
+        {
+          "label": "Разполагаем доход на човек (натрупан YoY %, тримесечно)",
+          "value": 4.4,
+          "percentile": 24.4
         }
       ],
       "narrative": [
         "Младежка безработица (16-24 г. без студенти) 17.2% — повишена. Образователната система произвежда повече дипломирани, отколкото пазарът абсорбира.",
         "Градска анкетна безработица 5.1% — подценява реалната картина: не включва ~300 млн. мигрантски работници."
       ],
-      "health_z": 0.067,
-      "health_z_n": 2,
+      "health_z": -0.327,
+      "health_z_n": 4,
       "health_z_excluded_stale": []
     },
     "credit": {
@@ -114,7 +129,7 @@
       "direction": "mixed",
       "regime": "НЕУТРАЛНА ПОЛИТИКА",
       "label_bg": "Монетарна политика и кредит",
-      "indicators_count": 7,
+      "indicators_count": 8,
       "key_readings": [
         {
           "label": "1-годишен Loan Prime Rate (%)",
@@ -140,10 +155,10 @@
       "narrative": [
         "1Y LPR 3.00% — на/близо до исторически дъна; активен easing цикъл.",
         "M2 растеж 7.1% YoY — исторически слаб. Лихвите паднаха, но кредитът не се ускорява (слаба трансмисия).",
-        "Доходност на 10г ДЦК 1.59% — пазарната цена на дълга; ниска доходност при слаб кредит чете дефлационни очаквания."
+        "Доходност на 10г ДЦК 1.60% — пазарната цена на дълга; ниска доходност при слаб кредит чете дефлационни очаквания."
       ],
-      "health_z": 0.894,
-      "health_z_n": 7,
+      "health_z": 0.726,
+      "health_z_n": 8,
       "health_z_excluded_stale": [
         "CN_BIS_CREDIT_GDP",
         "CN_INTERBANK_3M"
@@ -243,7 +258,7 @@
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
-      "periods_behind": 0.17,
+      "periods_behind": 0.23,
       "narrative_hint": "Замества benchmark lending rate от 2019. Главен policy signal."
     },
     {
@@ -260,7 +275,7 @@
       "is_new_extreme": true,
       "new_extreme_direction": "max",
       "stale": false,
-      "periods_behind": 0.9,
+      "periods_behind": 0.91,
       "narrative_hint": "Рекорд 21.3% юни 2023. НБС спря публикуването за 6 месеца. Структурен проблем — образователна система произвежда повече дипломирани, отколкото пазарът може да абсорбира."
     },
     {
@@ -277,7 +292,7 @@
       "is_new_extreme": false,
       "new_extreme_direction": null,
       "stale": false,
-      "periods_behind": 0.62,
+      "periods_behind": 0.64,
       "narrative_hint": "Имплицитен дефлатор = номинален YoY − реален YoY (от НБС тримесечни данни). Отрицателен 12 поредни тримесечия (2Q2023–1Q2026) → debt-deflation. Ключов falsifier сигнал за recessionary режима."
     },
     {
@@ -294,7 +309,7 @@
       "is_new_extreme": true,
       "new_extreme_direction": "min",
       "stale": false,
-      "periods_behind": 1.83,
+      "periods_behind": 1.9,
       "narrative_hint": "НБС (чрез chinadata.live). ВНИМАНИЕ: това е темп от началото на годината (YTD), не месечен; през годината се изглажда и се нулира всеки януари/февруари. Дълбок и устойчив спад."
     }
   ],
